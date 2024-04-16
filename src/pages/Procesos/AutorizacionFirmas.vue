@@ -6,97 +6,39 @@
           <q-btn flat round dense icon="done_outline" />
         </q-avatar>
         <q-avatar>
-          <q-btn flat round dense icon="print" @click="isDialogComponenteConsulta = true"  />
+          <q-btn flat round dense icon="print" @click="isDialogComponenteConsulta = true" />
         </q-avatar>
         <q-avatar>
           <q-btn flat round dense icon="content_paste_search" @click="isDialogComponenteFiltro = true" />
         </q-avatar>
         <q-toolbar-title>
-          Entrega de Medidores
+          Autorización de certificados
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
     <q-page-container>
       <q-form ref="formEntregaMedidores">
         <div class="q-pa-md">
-          <q-stepper
-            v-model="step"
-            vertical
-            color="primary"
-            animated
-            >
-            <q-step
-                :name="1"
-                title="1. Seleccione medidores para la entrega"
-                icon="search"
-                :done="step > 1"
-            >
-                <div class="row q-col-gutter-sm">
-                <q-toggle class="col-xs-12 col-sm-6 col-md-3 q-field--with-bottom q-pt-sm"
-                  v-model="todasFechas"
-                  checked-icon="check"
-                  color="green"
-                  label="Todas las fechas"
-                  unchecked-icon="clear"
-                />
-                <q-toggle class="col-xs-12 col-sm-6 col-md-3 q-field--with-bottom q-pt-sm"
-                  v-model="isEntregado"
-                  checked-icon="check"
-                  color="blue"
-                  label="Entregados"
-                  unchecked-icon="clear"
-                />
-                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" 
-                  stack-label label="No. Orden Entrada" 
-                  v-model="Id_ordenentrada" outlined  
-                  >
-                  <template v-slot:prepend>
-                    <q-icon name="system_security_update_good" size="lg" />
-                  </template>
-                </q-input>
-                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" 
-                  stack-label label="No. Orden Trabajo" 
-                  v-model="Id_programacionorden" outlined  
-                  >
-                  <template v-slot:prepend>
-                    <q-icon name="edit_calendar" size="lg" />
-                  </template>
-                </q-input>                
-                <q-input class="col-xs-12 col-sm-6 col-md-12 q-pt-sm" 
-                  stack-label label="Criterio Consulta (NCertificado, Serial, Identificación, Razon Social)" 
-                  v-model="consultaGeneral" outlined  
-                  >
-                  <template v-slot:prepend>
-                    <q-icon name="search" size="lg" />
-                  </template>
-                </q-input>
-                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" readonly stack-label label="Registros Encontrados" v-model="ListaCertificados.length" outlined  />
-                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" 
-                  stack-label label="Fecha Inicio" 
-                  :readonly="todasFechas === true"
-                  v-model="fechaIni"
-                  type="date" outlined  >
+          <q-stepper v-model="step" vertical color="primary" animated>
+            <q-step :name="1" title="1. Seleccione rango de fechas" icon="search" :done="step > 1">
+              <div class="row q-col-gutter-sm">
+                <q-toggle class="col-xs-12 col-sm-6 col-md-3 q-field--with-bottom q-pt-sm" v-model="todasFechas"
+                  checked-icon="check" color="green" label="Todas las fechas" unchecked-icon="clear" />
+                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" stack-label label="Fecha Inicio"
+                  :readonly="todasFechas === true" v-model="fechaIni" type="date" outlined>
                   <template v-slot:prepend>
                     <q-icon name="date_range" size="lg" />
                   </template>
                 </q-input>
-                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" 
-                  stack-label label="Fecha Fin" 
-                  :readonly="todasFechas === true"
-                  v-model="fechaFin"
-                  type="date" outlined  >
+                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" stack-label label="Fecha Fin"
+                  :readonly="todasFechas === true" v-model="fechaFin" type="date" outlined>
                   <template v-slot:prepend>
                     <q-icon name="date_range" size="lg" />
                   </template>
                 </q-input>
-                <q-table class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom 
-                  flat bordered
-                    :data="ListaCertificados"
-                    :columns="columnsCertificado"
-                    row-key="IdCertificado"
-                    selection="multiple"
-                    :selected.sync="SelectedCertificados"
-                    :visible-columns="vcCertificado">
+                <q-table class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                  flat bordered :data="ListaCertificados" :columns="columnsCertificado" row-key="IdCertificado"
+                  selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcCertificado">
                   <template v-slot:header-selection="scope">
                     <q-toggle v-model="scope.selected" />
                   </template>
@@ -104,110 +46,35 @@
                     <q-toggle v-model="scope.selected" dense />
                   </template>
                   <template v-slot:top="props">
-                    <q-btn
-                    color="primary"
-                    icon-right="archive"
-                    label=""
-                    no-caps
-                    @click="exportTable(ListaCertificados, columnsCertificado)"
-                    />
+                    <q-btn color="primary" icon-right="archive" label="" no-caps
+                      @click="exportTable(ListaCertificados, columnsCertificado)" />
                     <q-space />
-                    <q-btn
-                    flat round dense
-                    :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-                    @click="props.toggleFullscreen"
-                    class="q-ml-md"
-                    />
+                    <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                      @click="props.toggleFullscreen" class="q-ml-md" />
                     <q-space />
-                    <q-select
-                    v-model="vcCertificado"
-                    multiple
-                    outlined
-                    dense
-                    options-dense
-                    :display-value="$q.lang.table.columns"
-                    emit-value
-                    map-options
-                    :options="columnsCertificado"
-                    option-value="name"
-                    options-cover
-                    style="min-width: 150px"
-                    />
-                </template>
-                </q-table>
-                </div>
-                <div class="row justify-center q-pa-sm">
-                <q-btn label="Consultar" icon="search" outline align="center" unelevated @click="consultarFiltroEntregar(consultaGeneral, isEntregado, todasFechas, fechaIni, fechaFin)">
-                </q-btn>
-            </div>
-              <q-stepper-navigation>
-                <q-btn color="primary" @click="entregarMedidores()" label="Continuar" />
-                <q-btn flat color="primary" label="Volver" class="q-ml-sm" />
-                </q-stepper-navigation>
-            </q-step>
-
-            <q-step
-                :name="2"
-                title="2. Medidores Entregados"
-                icon="settings"
-                :done="step > 2"
-            >
-              <div class="row q-col-gutter-sm">
-                Seleccione un medidor para realizar la impresión del certificado
-                <q-table class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom flat bordered
-                    :data="ListaCertificados"
-                    :columns="columnsCertificadoImp"
-                    :rows-per-page-options="[10]"
-                    :visible-columns="vcCertificado">
-                  <template v-slot:body-cell-ImprimirCertificado="props">
-                    <q-td key="ImprimirCertificado" :props="props" auto-width>
-                      <q-btn icon="print" color="black" align="center" outline @click="imprimirCertificadoPDF(props.row.IdCertificado)"/>
-                    </q-td>
+                    <q-select v-model="vcCertificado" multiple outlined dense options-dense
+                      :display-value="$q.lang.table.columns" emit-value map-options :options="columnsCertificado"
+                      option-value="name" options-cover style="min-width: 150px" />
                   </template>
-                  <template v-slot:top="props">
-                    <q-btn
-                    color="primary"
-                    icon-right="archive"
-                    label=""
-                    no-caps
-                    @click="exportTable(ListaCertificados, columnsCertificadoImp)"
-                    />
-                    <q-space />
-                    <q-btn
-                    flat round dense
-                    :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-                    @click="props.toggleFullscreen"
-                    class="q-ml-md"
-                    />
-                    <q-space />
-                    <q-select
-                    v-model="vcCertificado"
-                    multiple
-                    outlined
-                    dense
-                    options-dense
-                    :display-value="$q.lang.table.columns"
-                    emit-value
-                    map-options
-                    :options="columnsCertificadoImp"
-                    option-value="name"
-                    options-cover
-                    style="min-width: 150px"
-                    />
-                </template>
                 </q-table>
               </div>
-                <q-stepper-navigation>
-                <q-btn color="primary" label="Salir" />
-                <q-btn flat @click="step = 1" color="primary" label="Volver" class="q-ml-sm" />
-                </q-stepper-navigation>
+              <div class="row justify-center q-pa-sm">
+                <q-btn label="Consultar" icon="search" outline align="center" unelevated
+                  @click="consultarFiltroEntregar(consultaGeneral, todasFechas, fechaIni, fechaFin)">
+                </q-btn>
+              </div>
+              <q-stepper-navigation>
+                <q-btn color="primary" @click="entregarMedidores()" label="Autorizar" />
+              </q-stepper-navigation>
             </q-step>
-            </q-stepper>
+
+
+          </q-stepper>
           <div class="row q-col-gutter-sm">
             <div class="q-pa-md q-gutter-md">
-                <q-btn label="Regresar" icon="replay" outline align="center" unelevated @click="regresar">
-                </q-btn>
-            </div>            
+              <q-btn label="Regresar" icon="replay" outline align="center" unelevated @click="regresar">
+              </q-btn>
+            </div>
           </div>
         </div>
       </q-form>
@@ -222,35 +89,17 @@
           </q-btn>
         </q-bar>
         <q-card-section>
-          <q-form ref="ordenEntrada" @submit="guardarEntrega()">  
+          <q-form ref="ordenEntrada" @submit="guardarEntrega()">
             <div class="row q-col-gutter-sm">
-              <q-input class="col-xs-12 col-sm-12 col-md-4 q-field--with-bottom"
-                outlined
-                stack-label
-                v-model="EntregaMedidor.FechaEntrega"
-                type="date"
-                label="Fecha de Entrega"
-                :rules="[ regla ]"
-              />
+              <q-input class="col-xs-12 col-sm-12 col-md-4 q-field--with-bottom" outlined stack-label
+                v-model="EntregaMedidor.FechaEntrega" type="date" label="Fecha de Entrega" :rules="[regla]" />
               <div class="col-xs-12 col-sm-12 col-md-8 q-field--with-bottom">
-                <q-select
-                  filled
-                  v-model="EntregaMedidor.Id_persona"
-                  map-options emit-value option-value="Id_persona"
-                  option-label="Razonsocial_cliente" :options="listaClientes"
-                  clearable
-                  use-input
-                  hide-dropdown-icon
-                  hide-selected
-                  fill-input
-                  input-debounce="0"
-                  label="Cliente"
-                  :rules="[ regla ]"
-                  @filter="filterFn"
-                  @input="val => { seleccionarCliente(val) }"
-                >
+                <q-select filled v-model="EntregaMedidor.Id_persona" map-options emit-value option-value="Id_persona"
+                  option-label="Razonsocial_cliente" :options="listaClientes" clearable use-input hide-dropdown-icon
+                  hide-selected fill-input input-debounce="0" label="Cliente" :rules="[regla]" @filter="filterFn"
+                  @input="val => { seleccionarCliente(val) }">
                   <template v-slot:prepend>
-                  <q-icon name="person" size="lg" />
+                    <q-icon name="person" size="lg" />
                   </template>
                   <template v-slot:append>
                     <q-btn icon="person_add" color="black" flat dense unelevated @click="agregarCliente" />
@@ -259,7 +108,8 @@
                     <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                       <q-item-section>
                         <q-item-label v-html="scope.opt.Razonsocial_cliente" />
-                        <q-item-label caption>Identificación: {{scope.opt.Codigo_cliente}} - Id Cliente: {{scope.opt.Id_cliente}} - Id Zona: {{scope.opt.Id_zona}}</q-item-label>
+                        <q-item-label caption>Identificación: {{ scope.opt.Codigo_cliente }} - Id Cliente:
+                          {{ scope.opt.Id_cliente }} - Id Zona: {{ scope.opt.Id_zona }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </template>
@@ -272,16 +122,12 @@
                   </template>
                 </q-select>
               </div>
-              <q-input class="col-xs-12 col-sm-12 col-md-12 q-field--with-bottom"
-                outlined
-                stack-label
-                v-model="EntregaMedidor.Observacion"
-                type="textarea"
-                label="Observación"
-              />
+              <q-input class="col-xs-12 col-sm-12 col-md-12 q-field--with-bottom" outlined stack-label
+                v-model="EntregaMedidor.Observacion" type="textarea" label="Observación" />
             </div>
             <div class="row justify-center q-pa-sm">
-              <q-btn label="Guardar" icon="save" outline align="center" unelevated type="submit" @submit="guardarEntrega" >
+              <q-btn label="Guardar" icon="save" outline align="center" unelevated type="submit"
+                @submit="guardarEntrega">
               </q-btn>
               <q-btn label="Regresar" icon="replay" outline align="center" unelevated v-close-popup>
               </q-btn>
@@ -301,29 +147,19 @@
         </q-bar>
         <q-card-section>
           <div class="col-xs-12 col-sm-12 col-md-9 q-field--with-bottom">
-            <q-select
-              filled
-              v-model="EntregaMedidorConsulta.Id_persona"
-              map-options emit-value option-value="Id_persona"
-              option-label="Razonsocial_cliente" :options="listaClientes"
-              clearable
-              use-input
-              hide-dropdown-icon
-              hide-selected
-              fill-input
-              input-debounce="0"
-              label="Todos los clientes"
-              @filter="filterFn"
-              @input="val => { seleccionarCliente(val) }"
-            >
+            <q-select filled v-model="EntregaMedidorConsulta.Id_persona" map-options emit-value
+              option-value="Id_persona" option-label="Razonsocial_cliente" :options="listaClientes" clearable use-input
+              hide-dropdown-icon hide-selected fill-input input-debounce="0" label="Todos los clientes"
+              @filter="filterFn" @input="val => { seleccionarCliente(val) }">
               <template v-slot:prepend>
-              <q-icon name="person" size="lg" />
+                <q-icon name="person" size="lg" />
               </template>
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                   <q-item-section>
                     <q-item-label v-html="scope.opt.Razonsocial_cliente" />
-                    <q-item-label caption>Identificación: {{scope.opt.Codigo_cliente}} - Id Cliente: {{scope.opt.Id_cliente}} - Id Zona: {{scope.opt.Id_zona}}</q-item-label>
+                    <q-item-label caption>Identificación: {{ scope.opt.Codigo_cliente }} - Id Cliente:
+                      {{ scope.opt.Id_cliente }} - Id Zona: {{ scope.opt.Id_zona }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </template>
@@ -337,78 +173,48 @@
             </q-select>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6 q-field--with-bottom">
-              <q-select
-              filled
-              v-model="EntregaMedidorConsulta.Login"
-              map-options emit-value option-value="LoginUsuario"
-              option-label="NombrePersona"
-              :options="listaUsuarios"
-              use-input
-              hide-dropdown-icon
-              hide-selected
-              fill-input
-              input-debounce="0"
-              label="Todos los usuarios"
-              clearable
-              @filter="filterFnUsuario"
-              >
+            <q-select filled v-model="EntregaMedidorConsulta.Login" map-options emit-value option-value="LoginUsuario"
+              option-label="NombrePersona" :options="listaUsuarios" use-input hide-dropdown-icon hide-selected
+              fill-input input-debounce="0" label="Todos los usuarios" clearable @filter="filterFnUsuario">
               <template v-slot:prepend>
-              <q-icon name="supervisor_account" size="lg" />
+                <q-icon name="supervisor_account" size="lg" />
               </template>
               <template v-slot:option="scope">
-                  <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+                <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                   <q-item-section>
-                      <q-item-label v-html="scope.opt.NombrePersona" />
-                      <q-item-label caption>Login: {{scope.opt.LoginUsuario}} </q-item-label>
+                    <q-item-label v-html="scope.opt.NombrePersona" />
+                    <q-item-label caption>Login: {{ scope.opt.LoginUsuario }} </q-item-label>
                   </q-item-section>
-                  </q-item>
+                </q-item>
               </template>
               <template v-slot:no-option>
-                  <q-item>
+                <q-item>
                   <q-item-section class="text-grey">
-                      Sin resultados
+                    Sin resultados
                   </q-item-section>
-                  </q-item>
+                </q-item>
               </template>
-              </q-select>
+            </q-select>
           </div>
-          <q-input class="col-xs-12 col-md-12 col-sm-12"
-            outlined
-            v-model="EntregaMedidorConsulta.Observacion"
-            label="Observación"
-          />
-          <q-toggle class="col-xs-12 col-sm-4 col-md-3 q-field--with-bottom q-pt-sm"
-            v-model="todasFechas"
-            checked-icon="check"
-            color="green"
-            label="Consultar todas las fechas"
-            unchecked-icon="clear"
-          />
-          <q-input class="col-xs-12 col-sm-4 col-md-4"
-            outlined
-            stack-label
-            v-model="EntregaMedidorConsulta.Fecha"
-            type="date"
-            label="Fecha Desde"
-            :readonly="todasFechas === true"
-          />
-          <q-input class="col-xs-12 col-sm-4 col-md-4"
-            outlined
-            stack-label
-            v-model="EntregaMedidorConsulta.FechaEntrega"
-            type="date"
-            label="Fecha Hasta"
-            :readonly="todasFechas === true"
-          />
+          <q-input class="col-xs-12 col-md-12 col-sm-12" outlined v-model="EntregaMedidorConsulta.Observacion"
+            label="Observación" />
+          <q-toggle class="col-xs-12 col-sm-4 col-md-3 q-field--with-bottom q-pt-sm" v-model="todasFechas"
+            checked-icon="check" color="green" label="Consultar todas las fechas" unchecked-icon="clear" />
+          <q-input class="col-xs-12 col-sm-4 col-md-4" outlined stack-label v-model="EntregaMedidorConsulta.Fecha"
+            type="date" label="Fecha Desde" :readonly="todasFechas === true" />
+          <q-input class="col-xs-12 col-sm-4 col-md-4" outlined stack-label
+            v-model="EntregaMedidorConsulta.FechaEntrega" type="date" label="Fecha Hasta"
+            :readonly="todasFechas === true" />
           <div class="row justify-center q-pa-sm">
-            <q-btn label="Consultar" icon="search" outline align="center" unelevated @click="consultarordenEntregaFechas()" >
+            <q-btn label="Consultar" icon="search" outline align="center" unelevated
+              @click="consultarordenEntregaFechas()">
             </q-btn>
             <q-btn label="Regresar" icon="replay" outline align="center" unelevated v-close-popup>
             </q-btn>
           </div>
           <div class="col-xs-12 col-sm-4 col-md-4 q-field--with-bottom">
-            <q-table class="col-md-12" dense title="Resumen Ordenes de Entrada" no-data-label="No hay registros" hide-bottom :rows-per-page-options="[0]" flat bordered
-              >
+            <q-table class="col-md-12" dense title="Resumen Ordenes de Entrada" no-data-label="No hay registros"
+              hide-bottom :rows-per-page-options="[0]" flat bordered>
               <template v-slot:bottom-row>
                 <q-tr>
                   <q-td colspan="2" align="center">
@@ -425,19 +231,20 @@
           </div>
           <div class="q-pa-md q-gutter-md">
             <q-list>
-              <q-item v-for="md in listaMedidoresConsultaEntrega" :key="md.IdEntregaMedidor" @click.native="imprimirOrdenEntregaPDF(md.IdEntregaMedidor)" class="q-my-sm" clickable>
+              <q-item v-for="md in listaMedidoresConsultaEntrega" :key="md.IdEntregaMedidor"
+                @click.native="imprimirOrdenEntregaPDF(md.IdEntregaMedidor)" class="q-my-sm" clickable>
                 <q-item-section avatar>
                   <q-icon name="receipt" />
                 </q-item-section>
                 <q-item-section>
                   <q-item-label> <b> {{ md.Nombre_persona }} </b> </q-item-label>
                   <q-item-label>
-                    Identificacion: {{ md.Identificacion_persona }} <br/>
-                    IdEntregaMedidor: {{ md.IdEntregaMedidor }} <br/>
-                    Medidores: {{ md.NMedidores }} <br/>
-                    Login:  {{ md.Login }} <br/>
-                    Fecha:  {{ md.FechaEntrega }} <br/>
-                    Observaciones: {{ md.Observacion }} <br/>
+                    Identificacion: {{ md.Identificacion_persona }} <br />
+                    IdEntregaMedidor: {{ md.IdEntregaMedidor }} <br />
+                    Medidores: {{ md.NMedidores }} <br />
+                    Login: {{ md.Login }} <br />
+                    Fecha: {{ md.FechaEntrega }} <br />
+                    Observaciones: {{ md.Observacion }} <br />
                   </q-item-label>
                   <q-separator />
                 </q-item-section>
@@ -455,7 +262,7 @@ import utils from '../../commons/utils.js'
 import { date } from 'quasar'
 import { exportFile } from 'quasar'
 
-function wrapCsvValue (val, formatFn) {
+function wrapCsvValue(val, formatFn) {
   let formatted = formatFn !== undefined
     ? formatFn(val)
     : val
@@ -477,7 +284,7 @@ function wrapCsvValue (val, formatFn) {
 
 export default {
   name: 'programacionOrden',
-  data () {
+  data() {
     return {
       model: null,
       Id_ordenentrada: null,
@@ -485,14 +292,14 @@ export default {
       EntregaMedidor: { IdEntregaMedidor: 0, Id_persona: null, NMedidores: 0, FechaEntrega: '', Fecha: '', Login: '', Observacion: '', Estado: 1, ListaEntregaMD: [], Id_ordenentrada: null, Id_programacionorden: null },
       EntregaMD: { IdEntregaMD: 0, IdEntregaMedidor: 0, Id_ordenentradad: 0, Id_pod: 0, Id_calibracion: 0, IdCertificado: 0, SerialMedidor: '', Estado: 1 },
       EntregaMedidorConsulta: { IdEntregaMedidor: 0, Id_persona: -1, NMedidores: 0, FechaEntrega: '', Fecha: '', Login: '', Observacion: '', Estado: 0, ListaEntregaMD: [] },
-      LecturaMedidor: { Puesto_ordenentradad: 0, Id_pod: 0, Id_ordenentradad: -1, Serialmedidor_ordenentradad: '', Lectura_ordenentradad: 0, Volumeninicial_repcp: 0, Volumenfinal_repcp: 0, Diametronominal_modelomedidor: '', Nombre_marcamedidor: '', Descripcion_modelomedidor: '', Fabricacion_ordenentradad: '', Aptocalibrar_ordenentradad: '', Nombre_normaref: ''  },
+      LecturaMedidor: { Puesto_ordenentradad: 0, Id_pod: 0, Id_ordenentradad: -1, Serialmedidor_ordenentradad: '', Lectura_ordenentradad: 0, Volumeninicial_repcp: 0, Volumenfinal_repcp: 0, Diametronominal_modelomedidor: '', Nombre_marcamedidor: '', Descripcion_modelomedidor: '', Fabricacion_ordenentradad: '', Aptocalibrar_ordenentradad: '', Nombre_normaref: '' },
       step: 1,
       isDialogComponenteGuardarEntrega: false,
       isDialogComponenteConsulta: false,
       consultaGeneral: '',
       Certificado: {},
       todasFechas: false,
-      isEntregado: false,
+      isEntregado: true,
       ListaMedidoresEntregar: [],
       SelectedCertificados: [],
       ListaCertificados: [],
@@ -541,8 +348,10 @@ export default {
       isDialogComponenteFiltro: false,
       fecha: date,
       usuario: {},
-      ordenEntradaD: { Id_ordenentradad: -1, Id_ordenentrada: -1, Id_marcamedidor: -1, Id_modelomedidor: -1, Id_normaref: -1, Aptocalibrar_ordenentradad: '', Fabricacion_ordenentradad: '', Lectura_ordenentradad: '', Serialmedidor_ordenentradad: '', Caudalpermanente_ordenentradad: 0, Claseprecision_ordenentradad: 0, Presionmax_ordenentradad: 0, Perdidapresion_ordenentradad: '',
-        Rangomedicion1_ordenentradad: 0, Rangomedicion2_ordenentradad: 0, Clasetemperatura_ordenentradad: '', Sensibilidadaar_ordenentradad: '', Sebsibilidadaab_ordenentradad: '', Identificador_ordenentradad: 0, Clasemetrologica_ordenentradad: '', Precisionnominal_ordenentradad: 0, Observacion_ordenentradad: '', Estado_ordenentradad: 0, Nombre_marcamedidor: '', Descripcion_modelomedidor: '', Nombre_normaref: '', Marcamedidor: { Id_marcamedidor: null, Nombre_marcamedidor: '' }, Modelomedidor: { Id_modelomedidor: null, Descripcion_modelomedidor: '', Diametronominal_modelomedidor: '' }, Icono: 'edit', Incidencias: 0, ListaIncidencias: [], Programado_ordenentradad: 0, Calibrado_ordenentradad: 0, Certificado_ordenentradad: 0 },
+      ordenEntradaD: {
+        Id_ordenentradad: -1, Id_ordenentrada: -1, Id_marcamedidor: -1, Id_modelomedidor: -1, Id_normaref: -1, Aptocalibrar_ordenentradad: '', Fabricacion_ordenentradad: '', Lectura_ordenentradad: '', Serialmedidor_ordenentradad: '', Caudalpermanente_ordenentradad: 0, Claseprecision_ordenentradad: 0, Presionmax_ordenentradad: 0, Perdidapresion_ordenentradad: '',
+        Rangomedicion1_ordenentradad: 0, Rangomedicion2_ordenentradad: 0, Clasetemperatura_ordenentradad: '', Sensibilidadaar_ordenentradad: '', Sebsibilidadaab_ordenentradad: '', Identificador_ordenentradad: 0, Clasemetrologica_ordenentradad: '', Precisionnominal_ordenentradad: 0, Observacion_ordenentradad: '', Estado_ordenentradad: 0, Nombre_marcamedidor: '', Descripcion_modelomedidor: '', Nombre_normaref: '', Marcamedidor: { Id_marcamedidor: null, Nombre_marcamedidor: '' }, Modelomedidor: { Id_modelomedidor: null, Descripcion_modelomedidor: '', Diametronominal_modelomedidor: '' }, Icono: 'edit', Incidencias: 0, ListaIncidencias: [], Programado_ordenentradad: 0, Calibrado_ordenentradad: 0, Certificado_ordenentradad: 0
+      },
       columnsMedidores: [
         { name: 'Puesto_ordenentradad', align: 'left', label: 'Puesto', field: 'Puesto_ordenentradad', required: true },
         { name: 'Id_pod', align: 'left', label: 'Id', field: 'Id_pod' },
@@ -557,10 +366,10 @@ export default {
         { name: 'Aptocalibrar_ordenentradad', align: 'left', label: 'AptoCal', field: 'Aptocalibrar_ordenentradad' },
         { name: 'Nombre_normaref', align: 'left', label: 'Norma Referencia', field: 'Nombre_normaref' }
       ],
-      vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad']     
+      vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad']
     }
   },
-  mounted () {
+  mounted() {
     this.usuario = this.$q.localStorage.getItem('usuarioSILAMED')
     utils.verificarUsuario(this.usuario.LoginUsuario, this)
     this.accesos = this.$q.localStorage.getItem('accesosSILAMED')
@@ -569,10 +378,10 @@ export default {
     this.EntregaMedidorConsulta.Fecha = utils.fechaActual()
     this.EntregaMedidorConsulta.FechaEntrega = utils.fechaActual()
   },
-  created () {
+  created() {
   },
   methods: {
-    exportTable (tablaE, columnasE) {
+    exportTable(tablaE, columnasE) {
       // naive encoding to csv format
       const content = [columnasE.map(col => wrapCsvValue(col.label))].concat(
         tablaE.map(row => columnasE.map(col => wrapCsvValue(
@@ -598,7 +407,7 @@ export default {
         })
       }
     },
-    consultarordenEntregaFechas () {
+    consultarordenEntregaFechas() {
       const self = this
       // estado = todasFechas, Fecha = FechaIni, FechaEntrega = FechaFin, Observacion puede tener serial medidor y Numero Certificado
       self.$q.loading.show()
@@ -621,7 +430,7 @@ export default {
           self.$q.loading.hide()
         })
     },
-    filterFnUsuario (val, update, abort) {
+    filterFnUsuario(val, update, abort) {
       if (val.length === 0) {
         abort()
         return
@@ -641,50 +450,49 @@ export default {
           })
       }, 500)
     },
-    entregarMedidores () {
+    AutorizarCertificados(Certificados) {
+      const Login = this.usuario.LoginUsuario
+      this.$q.loading.show()
+      api.post(`/certificado/InsertCertificadosAutorizar/${Login}`, Certificados)
+        .then(response => {
+          this.$q.loading.hide()
+          this.consultarFiltroEntregar(this.consultaGeneral, this.todasFechas, this.fechaIni, this.fechaFin)
+        }).catch(error => {
+          console.log(error)
+          this.$q.loading.hide()
+        })
+    },
+    entregarMedidores() {
       const self = this
-      if (self.isEntregado === true) {
-        let certificados = []
-        for (const em of self.SelectedCertificados) {
-          certificados.push(em.IdCertificado)
-        }
-        if (certificados.length > 0) {
-          self.imprimirCertificadoMasivoPDF(certificados)
-        }
-        this.step = 2
-        return
+
+      let certificados = []
+      for (const em of self.SelectedCertificados) {
+        certificados.push(em.IdCertificado)
       }
+      console.log(certificados)
+
       if (self.SelectedCertificados.length > 0) {
         this.$q.dialog({
           title: 'SILAMED',
           dark: true,
-          message: 'Está seguro de la entrega de ' + self.SelectedCertificados.length + ' medidores?',
+          message: 'Está seguro autorizar ' + self.SelectedCertificados.length + ' certificados?',
           cancel: true,
           persistent: true,
           html: true
         }).onOk(() => {
-          self.ListaMedidoresEntregar = []
-          for (const certificado of self.SelectedCertificados) {
-            const entregaMD = {...self.EntregaMD}
-            entregaMD.Id_ordenentradad = 0
-            entregaMD.Id_pod = certificado.Id_pod
-            entregaMD.Id_calibracion = certificado.Id_calibracion
-            entregaMD.IdCertificado = certificado.IdCertificado
-            entregaMD.SerialMedidor = certificado.Serialmedidor_ordenentradad
-            self.ListaMedidoresEntregar.push(entregaMD)
+
+          if (certificados.length > 0) {
+            self.AutorizarCertificados(certificados)
           }
-          self.EntregaMedidor.ListaEntregaMD = self.ListaMedidoresEntregar
-          self.EntregaMedidor.NMedidores = self.ListaMedidoresEntregar.length
-          self.EntregaMedidor.Login = self.usuario.LoginUsuario
-          self.EntregaMedidor.FechaEntrega = utils.fechaActual()
-          self.isDialogComponenteGuardarEntrega = true
+
         }).onCancel(() => {
         })
-      } else {
-        self.step = 2
       }
+      // else {
+      //   self.step = 2
+      // }
     },
-    guardarEntrega () {
+    guardarEntrega() {
       const self = this
       this.$q.dialog({
         title: 'SILAMED',
@@ -694,26 +502,26 @@ export default {
         persistent: true
       }).onOk(() => {
         api.post('/certificado/entregaMedidoresInsertar/', this.EntregaMedidor)
-        .then((response) => {
-          self.imprimirOrdenEntregaPDF(response.data.IdEntregaMedidor)
-          self.isDialogComponenteGuardarEntrega = false
-          let certificados = []
-          for (const em of self.SelectedCertificados) {
-            certificados.push(em.IdCertificado)
-          }
-          self.imprimirCertificadoMasivoPDF(certificados)
-          this.step = 2
-          self.$q.loading.hide()
-        })
-        .catch((error) => {
-          utils.mensaje('Fallo la conexion - Guardar Entrega de medidor ' + error)
-          self.$q.loading.hide()
-        })
+          .then((response) => {
+            self.imprimirOrdenEntregaPDF(response.data.IdEntregaMedidor)
+            self.isDialogComponenteGuardarEntrega = false
+            let certificados = []
+            for (const em of self.SelectedCertificados) {
+              certificados.push(em.IdCertificado)
+            }
+            self.imprimirCertificadoMasivoPDF(certificados)
+            this.step = 2
+            self.$q.loading.hide()
+          })
+          .catch((error) => {
+            utils.mensaje('Fallo la conexion - Guardar Entrega de medidor ' + error)
+            self.$q.loading.hide()
+          })
         this.step = 2
       }).onCancel(() => {
       })
     },
-    imprimirCertificadoPDF (idCertificado) {
+    imprimirCertificadoPDF(idCertificado) {
       this.$q.loading.show()
       api.get(`/certificado/certificadoImprimirPDF/${idCertificado}`, { responseType: 'arraybuffer' })
         .then(response => {
@@ -726,7 +534,7 @@ export default {
           this.$q.loading.hide()
         })
     },
-    imprimirCertificadoMasivoPDF (certificados) {
+    imprimirCertificadoMasivoPDF(certificados) {
       this.$q.loading.show()
       api.post('/certificado/certificadoImprimirMasivoPDF/', certificados, { responseType: 'arraybuffer' })
         .then(response => {
@@ -739,7 +547,7 @@ export default {
           this.$q.loading.hide()
         })
     },
-    imprimirOrdenEntregaPDF (idEntregaMedidor) {
+    imprimirOrdenEntregaPDF(idEntregaMedidor) {
       this.$q.loading.show()
       api.get(`/certificado/entregaMedidorImprimirPDF/${idEntregaMedidor}`, { responseType: 'arraybuffer' })
         .then(response => {
@@ -752,7 +560,7 @@ export default {
           this.$q.loading.hide()
         })
     },
-    filterFn (val, update, abort) {
+    filterFn(val, update, abort) {
       if (val.length === 0) {
         abort()
         return
@@ -772,7 +580,7 @@ export default {
           })
       }, 500)
     },
-    agregarCliente () {
+    agregarCliente() {
       for (var t = 0; t < this.accesos.length; t++) {
         if (this.accesos[t].Hijos !== null) {
           for (var h = 0; h < this.accesos[t].Hijos.length; h++) {
@@ -785,57 +593,56 @@ export default {
         }
       }
     },
-    getSelectdMedidores () {
+    getSelectdMedidores() {
       return this.lisMedidores.length === 0 ? '' : `${this.lisMedidores.length} medidor${this.lisMedidores.length > 1 ? 'es' : ''} para calibrar`
     },
-    regresar () {
+    regresar() {
       this.$router.push('/admin')
     },
-    reiniciarCalibracion () {
+    reiniciarCalibracion() {
       // this.ordenEntradaD = { Id_puse: 'PS01', Login_ordenEntrada: this.usuario.LoginUsuario, Numero_ordenEntrada: '0', Valor_ordenEntrada: 0, Observaciones_ordenEntrada: '' }
       this.ProgramacionOrden = { Id_programacionorden: -1, Id_ordenentradad: -1, Id_tipoensayo: -1, Nombre_tipoensayo: '', Id_banco: -1, Identificacion_banco: '', Id_parcal: -1, Fechacalibracion_programacionorden: '', Horacalibracion_programacionorden: '', Duracioncalibracion_programacionorden: 0, Medidores_programacionorden: 0, Supervisor_programacionorden: '', Encargado_programacionorden: '', Observacion_programacionorden: '', Login_programacionorden: '', LisProgOrdenDet: [], LisInstProg: [] }
       this.ProgramacionOrden.Fechacalibracion_programacionorden = utils.fechaActual()
       this.ProgramacionOrden.FechaIni = utils.fechaActual()
       this.ProgramacionOrden.FechaFin = utils.fechaActual()
       this.ProgramacionOrden.Horacalibracion_programacionorden = '07:30'
-      this.ProgramacionOrden.Login_programacionorden = this.usuario.LoginUsuario 
+      this.ProgramacionOrden.Login_programacionorden = this.usuario.LoginUsuario
       this.fechaIni = this.ProgramacionOrden.Fechacalibracion_programacionorden
       this.fechaFin = this.ProgramacionOrden.Fechacalibracion_programacionorden
       this.selected = []
       this.SelectedPruebas = []
       this.SelectedInstrumentos = []
-      this.Certificado = { Id_calibracion: -1, Id_programacionorden: -1, Fechaini_calibracion: '', Fechafin_calibracion: '', Fecha_calibracion: '', Observacion_calibracion: '', Login_calibracion: '', Estado_calibracion: 1, Programacionorden: {}, LisCalibracionPrueba: [], Medidores_programacionorden: 0, Nombre_supervisor: '', Nombre_encargado: ''  }
+      this.Certificado = { Id_calibracion: -1, Id_programacionorden: -1, Fechaini_calibracion: '', Fechafin_calibracion: '', Fecha_calibracion: '', Observacion_calibracion: '', Login_calibracion: '', Estado_calibracion: 1, Programacionorden: {}, LisCalibracionPrueba: [], Medidores_programacionorden: 0, Nombre_supervisor: '', Nombre_encargado: '' }
       this.CalibracionPrueba = { Id_calprueba: -1, Id_calibracion: -1, Id_caudal: '', Tempambini_calprueba: 0, Tempambfin_calprueba: 0, Humedadrelini_calprueba: 0, Humedadrelfin_calprueba: 0, Observacion_calprueba: '', Fechaini_calprueba: '', Fechafin_calprueba: '', Fecha_calprueba: '', Login_calprueba: '', Estado_calprueba: 0, LisRepeticionCP: [] }
       this.RepeticioCP = { Id_repcp: -1, Id_pod: 0, Id_calprueba: -1, Nrepeticion_repcp: 0, Npuestobanco_repcp: 0, Volumeninicial_repcp: 0, Volumenfinal_repcp: 0, Caudal1_repcp: 0, Caudal2_repcp: 0, Caudal3_repcp: 0, Presionent1_repcp: 0, Presionent2_repcp: 0, Presionent3_repcp: 0, Presionsal1_repcp: 0, Presionsal2_repcp: 0, Presionsal3_repcp: 0, Templinea1_repcp: 0, Templinea2_repcp: 0, Templinea3_repcp: 0, Temprvm_repcp: 0, Volumenrvm_repcp: 0, Duracionh_repcp: 0, Duracionm_repcp: 0, Duracions_repcp: 0, Fechaini_repcp: '', Fechafin_repcp: '', Observacion_repcp: '', Estado_repcp: 1 }
     },
-    regla (val) {
+    regla(val) {
       if (val !== null && val !== '' && val !== undefined) {
         return true
       }
       return false || 'Falta completar información'
     },
-   formatoNumero (numero, decimales) {
+    formatoNumero(numero, decimales) {
       return utils.formatoNumero(numero, decimales)
     },
-    consultarFiltroEntregar (consultaGeneral, isEntregado, todasFechas, fechaIni, fechaFin) {
+    consultarFiltroEntregar(consultaGeneral, todasFechas, fechaIni, fechaFin) {
       const self = this
       let consulta = '-1'
       let todasLasFechas = 0
-      let isEntregadoCertificado = 0
+      let isEntregadoCertificado = 1
       let ioe = -1
       let ipo = -1
       self.SelectedCertificados = []
-      const Login = null
+      const Login = this.usuario.LoginUsuario
+      console.log(Login)
       self.$q.loading.show()
-      if (consultaGeneral !== '') {
-        consulta = consultaGeneral
-      }
+
+      consulta = 1
+
       if (todasFechas === true) {
         todasLasFechas = 1
       }
-      if (isEntregado === true) {
-        isEntregadoCertificado = 1
-      }
+
       if (this.Id_ordenentrada === null || this.Id_ordenentrada === '') {
         ioe = -1
       } else {
@@ -856,7 +663,7 @@ export default {
           self.$q.loading.hide()
         })
     },
-    seleccionarCliente (clie) {
+    seleccionarCliente(clie) {
       if (clie != null) {
         this.cliente = clie
       }

@@ -18,6 +18,7 @@ const routes = [
       { path: '/Procesos/OrdeTrabajo', component: () => import('pages//Procesos/OrdenTrabajo.vue') },
       { path: '/Procesos/EntregaMedidores', component: () => import('pages//Procesos/EntregaMedidores.vue') },
       { path: '/Procesos/GeneracionResultados', component: () => import('pages//Procesos/GeneracionResultados.vue') },
+      { path: '/Procesos/AutorizarFirmas', component: () => import('pages//Procesos/AutorizacionFirmas.vue') },
       { path: '/Procesos/TrabajoNoConforme', component: () => import('pages//Procesos/TrabajoNoConforme.vue') },
       { path: '/Informes/AcumuladoMacro', component: () => import('src/pages/Informes/AcumuladoMacro.vue') },
       { path: '/Informes/ArchivosFacturacion', component: () => import('src/pages/Informes/ArchivosFacturacion.vue') },

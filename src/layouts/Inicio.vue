@@ -12,7 +12,7 @@
       <div>
         <q-form class="q-pa-md">
           <div class="row justify-center q-pt-sm">
-            <img class="col-xs-10 col-sm-5 col-md-3" src="~assets/logo.png"/>
+            <img class="col-xs-9 col-sm-3 col-md-2" src="~assets/LOGO_SERVAF.png"/>
           </div>
           <div class="row justify-center q-pt-sm">
             <q-input v-model="usuario.LoginUsuario" class="col-xs-12 col-sm-6 col-md-4"
