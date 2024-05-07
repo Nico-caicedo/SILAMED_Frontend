@@ -636,9 +636,6 @@ export default {
       const Login = this.usuario.LoginUsuario
       console.log(Login)
       self.$q.loading.show()
-
-      consulta = 1
-
       if (todasFechas === true) {
         todasLasFechas = 1
       }

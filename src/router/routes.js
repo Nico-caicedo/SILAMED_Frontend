@@ -32,6 +32,13 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/Inicio.vue')
+  },
+  {
+    path: '/descarga/:id',
+    component: () => import('src/pages/Prueba.vue'),
+    children: [
+      { path: '/des', component: () => import('src/pages/Prueba.vue') },
+    ]
   }
 ]
   // Always leave this as last one,

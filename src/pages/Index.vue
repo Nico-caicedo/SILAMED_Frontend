@@ -3,7 +3,7 @@
     <img
       alt="Quasar logo"
       src="~assets/logo.png"
-      style="width: 520px; height: 200px"
+      style="width: 420px; height: 400px"
     >
   </q-page>
 </template>
