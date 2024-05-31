@@ -12,7 +12,7 @@
           <q-btn flat round dense icon="content_paste_search" @click="isDialogComponenteFiltro = true" />
         </q-avatar>
         <q-toolbar-title>
-          Autorización de certificados
+          Autorización de Firmas
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -22,8 +22,14 @@
           <q-stepper v-model="step" vertical color="primary" animated>
             <q-step :name="1" title="1. Seleccione rango de fechas" icon="search" :done="step > 1">
               <div class="row q-col-gutter-sm">
-                <q-toggle class="col-xs-12 col-sm-6 col-md-3 q-field--with-bottom q-pt-sm" v-model="todasFechas"
+                <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="todasFechas"
                   checked-icon="check" color="green" label="Todas las fechas" unchecked-icon="clear" />
+
+                  <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="certificado"
+                  checked-icon="check" color="orange" label="Certificado" unchecked-icon="clear" @change="Cambio" @click.native="Cambio('certificado')"/>
+                  <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="informe"
+                  checked-icon="check" color="yellow" label="Informe" unchecked-icon="clear"  @change="Cambio" @click.native="Cambio('informe')" />
+
                 <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" stack-label label="Fecha Inicio"
                   :readonly="todasFechas === true" v-model="fechaIni" type="date" outlined>
                   <template v-slot:prepend>
@@ -36,7 +42,7 @@
                     <q-icon name="date_range" size="lg" />
                   </template>
                 </q-input>
-                <q-table class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                <q-table v-if="certificado == true" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
                   flat bordered :data="ListaCertificados" :columns="columnsCertificado" row-key="IdCertificado"
                   selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcCertificado">
                   <template v-slot:header-selection="scope">
@@ -57,6 +63,28 @@
                       option-value="name" options-cover style="min-width: 150px" />
                   </template>
                 </q-table>
+
+                <q-table v-if="informe == true" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                  flat bordered :data="ListaInformes" :columns="columnsInforme" row-key="IdInforme"
+                  selection="multiple" :selected.sync="SelectedInformes" :visible-columns="viInforme">
+                  <template v-slot:header-selection="scope">
+                    <q-toggle v-model="scope.selected" />
+                  </template>
+                  <template v-slot:body-selection="scope">
+                    <q-toggle v-model="scope.selected" dense />
+                  </template>
+                  <template v-slot:top="props">
+                    <q-btn color="primary" icon-right="archive" label="" no-caps
+                      @click="exportTable(ListaInformes, columnsInforme)" />
+                    <q-space />
+                    <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                      @click="props.toggleFullscreen" class="q-ml-md" />
+                    <q-space />
+                    <q-select v-model="viInforme" multiple outlined dense options-dense
+                      :display-value="$q.lang.table.columns" emit-value map-options :options="columnsInforme"
+                      option-value="name" options-cover style="min-width: 150px" />
+                  </template>
+                </q-table>
               </div>
               <div class="row justify-center q-pa-sm">
                 <q-btn label="Consultar" icon="search" outline align="center" unelevated
@@ -64,7 +92,8 @@
                 </q-btn>
               </div>
               <q-stepper-navigation>
-                <q-btn color="primary" @click="entregarMedidores()" label="Autorizar" />
+                <q-btn color="primary" v-if="certificado == true" @click="EnviarCertificados()" label="Autorizar" />
+                <q-btn color="primary" v-if="informe == true" @click="EnviarInformes()" label="Autorizar" />
               </q-stepper-navigation>
             </q-step>
 
@@ -286,6 +315,8 @@ export default {
   name: 'programacionOrden',
   data() {
     return {
+      certificado: true,
+      informe:false,
       model: null,
       Id_ordenentrada: null,
       Id_programacionorden: null,
@@ -302,7 +333,9 @@ export default {
       isEntregado: true,
       ListaMedidoresEntregar: [],
       SelectedCertificados: [],
+      SelectedInformes: [],
       ListaCertificados: [],
+      ListaInformes:[],
       listaClientes: [],
       columnsCertificado: [
         { name: 'IdCertificado', label: 'Id', field: 'IdCertificado', sortable: true },
@@ -318,21 +351,7 @@ export default {
         { name: 'FechaCertificado', label: 'FechaCertificado', field: 'FechaCertificado', align: 'left', sortable: true },
         { name: 'Login', label: 'Login', field: 'Login', align: 'left', sortable: true }
       ],
-      columnsCertificadoImp: [
-        { name: 'ImprimirCertificado', label: 'Imprimir', field: 'ImprimirCertificado', required: true, sortable: true },
-        { name: 'IdCertificado', label: 'Id', field: 'IdCertificado', sortable: true },
-        { name: 'Id_calibracion', align: 'left', label: 'IdCal', field: 'Id_calibracion', sortable: true },
-        { name: 'Id_ordenentrada', label: 'OrdenEntrada', field: 'Id_ordenentrada', sortable: true },
-        { name: 'Id_programacionorden', label: 'OrdenTrabajo', field: 'Id_programacionorden', sortable: true },
-        { name: 'Id_pod', label: 'IdPod', field: 'Id_pod', sortable: true },
-        { name: 'NCertificado', label: 'NCertificado', field: 'NCertificado', sortable: true },
-        { name: 'Serialmedidor_ordenentradad', label: 'Serialmedidor', align: 'left', field: 'Serialmedidor_ordenentradad', sortable: true },
-        { name: 'Codigo_cliente', label: 'Nit', field: 'Codigo_cliente', align: 'left', sortable: true },
-        { name: 'Razonsocial_cliente', label: 'Razonsocial_cliente', align: 'left', field: 'Razonsocial_cliente', sortable: true },
-        { name: 'FechaEmision', label: 'FechaEmision', field: 'FechaEmision', align: 'left', sortable: true },
-        { name: 'FechaCertificado', label: 'FechaCertificado', field: 'FechaCertificado', align: 'left', sortable: true },
-        { name: 'Login', label: 'Login', field: 'Login', align: 'left', sortable: true }
-      ],
+      
       SelectedInstrumentos: [],
       listaUsuarios: [],
       ProgramacionOrden: { Id_programacionorden: -1, Id_ordenentradad: -1, Id_tipoensayo: -1, Nombre_tipoensayo: '', Id_banco: -1, Identificacion_banco: '', Id_parcal: -1, Fechacalibracion_programacionorden: '', Horacalibracion_programacionorden: '', Duracioncalibracion_programacionorden: 0, Medidores_programacionorden: 0, Supervisor_programacionorden: '', Encargado_programacionorden: '', Observacion_programacionorden: '', Login_programacionorden: '', Calibrado_programacionorden: -1, LisProgOrdenDet: [], LisInstProg: [], Liscaudal: [], FechaIni: '', FechaFin: '' },
@@ -352,21 +371,15 @@ export default {
         Id_ordenentradad: -1, Id_ordenentrada: -1, Id_marcamedidor: -1, Id_modelomedidor: -1, Id_normaref: -1, Aptocalibrar_ordenentradad: '', Fabricacion_ordenentradad: '', Lectura_ordenentradad: '', Serialmedidor_ordenentradad: '', Caudalpermanente_ordenentradad: 0, Claseprecision_ordenentradad: 0, Presionmax_ordenentradad: 0, Perdidapresion_ordenentradad: '',
         Rangomedicion1_ordenentradad: 0, Rangomedicion2_ordenentradad: 0, Clasetemperatura_ordenentradad: '', Sensibilidadaar_ordenentradad: '', Sebsibilidadaab_ordenentradad: '', Identificador_ordenentradad: 0, Clasemetrologica_ordenentradad: '', Precisionnominal_ordenentradad: 0, Observacion_ordenentradad: '', Estado_ordenentradad: 0, Nombre_marcamedidor: '', Descripcion_modelomedidor: '', Nombre_normaref: '', Marcamedidor: { Id_marcamedidor: null, Nombre_marcamedidor: '' }, Modelomedidor: { Id_modelomedidor: null, Descripcion_modelomedidor: '', Diametronominal_modelomedidor: '' }, Icono: 'edit', Incidencias: 0, ListaIncidencias: [], Programado_ordenentradad: 0, Calibrado_ordenentradad: 0, Certificado_ordenentradad: 0
       },
-      columnsMedidores: [
-        { name: 'Puesto_ordenentradad', align: 'left', label: 'Puesto', field: 'Puesto_ordenentradad', required: true },
-        { name: 'Id_pod', align: 'left', label: 'Id', field: 'Id_pod' },
-        { name: 'Id_ordenentradad', align: 'left', label: 'IdOED', field: 'Id_ordenentradad' },
-        { name: 'Serialmedidor_ordenentradad', align: 'left', label: 'Serial', field: 'Serialmedidor_ordenentradad' },
-        { name: 'Lectura_ordenentradad', label: 'Lectura', field: 'Lectura_ordenentradad' },
-        { name: 'Volumeninicial_repcp', label: 'Vol. Inicial', field: 'Volumeninicial_repcp' },
-        { name: 'Volumenfinal_repcp', label: 'Vol. Final', field: 'Volumenfinal_repcp' },
-        { name: 'Nombre_marcamedidor', align: 'left', label: 'Marca Medidor', field: 'Nombre_marcamedidor' },
-        { name: 'Descripcion_modelomedidor', align: 'left', label: 'Modelo Medidor', field: 'Descripcion_modelomedidor' },
-        { name: 'Fabricacion_ordenentradad', align: 'left', label: 'AñoFab', field: 'Fabricacion_ordenentradad' },
-        { name: 'Aptocalibrar_ordenentradad', align: 'left', label: 'AptoCal', field: 'Aptocalibrar_ordenentradad' },
-        { name: 'Nombre_normaref', align: 'left', label: 'Norma Referencia', field: 'Nombre_normaref' }
-      ],
-      vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad']
+      columnsInforme:[  
+        { name: 'IdInforme', align: 'left', label: 'Id', field: 'IdInforme', required: true },
+        { name: 'IdOrdenEntradad', align: 'left', label: 'Id_OrdenEntradad', field: 'IdOrdenEntradad' },
+        { name: 'NInforme', align: 'left', label: 'NInforme', field: 'NInforme' },
+        { name: 'FechaEmision', align: 'left', label: 'FechaEmisión', field: 'FechaEmision' },
+       ]
+      ,
+      vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad'],
+      viInforme: ['IdInforme', 'NInforme', 'SerialMedidor']
     }
   },
   mounted() {
@@ -406,6 +419,17 @@ export default {
           icon: 'warning'
         })
       }
+    },
+    Cambio(value){
+      if(value == 'informe'){
+        this.certificado = false
+        console.log('informe activo')
+      }
+      if(value == 'certificado'){
+        this.informe = false
+        console.log('certificado activo')
+      } 
+       
     },
     consultarordenEntregaFechas() {
       const self = this
@@ -462,7 +486,7 @@ export default {
           this.$q.loading.hide()
         })
     },
-    entregarMedidores() {
+    EnviarCertificados() {
       const self = this
 
       let certificados = []
@@ -492,6 +516,49 @@ export default {
       //   self.step = 2
       // }
     },
+    AutorizarInformes(informes) {
+      const Login = this.usuario.LoginUsuario
+      this.$q.loading.show()
+      api.post(`/medidor/InsertInformesAutorizar/${Login}`, informes)
+        .then(response => {
+          this.$q.loading.hide()
+          this.consultarFiltroEntregar(this.consultaGeneral, this.todasFechas, this.fechaIni, this.fechaFin)
+        }).catch(error => {
+          console.log(error)
+          this.$q.loading.hide()
+        })
+    },
+    EnviarInformes() {
+      const self = this
+
+      let informes = []
+      for (const em of self.SelectedInformes) {
+        informes.push(em.IdInforme)
+      }
+      console.log(informes)
+
+      if (self.SelectedInformes.length > 0) {
+        this.$q.dialog({
+          title: 'SILAMED',
+          dark: true,
+          message: 'Está seguro autorizar ' + self.SelectedInformes.length + ' informe?',
+          cancel: true,
+          persistent: true,
+          html: true
+        }).onOk(() => {
+
+          if (informes.length > 0) {
+            self.AutorizarInformes(informes)
+          }
+
+        }).onCancel(() => {
+        })
+      }
+      // else {
+      //   self.step = 2
+      // }
+    }
+    ,
     guardarEntrega() {
       const self = this
       this.$q.dialog({
@@ -630,6 +697,8 @@ export default {
       let consulta = '-1'
       let todasLasFechas = 0
       let isEntregadoCertificado = 1
+      let Certificado = this.certificado
+      let Informe = this.informe
       let ioe = -1
       let ipo = -1
       self.SelectedCertificados = []
@@ -650,9 +719,19 @@ export default {
       } else {
         ipo = this.Id_programacionorden
       }
-      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}`)
+      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${Certificado}/${Informe}`)
         .then((response) => {
-          self.ListaCertificados = response.data
+          if(this.informe){
+            self.ListaInformes = response.data
+            console.log(self.ListaInformes)
+          }
+
+
+          if(this.certificado){
+            self.ListaCertificados = response.data
+            console.log(self.ListaCertificados)
+          }
+          
           self.$q.loading.hide()
         })
         .catch((error) => {

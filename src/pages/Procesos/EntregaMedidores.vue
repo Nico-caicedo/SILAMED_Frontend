@@ -819,6 +819,8 @@ export default {
     },
     consultarFiltroEntregar (consultaGeneral, isEntregado, todasFechas, fechaIni, fechaFin) {
       const self = this
+      let Certificado = true
+      let Informe = false
       let consulta = '-1'
       let todasLasFechas = 0
       let isEntregadoCertificado = 0
@@ -846,7 +848,7 @@ export default {
       } else {
         ipo = this.Id_programacionorden
       }
-      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}`)
+      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${Certificado}/${Informe}`)
         .then((response) => {
           self.ListaCertificados = response.data
           self.$q.loading.hide()
