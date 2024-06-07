@@ -608,6 +608,7 @@ export default {
       //  this.guardarVerificacionCalibracion();
 
       Verificacion.img = Verificacion.img.map(img => img.replace(UrlServer, ""));
+      Verificacion.listIncidencias = this.selected
       const self = this;
       self.$q.loading.show();
       api.post("/medidor/VerificarInforme/", Verificacion)

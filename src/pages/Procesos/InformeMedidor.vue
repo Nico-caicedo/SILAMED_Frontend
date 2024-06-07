@@ -141,10 +141,7 @@
           <q-btn label="Regresar" icon="replay" outline align="center" unelevated @click="regresar">
           </q-btn>
         </div>
-        <div class="q-pa-md q-gutter-md">
-          <q-btn label="Imprimir" icon="print" outline align="center" unelevated @click="imprimir">
-          </q-btn>
-        </div>
+        
       </q-form>
     </q-page-container>
   </q-layout>
