@@ -68,6 +68,8 @@ export default {
     }
     return polinomio
   },
+
+
   mensajeError (texto, posicion) {
     this.$q.notify({
       color: 'negative',

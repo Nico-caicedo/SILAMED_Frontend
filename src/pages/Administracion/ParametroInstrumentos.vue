@@ -391,7 +391,7 @@ export default {
         Certcalibracion_trazabilidadinst: '', Fechacalibracion_trazabilidadinst: '', Proximacalibracion_trazabilidadinst: '', Fuentecalibracion_trazabilidadinst: '',
         Errorindicacion_trazabilidadinst: null, Errorindicacionant_trazabilidadinst: null, Incertidumbre_trazabilidadinst: null, Divisionescala_trazabilidadinst: null, 
         Correccionescala_trazabilidadinst: null, Incertidumbreescala_trazabilidadinst: null, Factorcubrimiento_trazabilidadinst: null, Parametroref_trazabilidadinst: null, Ultima_trazabilidadinst: null,
-        Deriva_trazabilidadinst: null, Factorcorreccion_trazabilidadinst: null, X_trazabilidadinst: null, Aplus_trazabilidadinst: '+', A_trazabilidadinst: null, Bplus_trazabilidadinst: '+', B_trazabilidadinst: null, Bplus_trazabilidadinst: '+', C_trazabilidadinst: null, Cplus_trazabilidadinst: '+', Observacion_trazabilidadinst: '', Login_trazabilidadinst: ''
+        Deriva_trazabilidadinst: null, Factorcorreccion_trazabilidadinst: 0, X_trazabilidadinst: 0, Aplus_trazabilidadinst: '+', A_trazabilidadinst: 0, Bplus_trazabilidadinst: '+', B_trazabilidadinst: 0, Bplus_trazabilidadinst: '+', C_trazabilidadinst: 0, Cplus_trazabilidadinst: '+', Observacion_trazabilidadinst: '', Login_trazabilidadinst: ''
       },
       trazabilidadInstrumentoGen: {},
       columnsTrazabilidad: [
@@ -659,6 +659,26 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
+        const trazabilidadInst = {...this.trazabilidadInstrumento}
+        if (trazabilidadInst.A_trazabilidadinst === null) {
+          this.trazabilidadInstrumento.A_trazabilidadinst = 0
+          this.trazabilidadInstrumento.Aplus_trazabilidadinst = '+'
+        }
+        if (trazabilidadInst.B_trazabilidadinst === null) {
+          this.trazabilidadInstrumento.B_trazabilidadinst = 0
+          this.trazabilidadInstrumento.Bplus_trazabilidadinst = '+'
+        }
+        if (trazabilidadInst.C_trazabilidadinst === null) {
+          this.trazabilidadInstrumento.C_trazabilidadinst = 0
+          this.trazabilidadInstrumento.Cplus_trazabilidadinst = '+'
+        }
+        if (trazabilidadInst.Factorcorreccion_trazabilidadinst === null) {
+          this.trazabilidadInstrumento.Factorcorreccion_trazabilidadinst = 0
+        }
+        if (trazabilidadInst.X_trazabilidadinst === null) {
+          this.trazabilidadInstrumento.X_trazabilidadinst = 0
+        }
+
         this.guardarTrazabilidadInstrumento()
       }).onCancel(() => {
       })

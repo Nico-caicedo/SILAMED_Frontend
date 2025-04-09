@@ -131,6 +131,10 @@
                   </template>
                 </q-select>
                 <q-input class="col-xs-12 col-sm-6 col-md-4 q-pt-sm" 
+                  stack-label label="Código Suscriptor" 
+                  v-model="ordenEntradaD.CodigoSuscriptor"
+                  type="number" outlined  />
+                <q-input class="col-xs-12 col-sm-6 col-md-4 q-pt-sm" 
                   stack-label label="Año Fabricación" 
                   v-model="ordenEntradaD.Fabricacion_ordenentradad"
                   :rules="[ val => val > 0 && val.length < 5 || 'Debe ingresar un año adecuado']"
@@ -631,7 +635,7 @@ export default {
       fecha: date,
       usuario: {},
       cliente: {},
-      ordenEntradaD: { Id_ordenentradad: -1, Id_ordenentrada: -1, Id_marcamedidor: -1, Id_modelomedidor: -1, Id_normaref: -1, Aptocalibrar_ordenentradad: '', Fabricacion_ordenentradad: null, Lectura_ordenentradad: null, Serialmedidor_ordenentradad: '', Diametronominal_ordenentradad: 0, Caudalpermanente_ordenentradad: 0, Claseprecision_ordenentradad: 0, Presionmax_ordenentradad: 0, Perdidapresion_ordenentradad: '',
+      ordenEntradaD: { Id_ordenentradad: -1, Id_ordenentrada: -1, Id_marcamedidor: -1, Id_modelomedidor: -1, Id_normaref: -1, Aptocalibrar_ordenentradad: '', CodigoSuscriptor: '', Fabricacion_ordenentradad: null, Lectura_ordenentradad: null, Serialmedidor_ordenentradad: '', Diametronominal_ordenentradad: 0, Caudalpermanente_ordenentradad: 0, Claseprecision_ordenentradad: 0, Presionmax_ordenentradad: 0, Perdidapresion_ordenentradad: '',
         Rangomedicion1_ordenentradad: 0, Rangomedicion2_ordenentradad: 0, Clasetemperatura_ordenentradad: '', Sensibilidadaar_ordenentradad: '', Sensibilidadaab_ordenentradad: '', Identificador_ordenentradad: 0, Clasemetrologica_ordenentradad: '', Precisionnominal_ordenentradad: 0, Observacion_ordenentradad: '', Estado_ordenentradad: 0, Nombre_marcamedidor: '', Descripcion_modelomedidor: '', Nombre_normaref: '', Marcamedidor: { Id_marcamedidor: null, Nombre_marcamedidor: '' }, Modelomedidor: { Id_modelomedidor: null, Descripcion_modelomedidor: '' }, Programado_ordenentradad: 0, Calibrado_ordenentradad: 0, Certificado_ordenentradad: 0, Entregado_ordenentradad: 0, Estado_ordenentradad: 1, Icono: 'edit', Incidencias: 0, ListaIncidencias: [] },
       columnsIncidencias: [
         {

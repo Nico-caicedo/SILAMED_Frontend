@@ -18,8 +18,8 @@
 
       <q-form ref="formordenEntrada" @submit="ProgramarInforme">
         <div class="col-xs-12 col-sm-12 col-md-8">
-          <div class="row q-col-gutter-sm">
-            <q-select class="col-xs-12 col-md-6 q-field--with-bottom" outlined v-model="Informe.IdOrdenEntradad"
+          <div class="row q-gutter-md" style="padding: 8px;" >
+            <q-select class="col-xs-11 col-sm-11 col-md-11 q-field--with-bottom" outlined v-model="Informe.IdOrdenEntradad"
               map-options emit-value option-value="Id_Ordenentradad" option-label="SerialMedidor" clearable
               :options="lisMedidoresNoApto" @input="(val) => {
               consultarFiltro();
@@ -39,7 +39,7 @@
               </template>
             </q-select>
 
-            <div class="col-xs-12 col-sm-12 col-md-6 q-field--with-bottom">
+            <div class="col-xs-11 col-sm-11 col-md-11 q-field--with-bottom">
               <q-select filled v-model="Informe.Reviso" map-options emit-value option-value="LoginUsuario"
                 option-label="NombrePersona" :options="listaUsuarios" :rules="[regla]" use-input hide-dropdown-icon
                 hide-selected fill-input input-debounce="0" label="Supervisor Informe" @filter="filterFnUsuario">
@@ -64,7 +64,7 @@
                 </template>
               </q-select>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-6 q-field--with-bottom">
+            <div class="col-xs-11 col-sm-11 col-md-11 q-field--with-bottom">
               <q-select filled v-model="Informe.Elaboro" map-options emit-value option-value="LoginUsuario"
                 option-label="NombrePersona" :options="listaUsuarios" :rules="[regla]" use-input hide-dropdown-icon
                 hide-selected fill-input input-debounce="0" label="Encargado informe" @filter="filterFnUsuario">
@@ -91,7 +91,7 @@
             </div>
           </div>
         </div>
-        <q-btn color="white" text-color="black" label="Agregar evidencia fotográfica" icon="photo_camera"
+        <q-btn style="margin-bottom: 10px;" color="white" text-color="black" label="Agregar evidencia fotográfica" icon="photo_camera"
           @click="OpenCamera(1)" />
         <!-- <div v-for="(imageSrc, index) in imageSrcs" :key="index">
                     <img style="width: 200px; height: 200px" :src="imageSrc" />
@@ -132,13 +132,13 @@
               <q-btn flat icon="add_photo_alternate" label="Abrir galeria" @click="captureImage(0)" />
             </q-card-section>
           </q-card>
-        </q-dialog>
-        <div class="q-pa-md q-gutter-md">
-          <q-btn label="Programar" icon="save" type="submit" outline align="center" unelevated>
+        </q-dialog> 
+        <div class="q-pa-md q-gutter-md col-xs-12 col-sm-11 col-md-12">
+          <q-btn class="col-xs-1 col-sm-11 col-md-12" label="Programar" color="positive" icon="save" type="submit"   unelevated>
           </q-btn>
-        </div>
-        <div class="q-pa-md q-gutter-md">
-          <q-btn label="Regresar" icon="replay" outline align="center" unelevated @click="regresar">
+      
+        
+          <q-btn class="col-xs-11 col-sm-11 col-md-12" label="Regresar" icon="replay" color="primary" unelevated @click="regresar">
           </q-btn>
         </div>
         
@@ -363,26 +363,9 @@ export default {
     utils.verificarUsuario(this.usuario.LoginUsuario, this);
     this.accesos = this.$q.localStorage.getItem("accesosSILAMED");
     this.mostrarNormaReferencia();
-    this.reiniciarProgramacion();
-    this.ProgramacionOrdenB.FechaIni = utils.fechaActual();
-    this.ProgramacionOrdenB.FechaFin = utils.fechaActual();
-  },
-  created() {
-    const instrumento = {
-      Id_instrumento: -1,
-      IdTipoInstrumento: "",
-      Id_variablemedicion: "",
-      Nombre_variablemedicion: "",
-      Nombre_instrumento: "",
-      Serial_instrumento: "",
-      Codigo_instrumento: "",
-      Descripcion_instrumento: "",
-      Medida_instrumento: -1,
-      Activo_instrumento: 1,
-      Login_instrumento: "",
-      LisTrazabilidadInstrumentos: [],
-    };
-    this.mostrarInstrumentosGeneral(instrumento);
+   
+    // this.ProgramacionOrdenB.FechaIni = utils.fechaActual();
+    // this.ProgramacionOrdenB.FechaFin = utils.fechaActual();
   },
   methods: {
     AbrirCambio(index){
@@ -404,42 +387,47 @@ export default {
     ProgramarInforme() {
       this.Informe.img = this.imageSrcs;
       this.Informe.Login = this.usuario.LoginUsuario;
-      console.log(this.Informe);
-      const self = this;
+      console.log(this.Informe)
+      if(this.Informe.img.length == 4 && this.Informe.Elaboro != '' && this.Informe.Reviso != '' ){
+        const self = this;
       self.$q.loading.show();
       api
         .post("/medidor/SetInformeMedidor/", self.Informe)
         .then((response) => {
           this.Limpiar();
           this.$q.loading.hide();
+      this.$q.notify({
+                  type: 'positive',
+                  message: 'Informe Medidor creado con éxito',
+                  position: 'top-right'
+                });
         })
         .catch((error) => {
           console.log(error);
           this.$q.loading.hide();
         });
+      }else{
+        this.$q.notify({
+                  type: 'warning',
+                  message: 'Faltan evidencias o campos por completar',
+                  position: 'top-right'
+                });
+      }
+
+     
     },
 
-    imprimir() {
-      const self = this;
-      const IdInforme = 2120;
-      self.$q.loading.show();
-      api
-        .get(`/medidor/ImprimirInforme/${IdInforme}`, {
-          responseType: "arraybuffer",
-        })
-        .then((response) => {
-          const blob = new Blob([response.data], { type: "application/pdf" });
-          const blobURL = URL.createObjectURL(blob);
-          window.open(blobURL);
-          this.$q.loading.hide();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$q.loading.hide();
-        });
-    },
     captureImage(tipo) {
-      navigator.camera.getPicture(
+
+      if(this.imageSrcs.length == 4){
+      this.$q.notify({
+                  type: 'warning',
+                  message: 'El máximo de imagenes se completo.',
+                  position: 'top-right'
+                });
+      }else{
+      
+        navigator.camera.getPicture(
         (data) => {
           // on success
           const imageSrc = `data:image/jpeg;base64,${data}`;
@@ -449,7 +437,7 @@ export default {
         },
         () => {
           // on fail
-          this.$q.notify("Could not access device camera.");
+          // this.$q.notify("");
         },
         {
           quality: 100,
@@ -462,6 +450,8 @@ export default {
           correctOrientation: true,
         }
       );
+      }
+   
     },
     replaceImage(index, tipo) {
       // Tomar una nueva foto o seleccionar una imagen de la galería
@@ -473,11 +463,22 @@ export default {
 
           // Reemplazar la imagen en la posición 'index' con la nueva imagen
           this.$set(this.imageSrcs, index, imageSrc);
+          this.dialogReplace = false
+          this.$q.notify({
+                  type: 'positive',
+                  message: 'se remplazo la evidencia',
+                  position: 'top-right'
+                });
         },
         () => {
           // En caso de fallo
           // Mostrar una notificación si no se puede acceder a la cámara del dispositivo
-          this.$q.notify("No se pudo acceder a la cámara del dispositivo.");
+          this.$q.notify({
+                  type: 'negative',
+                  message: 'No se pudo acceder a la cámara del dispositivo.',
+                  position: 'top-right'
+                });
+         
         },
         {
           quality: 100,
@@ -582,65 +583,7 @@ export default {
         }
       });
     },
-    mostrarRangoMedicion(rm) {
-      const self = this;
-      self.$q.loading.show();
-      api
-        .post("/programacionorden/rangoMedicionMostrar/", rm)
-        .then((response) => {
-          self.listaRangoMedicion = response.data;
-          self.$q.loading.hide();
-        })
-        .catch((error) => {
-          utils.mensaje("Fallo la conexion - Rango Medicion " + error);
-          self.$q.loading.hide();
-        });
-    },
-    mostrarInstrumentosGeneral(inst) {
-      const self = this;
-      self.$q.loading.show();
-      api
-        .post("/instrumento/instrumentoMostrarFiltro/", inst)
-        .then((response) => {
-          self.listaInstrumentos = response.data;
-          self.$q.loading.hide();
-        })
-        .catch((error) => {
-          utils.mensaje("Fallo la conexion - Instrumentos Gral " + error);
-          self.$q.loading.hide();
-        });
-    },
-    exportTable(tablaE, columnasE) {
-      // naive encoding to csv format
-      const content = [columnasE.map((col) => wrapCsvValue(col.label))]
-        .concat(
-          tablaE.map((row) =>
-            columnasE
-              .map((col) =>
-                wrapCsvValue(
-                  typeof col.field === "function"
-                    ? col.field(row)
-                    : row[col.field === undefined ? col.name : col.field],
-                  col.format
-                )
-              )
-              .join(",")
-          )
-        )
-        .join("\r\n");
 
-      var nombreArchivo =
-        "ConsultaProgramacionMedidores_" + utils.fechaActual();
-      const status = exportFile(nombreArchivo + ".csv", content, "text/csv");
-
-      if (status !== true) {
-        this.$q.notify({
-          message: "No existen datos para descargar",
-          color: "negative",
-          icon: "warning",
-        });
-      }
-    },
     mostrarModelos(marca) {
       if (marca !== null) {
         this.lisModelomedidor = marca.LisModelomedidor;
@@ -669,7 +612,7 @@ export default {
         .then((response) => {
           self.lisMedidoresNoApto = response.data;
           // self.ordenEntradaD.Id_normaref = response.data[0].Id_normaref
-          console.log(self.lisMedidoresNoApto);
+          // console.log(self.lisMedidoresNoApto);
           self.$q.loading.hide();
         })
         .catch((error) => {
@@ -715,211 +658,14 @@ export default {
     regresar() {
       this.$router.push("/admin");
     },
-    reiniciarProgramacion() {
-      // this.ordenEntradaD = { Id_puse: 'PS01', Login_ordenEntrada: this.usuario.LoginUsuario, Numero_ordenEntrada: '0', Valor_ordenEntrada: 0, Observaciones_ordenEntrada: '' }
-      this.ProgramacionOrden = {
-        Id_programacionorden: null,
-        Id_ordenentradad: null,
-        Id_tipoensayo: null,
-        Nombre_tipoensayo: "",
-        Id_banco: null,
-        Nombre_banco: "",
-        Fechacalibracion_programacionorden: "",
-        Horacalibracion_programacionorden: "",
-        Duracioncalibracion_programacionorden: 0,
-        Medidores_programacionorden: 0,
-        Supervisor_programacionorden: "",
-        Encargado_programacionorden: "",
-        Observacion_programacionorden: "",
-        Login_programacionorden: "",
-        LisProgOrdenDet: [],
-        LisInstProg: [],
-      };
-      this.ProgramacionOrden.Fechacalibracion_programacionorden =
-        utils.fechaActual();
-      this.ProgramacionOrden.Horacalibracion_programacionorden = "07:30";
-      this.ProgramacionOrden.Login_programacionorden =
-        this.usuario.LoginUsuario;
-      this.fechaIni = this.ProgramacionOrden.Fechacalibracion_programacionorden;
-      this.fechaFin = this.ProgramacionOrden.Fechacalibracion_programacionorden;
-      this.listaClientes = [];
-      this.selectedMedidores = [];
-      this.SelectedPruebas = [];
-      this.SelectedInstrumentos = [];
-      this.consultarFiltro();
-    },
-    consultarordenProgramacionFechas() {
-      const self = this;
-      self.$q.loading.show();
-      if (self.todasFechas === 1) {
-        self.ProgramacionOrdenB.Id_programacionorden = 1;
-      } else {
-        self.ProgramacionOrdenB.Id_programacionorden = 0;
-      }
-      if (self.ProgramacionOrdenB.Login_programacionorden === null) {
-        self.ProgramacionOrdenB.Login_programacionorden = "";
-      }
-
-      api
-        .post(
-          "/programacionorden/ProgramacionConsultaFechas/",
-          this.ProgramacionOrdenB
-        )
-        .then((response) => {
-          if (response.data != null) {
-            self.listaProgramaciones = response.data;
-          }
-          self.$q.loading.hide();
-        })
-        .catch((error) => {
-          utils.mensaje("Consulta RC - Fallo la conexion " + error);
-          self.$q.loading.hide();
-        });
-    },
     regla(val) {
       if (val !== null && val !== "" && val !== undefined) {
         return true;
       }
       return false || "Falta completar información";
     },
-    programacionOrdenImprimirPDF(IdProgramacionOrden) {
-      this.$q.loading.show();
-      api
-        .get(
-          `/programacionorden/programacionImprimirPDF/${IdProgramacionOrden}`,
-          { responseType: "arraybuffer" }
-        )
-        .then((response) => {
-          const blob = new Blob([response.data], { type: "application/pdf" });
-          const blobURL = URL.createObjectURL(blob);
-          window.open(blobURL);
-          this.$q.loading.hide();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$q.loading.hide();
-        });
-    },
-    guardarProgramacion() {
-      const self = this;
-      if (
-        self.ProgramacionOrden.Supervisor_programacionorden ===
-        self.ProgramacionOrden.Encargado_programacionorden
-      ) {
-        utils.mensaje(
-          "No puedes seleccionar el mismo supervisor al encargado de la calibración"
-        );
-        return;
-      }
-      if (this.SelectedPruebas.length < 1) {
-        utils.mensaje(
-          "Debe seleccionar al menos una prueba de caudal para realizar las pruebas"
-        );
-        return;
-      }
-      if (this.selectedMedidores.length < 1) {
-        utils.mensaje(
-          "No ha seleccionados medidores para las pruebas, debe seleccionar al menos uno"
-        );
-        return;
-      }
-      if (this.selectedMedidores.length > this.banco.Medidores_banco) {
-        utils.mensaje(
-          "Los medidores seleccionados no pueden superar la capcidad del banco, Capacidad del Banco: " +
-          this.banco.Medidores_banco +
-          ", Medidores seleccionados: " +
-          this.selectedMedidores.length
-        );
-        return;
-      }
-      this.$q
-        .dialog({
-          title: "SILAMED",
-          dark: true,
-          message: "Esta seguro de guardar la programación?",
-          cancel: true,
-          persistent: true,
-        })
-        .onOk(() => {
-          self.ProgramacionOrden.LisProgOrdenDet = [];
-          self.ProgramacionOrden.LisInstProg = [];
-          self.ProgramacionOrden.Medidores_programacionorden =
-            self.selectedMedidores.length;
-          self.ProgramacionOrden.Id_banco = this.banco.Id_banco;
-          for (const oed of self.selectedMedidores) {
-            const oeDet = {
-              Id_pod: 0,
-              Id_programacionorden: 0,
-              Id_ordenentradad: oed.Id_ordenentradad,
-              Estado_pod: 1,
-            };
-            self.ProgramacionOrden.LisProgOrdenDet.push(oeDet);
-          }
-          // VERIFICAR TRAZABILIDAD DEL INSTRUMENTO
-          for (const caudalP of self.SelectedPruebas) {
-            if (caudalP.ListaInstrumentoCaudal.length > 0) {
-              for (const lic of caudalP.ListaInstrumentoCaudal) {
-                // El Id_trazabilidadinst: se actualiza con el procedimiento almacenado.
-                let instr = {
-                  Id_instprog: -1,
-                  Id_programacionorden: 0,
-                  Id_caudal: caudalP.Id_caudal,
-                  IdTipoInstrumento: lic.IdTipoInstrumento,
-                  Id_instrumento: lic.Id_instrumento,
-                  Id_trazabilidadinst: 0,
-                  Login_instprog: self.usuario.LoginUsuario,
-                  Fecha_instprog: "",
-                  Estado_instprog: 1,
-                };
-                self.ProgramacionOrden.LisInstProg.push(instr);
-              }
-            } else {
-              utils.mensaje(
-                "El Caudal " +
-                caudalP.Nombre_caudal +
-                " no tiene instrumentos asociados"
-              );
-              return;
-            }
-          }
-          if (self.ProgramacionOrden.LisInstProg.length > 0) {
-            api
-              .post(
-                "/programacionorden/guardarProgramacion/",
-                this.ProgramacionOrden
-              )
-              .then((response) => {
-                utils.mensaje(
-                  "Programación realizada con éxito para " +
-                  response.data.Medidores_programacionorden +
-                  " medidores"
-                );
-                self.programacionOrdenImprimirPDF(
-                  response.data.Id_programacionorden
-                );
-                self.reiniciarProgramacion();
-                self.$q.loading.hide();
-              })
-              .catch((error) => {
-                utils.mensaje(
-                  "Fallo la conexion - Guardar Programacion " + error
-                );
-                self.$q.loading.hide();
-              });
-          } else {
-            utils.mensaje(
-              "No cuenta con instrumentos asociados a la calibración, verifique"
-            );
-            return;
-          }
-        })
-        .onCancel(() => { });
-    },
-    formatoNumero(numero, decimales) {
-      return utils.formatoNumero(numero, decimales);
-    },
     consultarFiltro() {
-      console.log(this.Informe.IdOrdenEntradad);
+      // console.log(this.Informe.IdOrdenEntradad);
     },
   },
 };

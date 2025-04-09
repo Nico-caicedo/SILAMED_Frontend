@@ -23,6 +23,7 @@
                   option-label="Nombre"
                   :options="listaBancos"
                   :rules="[ regla ]"
+                  @input="val => { seleccionarBanco(val) }"
                   label="Archivo a Generar"
                 >
                   <template v-slot:prepend>
@@ -122,7 +123,7 @@ export default {
     return {
       model: null,
       ListaSuscriptores: [],
-      Reporte: { IdBanco: 0, IdCico: 1, IdVigencia: 2023, IdMes: 1, Registros: 0 },
+      Reporte: { IdBanco: 0, NombreBanco: '', IdCiclo: 1, IdVigencia: 2023, IdMes: 1, Registros: 0 },
       listaBancos: [
         { IdBanco: 1, Nombre: 'BANCOOMEVA PSE'},
         { IdBanco: 2, Nombre: 'BASES GROUP BBVA'},
@@ -180,6 +181,16 @@ export default {
   created () {
   },
   methods: {
+    seleccionarBanco (val) {
+      for (const banco of this.listaBancos) {
+        if (banco.IdBanco === val) {
+          this.Reporte.NombreBanco = banco.Nombre
+          this.Reporte.IdBanco = banco.IdBanco
+          return
+        }
+      }
+      this.Reporte.NombreBanco = val.Nombre
+    },
     exportTable (tablaE, columnasE) {
       // naive encoding to csv format
       const content = [columnasE.map(col => wrapCsvValue(col.label))].concat(
@@ -231,11 +242,24 @@ export default {
     },
     generarArchivo (IdBanco, IdCiclo, Vigencia, Mes) {
       this.$q.loading.show()
-      api.get(`serviWeb/archivoFacturacionBancos/${IdBanco}/${IdCiclo}/${Vigencia}/${Mes}`, { responseType: 'arraybuffer' })
+      api.get(`serviWeb/archivoFacturacionBancos/${IdBanco}/${IdCiclo}/${Vigencia}/${Mes}`, { responseType: 'blob' })
         .then(response => {
-          const blob = new Blob([response.data], { type: 'application/notepad' })
-          const blobURL = URL.createObjectURL(blob)
-          window.open(blobURL)
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          switch(IdBanco) {
+            case 1:
+              link.setAttribute('download', this.Reporte.NombreBanco + "_Ciclo_" + this.Reporte.IdCiclo + '.csv'); // Nombre sugerido del archivo
+              break
+            case 2:
+            case 3:
+              link.setAttribute('download', this.Reporte.NombreBanco + "_Ciclo_" + this.Reporte.IdCiclo + '.txt'); // Nombre sugerido del archivo
+              break            
+          }
+          
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
           this.$q.loading.hide()
         }).catch(error => {
           console.log(error)
