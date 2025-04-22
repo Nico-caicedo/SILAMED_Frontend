@@ -282,7 +282,7 @@
               <div class="row justify-center q-gutter-md" style="margin-top: 0">
                 <p class="h5 text-center">¿REQUIERE ACCIÓN CORRECTIVA?</p>
                 <q-option-group v-model="Trabajo.RequiereAccionCorrectiva" :options="options" color="primary" inline
-                  dense :disable="RAcciondiasableOption" @input="SaveOpt" />
+                  dense :disable="RAcciondiasableOption" @input="ValidarOpt" />
               </div>
             </q-card-section>
           </q-card>
@@ -1337,6 +1337,25 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="ModalSaveOpt">
+      <q-card style="width: 600px; max-width: none">
+        <q-card-section style="padding: 16px 16px 0 16px">
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+            ADVERTENCIA <q-icon name="warning" color="warning" />
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <p class="text-weight-bold">Seleccionar esta opción como "NO", eliminara las acciones y sus respectivas evidencias, ¿Desea Continuar?</p>
+
+        </q-card-section>
+        <q-card-actions align="center">
+          <q-btn label="regresar" color="primary"  @click="ReturnValOpt"/>
+          <q-btn label="Continuar" color="positive"  @click="SaveOpt(1)"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -1417,6 +1436,7 @@ export default {
       BtnReanuda: false,
       BtnReanudaEdit: false,
       BtnDetiene: false,
+      ModalSaveOpt:false,
       slide: 1,
       Action: [0],
       IdAccion: "",
@@ -1980,19 +2000,44 @@ export default {
         this.EditEmailReanudar = false;
         this.BtnReanudaEdit = false;
       }
-      this.SaveOpt();
+      this.SaveOpt(0);
     },
 
-    SaveOpt() {
+    SaveOpt(ConfirmDelete) {
       this.Trabajo.ReanudarActividad;
       this.Trabajo.RequiereAccionCorrectiva;
       api
-        .post("/medidor/UpdateOpts/", this.Trabajo)
-        .then((responde) => { })
+        .post(`/medidor/UpdateOpts/${ConfirmDelete}`, this.Trabajo)
+        .then((responde) => { 
+          this.ModalSaveOpt = false
+          if(ConfirmDelete > 0){
+            this.RAcciondiasable = true
+          }
+        })
         .catch((error) => {
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
     },
+    ValidarOpt(){
+      if( this.Trabajo.RequiereAccionCorrectiva > 0){
+        this.RAcciondiasable = false
+        this.SaveOpt(0) 
+      }else{
+        if(this.Acciones.length > 0){
+          this.ModalSaveOpt = true
+        }else{
+          this.RAcciondiasable = true
+        }
+      }
+     
+    },
+    ReturnValOpt(){
+      this.Trabajo.RequiereAccionCorrectiva = 1
+      this.ModalSaveOpt = false
+    },
+
+
+
     Aprobar() {
       const dataToSend = this.IdsAprobar.map((id) => {
         return {
@@ -3761,8 +3806,13 @@ export default {
       if (Login == this.Trabajo.ResponsableAccion) {
         this.leer = true;
         this.Editar = false;
-        this.RAcciondiasable = false;
-        this.RAcciondiasableOption = false;
+        this.RAcciondiasableOption = false
+        console.log(this.Trabajo.RequiereAccionCorrectiva)
+        if(this.Trabajo.RequiereAccionCorrectiva > 0){
+          this.RAcciondiasable = false;
+        }else{
+          this.RAcciondiasable = true;
+        }
         this.DesAccionTomada = false;
         this.Evidenciadisable = false;
         this.CreateAccion = true;
