@@ -145,7 +145,7 @@
         <template class="row justify-start" v-slot:body-cell-Operaciones="props">
           <q-td  key="Operaciones"  :props="props" auto-width>
             <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-            <q-btn icon="visibility" color="black" flat
+            <q-btn icon="arrow_forward_ios" color="positive" flat
               @click="VerificarResponsabilidad(props.row, 1)" />
             <q-btn icon="folder" flat color="yellow" @click="openEvidence(props.row.IdTNC)" />
             <q-btn icon="edit" flat v-if="BtnCalidad" color="primary" @click="VisibleBtn(props.row.IdTNC)" />
@@ -1694,7 +1694,18 @@ export default {
       this.ModalCalidad = true;
     },
     PrintTNC(IdTNC) {
-      console.log(this.ListTNC);
+   
+
+        api.get(`/medidor/ImprimirTNC/${IdTNC}`, { responseType: 'arraybuffer' })
+          .then(response => {
+            const blob = new Blob([response.data], { type: 'application/pdf' })
+            const blobURL = URL.createObjectURL(blob)
+            window.open(blobURL)
+            this.$q.loading.hide()
+          }).catch(error => {
+            console.log(error)
+            this.$q.loading.hide()
+          })
     },
 
     PermisosCalidad(Op, IdTNC, Permiso) {

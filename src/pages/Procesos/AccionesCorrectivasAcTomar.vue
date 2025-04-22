@@ -6,6 +6,7 @@
       </q-toolbar>
     </q-header>
     <q-page-container v-if="Mostrar">
+      <q-btn label="Actividades" />
       <q-table class="col-xs-12 col-sm-12 col-md-12" title="" style="margin: 15px" separator="cell"
         no-data-label="No hay registros" show-bottom flat bordered :data="DocsAc" :columns="columnsDocAc"
         :rows-per-page-options="[10]">

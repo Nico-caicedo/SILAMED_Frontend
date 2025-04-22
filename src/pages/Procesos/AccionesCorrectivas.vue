@@ -20,7 +20,7 @@
       <q-form ref="formEntregaMedidores">
         <div class="q-pa-md">
           <div class="row q-col-gutter-sm">
-            <q-input  :disable="Active" class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" stack-label label="Fecha Apertura"
+            <q-input :disable="Active" class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" stack-label label="Fecha Apertura"
               v-model="AccionCorrectiva.FechaApertura" type="date" outlined>
               <template v-slot:prepend>
                 <q-icon name="date_range" size="lg" />
@@ -28,22 +28,22 @@
             </q-input>
 
             <q-select class="col-xs-12 col-sm-6 col-md-4 q-field--with-bottom" filled
-              v-model="AccionCorrectiva.TipoEvaluacion" option-value="Nombre"  :disable="Active" option-label="Nombre"
+              v-model="AccionCorrectiva.TipoEvaluacion" option-value="Nombre" :disable="Active" option-label="Nombre"
               :options="TipoEvaluacion" label="Tipo de Evaluación" emit-value map-options />
 
-            <q-input  :disable="Active" v-if="AccionCorrectiva.TipoEvaluacion == 'Otro'" type="text" label="Otro" outlined
-              class="col-xs-12 col-sm-6 col-md-5" v-model="AccionCorrectiva.OtroTipoEvaulacion" />
+            <q-input :disable="Active" v-if="AccionCorrectiva.TipoEvaluacion == 'Otro'" type="text" label="Otro"
+              outlined class="col-xs-12 col-sm-6 col-md-5" v-model="AccionCorrectiva.OtroTipoEvaulacion" />
 
-            <q-input  :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm" v-model="AccionCorrectiva.QuienLevantaAccion"
-              label="Quién detecta la Acción" />
-            <q-input  :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm" v-model="AccionCorrectiva.CargoQuienLevantaAccion"
-              label="Cargo" />
+            <q-input :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm"
+              v-model="AccionCorrectiva.QuienLevantaAccion" label="Quién detecta la Acción" />
+            <q-input :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm"
+              v-model="AccionCorrectiva.CargoQuienLevantaAccion" label="Cargo" />
 
-            <q-input   :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm" v-model="AccionCorrectiva.ProcesoLevantaAccion"
-              label="Proceso al que se levanta acción" />
+            <q-input :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm"
+              v-model="AccionCorrectiva.ProcesoLevantaAccion" label="Proceso al que se levanta acción" />
 
             <div class="col-xs-8 col-sm-9 col-md-6 q-field--with-bottom">
-              <q-select  :disable="Active" filled v-model="AccionCorrectiva.IdTramitoAccion" map-options emit-value
+              <q-select :disable="Active" filled v-model="AccionCorrectiva.IdTramitoAccion" map-options emit-value
                 option-value="LoginUsuario" option-label="NombrePersona" :options="listaUsuarios" :rules="[regla]"
                 use-input hide-dropdown-icon hide-selected fill-input input-debounce="0" label="Quién tramita Acción"
                 @filter="filterFnUsuario">
@@ -68,11 +68,12 @@
                 </template>
               </q-select>
             </div>
-            <q-input  :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm" v-model="AccionCorrectiva.Hallazgo" label="Hallazgo"
-              autogrow />
+            <q-input :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm" v-model="AccionCorrectiva.Hallazgo"
+              label="Hallazgo" autogrow />
 
-            <q-input  :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm" v-model="AccionCorrectiva.NCSimilares"
-              label="No conformidades similares o con potencial de ocurrir" autogrow />
+            <q-input :disable="Active" class="col-xs-12 col-sm-12 col-md-6 q-pt-sm"
+              v-model="AccionCorrectiva.NCSimilares" label="No conformidades similares o con potencial de ocurrir"
+              autogrow />
             <div>
               <p class="text-h5">Identificación de Causas</p>
               <q-card class="">
@@ -119,7 +120,7 @@
               </q-card>
             </div>
 
-            <q-dialog persistent v-model="CategoriasModal">
+            <q-dialog v-model="CategoriasModal">
               <div class="q-pa-md bg-white" style="width: 200px; max-width: none">
                 <div class="column" style="height: 300px">
                   <q-checkbox class="" v-model="categorias" val="Mano de obra" label="Mano de obra" color="" />
@@ -175,7 +176,7 @@
               <q-card v-if="showCausa" style="max-width: none; width: 800px">
                 <q-card-section class="q-gutter-sm">
                   <div class="text-h6 text-center text-weight-bolder">
-                    {{ TitleCategoria }}
+                    Categoría {{ TitleCategoria.Categoria }}
                   </div>
                   <!-- v-if="SinInfo.Evidencias" -->
                   <q-scroll-area style="height: 300px">
@@ -274,7 +275,7 @@
                   <q-input autogrow v-model="EfectoField" label="Efecto" v-if="FieldText" />
                 </div>
                 <q-card-actions align="center">
-                  <q-btn label="Cancelar" color="negative"  v-close-popup @click="Resetearinfo" />
+                  <q-btn label="Cancelar" color="negative" v-close-popup @click="Resetearinfo" />
                   <q-btn label="guardar" color="positive" v-if="!FieldText" @click="SaveFiledText(0)" v-close-popup />
                   <q-btn label="guardar" color="positive" v-if="FieldText" @click="SaveFiledText(1)" v-close-popup />
                 </q-card-actions>
@@ -363,7 +364,7 @@
               <q-card v-if="ShowSubcausaState == false" style="width: 600px; max-width: none">
                 <q-card-section class="q-gutter-sm">
                   <div class="text-h6 text-center">
-                    SubCausas de Categoría {{ TitleCategoria }}
+                    SubCausas de Categoría {{ TitleCategoria.Categoria }}
                   </div>
 
                   <div class="row justify-end q-gutter-sm">
@@ -400,7 +401,7 @@
               <q-card v-if="ShowSubcausaState" style="max-width: none; width: 800px">
                 <q-card-section class="q-gutter-sm">
                   <div class="text-h6 text-center text-weight-bolder">
-                    SubCausas de Categoría {{ TitleCategoria }}
+                    SubCausas de Categoría {{ TitleCategoria.Categoria }}
                   </div>
                   <!-- v-if="SinInfo.Evidencias" -->
                   <q-scroll-area style="height: 300px">
@@ -459,7 +460,8 @@
                 </q-card-section>
 
                 <q-card-actions align="right">
-                  <q-btn v-if="BtnAcciones" label="regresar" color="primary"  v-close-popup @click="ShowSubcausaState = false" />
+                  <q-btn v-if="BtnAcciones" label="regresar" color="primary" v-close-popup
+                    @click="ShowSubcausaState = false" />
                   <q-btn v-if="!BtnAcciones" label="continuar" color="positive" v-close-popup />
                 </q-card-actions>
               </q-card>
@@ -470,10 +472,11 @@
         </div>
         <div class="row justify-center q-gutter-sm q-pa-sm">
           <q-btn label="regresar" icon="undo" @click="ReturnView" color="info" />
-          <q-btn  label="Guardar" v-if="!Edit" icon="save" @click="ValidarCamposDocAc()" color="positive" unelevated />
-            <q-btn  label="Guardar Identificación"  v-if="Edit" icon="save" @click="SaveIdentificacion()" color="positive" unelevated />
+          <q-btn label="Guardar" v-if="!Edit" icon="save" @click="ValidarCamposDocAc()" color="positive" unelevated />
+          <q-btn label="Guardar Identificación" v-if="Edit" icon="save" @click="SaveIdentificacion()" color="positive"
+            unelevated />
 
-      
+
 
         </div>
       </q-form>
@@ -496,12 +499,14 @@
         </template>
 
         <template v-slot:body-cell-Hallazgos="props" flat class="">
-          <q-td key="Hallazgos" :props="props" class="cursor-pointer" @click="viewDescription(props.row.Hallazgo,'Hallazgos')">
+          <q-td key="Hallazgos" :props="props" class="cursor-pointer"
+            @click="viewDescription(props.row.Hallazgo, 'Hallazgos')">
             <q-btn class="" label="" icon="visibility" flat color="" />
           </q-td>
         </template>
         <template v-slot:body-cell-NCSimiliares="props" flat class="">
-          <q-td key="NCSimiliares" :props="props" class="cursor-pointer" @click="viewDescription(props.row.NCSimilares,'NCSimilares')">
+          <q-td key="NCSimiliares" :props="props" class="cursor-pointer"
+            @click="viewDescription(props.row.NCSimilares, 'NCSimilares')">
             <q-btn class="" label="" icon="visibility" flat />
           </q-td>
         </template>
@@ -509,27 +514,29 @@
           <q-td key="operaciones" :props="props" auto-width>
             <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
             <q-btn icon="arrow_forward_ios" @click="ChangeView(props.row.IdAC)" flat color="positive" />
-            <q-btn v-if="props.row.QuienTramitaAccion == usuario.LoginUsuario" icon="edit"  to="/Procesos/AccionesCorrectivas" flat color="primary" />
-            <q-btn v-if="props.row.QuienTramitaAccion == usuario.LoginUsuario" icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
+            <q-btn v-if="props.row.QuienTramitaAccion == usuario.LoginUsuario" icon="edit"
+              to="/Procesos/AccionesCorrectivas" flat color="primary" />
+            <q-btn v-if="props.row.QuienTramitaAccion == usuario.LoginUsuario" icon="delete" color="negative"
+              align="center" flat @click="DeleteAccion(props.rowIndex)" />
           </q-td>
         </template>
       </q-table>
 
       <q-dialog v-model="DescripcionVisible" persistent>
-      <q-card style="width: 600px">
-        <q-card-section>
-          <div class="text-h5 text-center">{{ titleDescripcion }}</div>
-        </q-card-section>
+        <q-card style="width: 600px">
+          <q-card-section>
+            <div class="text-h5 text-center">{{ titleDescripcion }}</div>
+          </q-card-section>
 
-        <q-card-section>
-          <p>{{ Descripcion }}</p>
-        </q-card-section>
+          <q-card-section>
+            <p>{{ Descripcion }}</p>
+          </q-card-section>
 
-        <q-card-actions align="right">
-          <q-btn label="Ok" color="positive" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+          <q-card-actions align="right">
+            <q-btn label="Ok" color="positive" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>
@@ -564,7 +571,7 @@ export default {
         CausaRaiz: "",
 
       },
-      Edit:false,
+      Edit: false,
       Active: true,
       nuevaCategoria: "",
       nuevaSubcausa: {},
@@ -655,8 +662,8 @@ export default {
       IdAc: '',
       Ac: {},
       DescripcionVisible: false,
-      Descripcion:'',
-      titleDescripcion:''
+      Descripcion: '',
+      titleDescripcion: ''
 
     };
   },
@@ -668,28 +675,30 @@ export default {
       this.AcCorrectivas = []
       this.Correcciones = []
     },
-    SaveChange(){
+    SaveChange() {
 
       this.categoriaList = []
-      for(let i = 0; this.categorias.length > i; i++ ){
-       
+      for (let i = 0; this.categorias.length > i; i++) {
+
         this.categoriaList.push({
           Categoria: this.categorias[i],
           IdAc: this.IdAc
         })
 
-       
+
       }
     },
     ChangeView(IdAc) {
       this.FirstView = true;
-     
-      this.GetIdAc(IdAc)
-    
-      
+
+      this.GetIdAc(IdAc)  
+      this.categoriaList = []
+      this.CausasList = []
+      this.SubCausasList = []
+
     },
 
-    Resetearinfo(){
+    Resetearinfo() {
       this.CausaRaizField = ''
       this.EfectoField = ''
     },
@@ -708,13 +717,13 @@ export default {
         CausaRaiz: "",
 
       },
-      this.IdentificacionStatus = true
+        this.IdentificacionStatus = true
       this.Edit = false
       this.FirstView = true
       this.Active = false
 
     },
-    viewDescription(Description,title) {
+    viewDescription(Description, title) {
       this.DescripcionVisible = true;
       this.Descripcion = Description;
       this.titleDescripcion = title
@@ -774,9 +783,9 @@ export default {
       // Si no hay errores, la validación pasa
       this.CreateDocAc()
     },
-    GetPaqIdentificacionId(){
+    GetPaqIdentificacionId() {
       api
-        .get(`/AcCorrectivas/GetAcId/${ this.IdAc }`)
+        .get(`/AcCorrectivas/GetAcId/${this.IdAc}`)
         .then((response) => {
           var Ac = response.data;
           this.AccionCorrectiva = {
@@ -822,6 +831,7 @@ export default {
             CausaRaiz: Ac.CausaRaiz,
             FechaCierre: Ac.FechaCierre
           }
+          this.GetIdentificacionId(IdAC)
           this.ValidarCargo()
           console.log(Ac)
         })
@@ -830,30 +840,68 @@ export default {
         });
     },
 
+    GetIdentificacionId(IdAC) {
+      api
+        .get(`/AcCorrectivas/GetIdentificacion/${IdAC}`)
+        .then((response) => {
+          console.log(response.data)
+          var data = response.data[0]
+          console.log('data', data)
+          for (let i = 0; data.Categorias.length > i; i++) {
+            this.categorias.push(data.Categorias[i].Categoria)
+            this.categoriaList.push({ Categoria: data.Categorias[i].Categoria })
+            for (let a = 0; data.Causas.length > a; a++) {
+              let CA = data.Causas[a]
+              this.CausasList.push({
+                IdCausa: CA.IdCausa,
+                CausaTxt: CA.CausaTxt,
+                IndexCategoria: i,
+              })
+
+
+              for (let b = 0; data.SubCausas.length > b; b++) {
+
+                let Sub = data.SubCausas[b]
+                this.SubCausasList.push({
+                  IdSubCausa: Sub.IdSubCausa,
+                  SubCausaTxt: Sub.SubCausaTxt,
+                  IndexCausa: a,
+                });
+              }
+
+            }
+          }
+          console.log('causas', this.CausasList)
+
+        })
+
+    },
+
     ValidarCargo() {
       console.log(this.usuario)
 
-      if(this.AccionCorrectiva.IdTramitoAccion == this.usuario.LoginUsuario){
+      if (this.AccionCorrectiva.IdTramitoAccion == this.usuario.LoginUsuario) {
         this.IdentificacionStatus = false
-        this.Edit = true 
+        this.Edit = true
         this.Active = true
-        
+
       }
     },
 
-    SaveIdentificacion(){
-     
-      
-   
+    SaveIdentificacion() {
 
-      console.log('categorias',   this.categoriaList)
+
+
+
+      console.log('categorias', this.categoriaList)
       console.log('causas', this.CausasList)
       console.log('subcausas', this.SubCausasList)
 
-      var AccionesCorrectivas = {IdAC: this.IdAc,
-                                Categorias: this.categoriaList,
-                                Causas: this.CausasList,
-                                SubCausas: this.SubCausasList
+      var AccionesCorrectivas = {
+        IdAC: this.IdAc,
+        Categorias: this.categoriaList,
+        Causas: this.CausasList,
+        SubCausas: this.SubCausasList
       }
 
       api
@@ -873,7 +921,9 @@ export default {
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
 
-
+      this.categoriaList = []
+      this.CausasList = []
+      this.SubCausasList = []
 
     },
 
@@ -944,7 +994,7 @@ export default {
     agregarCategoria() {
       if (this.nuevaCategoria.trim() !== "") {
         this.categorias.push({ nombre: this.nuevaCategoria, subcausas: [] });
-        console.log(this.categorias,'pruebas')
+        console.log(this.categorias, 'pruebas')
         this.nuevaCategoria = "";
       }
     },
@@ -1124,6 +1174,7 @@ export default {
       }
     },
     GetCausas() {
+      console.log('causas listas', this.CausasList)
       const listaCausas = this.CausasList.filter(
         (causa) => causa.IndexCategoria === this.IndexCategoria
       );
