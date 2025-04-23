@@ -557,7 +557,7 @@ export default {
         { name: 'Aptocalibrar_ordenentradad', align: 'left', label: 'AptoCal', field: 'Aptocalibrar_ordenentradad' },
         { name: 'Nombre_normaref', align: 'left', label: 'Norma Referencia', field: 'Nombre_normaref' }
       ],
-      vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad']     
+      vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad'], 
     }
   },
   mounted () {

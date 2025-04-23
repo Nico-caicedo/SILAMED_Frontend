@@ -76,6 +76,7 @@ module.exports = function (/* ctx */) {
       https: false,
       port: 8080,
       open: true // opens browser window automatically
+      
     },
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework

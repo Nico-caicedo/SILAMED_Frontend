@@ -63,7 +63,7 @@ export default {
           var datos = response.data
           if (datos.LoginUsuario === null) {
             self.$q.loading.hide()  
-            utils.mensaje('Verify username or password')
+            utils.mensaje('Verique su nombre de usuario o contraseña')
           } else {
             self.$q.localStorage.set('usuarioSILAMED', datos)
             utils.cargarAccesos(datos.IdRol, '-1', this)

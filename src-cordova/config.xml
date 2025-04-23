@@ -10,4 +10,5 @@
     <allow-intent href="https://*/*" />
     <allow-navigation href="about:*" />
     <preference name="scheme" value="http" />
+    <icon src="logo.png" />
 </widget>

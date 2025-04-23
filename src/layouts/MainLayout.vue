@@ -7,7 +7,7 @@
           <q-icon name="menu" />
         </q-btn>
         <q-toolbar-title>
-          SILAMED V 2024.05.31.1
+          SILAMED V 2024.11.16.1
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
