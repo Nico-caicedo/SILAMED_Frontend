@@ -221,10 +221,20 @@
                 </div>
                 <!--   @input="DetieneVisibles(Trabajo.DetieneActividad)" -->
               </div>
+              <div class="row q-gutter-md" style="margin-top: 0">
+                <p class="text-left" style="width: 50%">
+                 Se Repite la Actividad
+                </p>
+                <q-option-group v-model="Trabajo.RepiteActividad" :disable="OptionsDisabled" :options="options"
+                  color="primary" inline dense/>
+
+              
+                <!--   @input="DetieneVisibles(Trabajo.DetieneActividad)" -->
+              </div>
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="text-left" style="width: 50%">
-                  Se Debe Notificar al Usuario
+                  Se Debe Notificar al Cliente
                 </p>
                 <q-option-group v-model="Trabajo.NotificarUsuario" :options="options" color="primary" inline dense
                   :disable="OptionsDisabled" @input="NotificarVisibles(Trabajo.NotificarUsuario)" />
@@ -1452,6 +1462,7 @@ export default {
         AceptaTNC: 1,
         AfectaResultadosPrevios: 0,
         DetieneActividad: 0,
+        RepiteActividad:0,
         NotificarUsuario: 0,
         AnularDocumento: 0,
         TipoDocumento: "",
@@ -1479,6 +1490,7 @@ export default {
         AceptaTNC: 0,
         AfectaResultadosPrevios: 0,
         DetieneActividad: 0,
+        RepiteActividad:0,
         NotificarUsuario: 0,
         AnularDocumento: 0,
         TipoDocumento: "",
