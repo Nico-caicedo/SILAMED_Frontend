@@ -6,10 +6,10 @@
           <q-btn flat round dense icon="edit_calendar" />
         </q-avatar>
         <q-avatar>
-          <q-btn flat round dense icon="print" @click="isDialogComponenteConsulta = true" />
+          <q-btn flat round dense icon="print" />
         </q-avatar>
         <q-avatar>
-          <q-btn flat round dense icon="content_paste_search" @click="isDialogComponenteFiltro = true" />
+          <q-btn flat round dense icon="content_paste_search" />
         </q-avatar>
         <q-toolbar-title> Programación Informe Medidor </q-toolbar-title>
       </q-toolbar>
