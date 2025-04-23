@@ -391,7 +391,7 @@ export default {
         Certcalibracion_trazabilidadinst: '', Fechacalibracion_trazabilidadinst: '', Proximacalibracion_trazabilidadinst: '', Fuentecalibracion_trazabilidadinst: '',
         Errorindicacion_trazabilidadinst: null, Errorindicacionant_trazabilidadinst: null, Incertidumbre_trazabilidadinst: null, Divisionescala_trazabilidadinst: null, 
         Correccionescala_trazabilidadinst: null, Incertidumbreescala_trazabilidadinst: null, Factorcubrimiento_trazabilidadinst: null, Parametroref_trazabilidadinst: null, Ultima_trazabilidadinst: null,
-        Deriva_trazabilidadinst: null, Factorcorreccion_trazabilidadinst: 0, X_trazabilidadinst: 0, Aplus_trazabilidadinst: '+', A_trazabilidadinst: 0, Bplus_trazabilidadinst: '+', B_trazabilidadinst: 0, Bplus_trazabilidadinst: '+', C_trazabilidadinst: 0, Cplus_trazabilidadinst: '+', Observacion_trazabilidadinst: '', Login_trazabilidadinst: ''
+        Deriva_trazabilidadinst: null, Factorcorreccion_trazabilidadinst: null, X_trazabilidadinst: null, Aplus_trazabilidadinst: '+', A_trazabilidadinst: null, Bplus_trazabilidadinst: '+', B_trazabilidadinst: null, Bplus_trazabilidadinst: '+', C_trazabilidadinst: null, Cplus_trazabilidadinst: '+', Observacion_trazabilidadinst: '', Login_trazabilidadinst: ''
       },
       trazabilidadInstrumentoGen: {},
       columnsTrazabilidad: [

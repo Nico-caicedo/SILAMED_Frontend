@@ -1,27 +1,12 @@
 <template>
-  <q-layout
-    view="lHh lpr lFf"
-    container
-    style="height: 92vh"
-    class="shadow-2 rounded-borders"
-  >
-    <q-header
-      v-if="mostrarse == true"
-      bordered
-      class="bg-white text-primary col-xs-12 col-sm-12 col-md-12 q-pt-sm"
-    >
+  <q-layout view="lHh lpr lFf" container style="height: 92vh" class="shadow-2 rounded-borders">
+    <q-header v-if="mostrarse == true" bordered class="bg-white text-primary col-xs-12 col-sm-12 col-md-12 q-pt-sm">
       <div class="row justify-center q-gutter-md">
-        <div
-          class="row justify-center"
-          :style="{
-            width: cc.Logoancho_contcambios,
-            height: cc.Logoalto_contcambios,
-          }"
-        >
-          <q-img
-            style="height: 100px; width: 300px"
-            :src="cc.Logo_contcambios"
-          />
+        <div class="row justify-center" :style="{
+          width: cc.Logoancho_contcambios,
+          height: cc.Logoalto_contcambios,
+        }">
+          <q-img style="height: 100px; width: 300px" :src="cc.Logo_contcambios" />
         </div>
 
         <div>
@@ -30,46 +15,28 @@
           </p>
           <div class="row justify-around q-gutter-md">
             <div>
-              <p
-                class="row justify-center"
-                style="color: black; font-size: 12px; margin: 0"
-              >
+              <p class="row justify-center" style="color: black; font-size: 12px; margin: 0">
                 CÓDIGO:
               </p>
-              <p
-                class="row justify-center"
-                style="color: black; font-size: 12px"
-              >
+              <p class="row justify-center" style="color: black; font-size: 12px">
                 {{ cc.Codigo_formato }}
               </p>
             </div>
 
             <div>
-              <p
-                class="row justify-center"
-                style="color: black; font-size: 12px; margin: 0"
-              >
+              <p class="row justify-center" style="color: black; font-size: 12px; margin: 0">
                 VERSIÓN
               </p>
-              <p
-                class="row justify-center"
-                style="color: black; font-size: 12px"
-              >
+              <p class="row justify-center" style="color: black; font-size: 12px">
                 {{ cc.Version_contcambios }}
               </p>
             </div>
 
             <div>
-              <p
-                class="row justify-center"
-                style="color: black; font-size: 12px; margin: 0"
-              >
+              <p class="row justify-center" style="color: black; font-size: 12px; margin: 0">
                 FECHA:
               </p>
-              <p
-                class="row justify-center"
-                style="color: black; font-size: 12px"
-              >
+              <p class="row justify-center" style="color: black; font-size: 12px">
                 {{ cc.Fechacreacion_contcambios }}
               </p>
             </div>
@@ -78,24 +45,16 @@
       </div>
     </q-header>
 
-    <q-footer
-      v-if="mostrarse == true"
-      bordered
-      class="bg-white text-primary"
-      style="height: 80px"
-    >
+    <q-footer v-if="mostrarse == true" bordered class="bg-white text-primary" style="height: 80px">
       <div class="row justify-center items-center q-gutter-lg">
         <div>
-          <p
-            class="row justify-center"
-            style="
+          <p class="row justify-center" style="
               font-weight: bold;
               color: black;
               font-size: 12px;
               margin: 0;
               padding-top: 5px;
-            "
-          >
+            ">
             ELABORÓ
           </p>
           <p class="row justify-center" style="color: black; margin: 0">
@@ -107,16 +66,13 @@
         </div>
 
         <div>
-          <p
-            class="row justify-center"
-            style="
+          <p class="row justify-center" style="
               font-weight: bold;
               color: black;
               font-size: 12px;
               margin: 0;
               padding-top: 5px;
-            "
-          >
+            ">
             REVISÓ
           </p>
           <p class="row justify-center" style="color: black; margin: 0">
@@ -128,16 +84,13 @@
         </div>
 
         <div>
-          <p
-            class="row justify-center"
-            style="
+          <p class="row justify-center" style="
               font-weight: bold;
               color: black;
               font-size: 12px;
               margin: 0;
               padding-top: 5px;
-            "
-          >
+            ">
             APROBÓ
           </p>
           <p class="row justify-center" style="color: black; margin: 0">
@@ -165,96 +118,39 @@
       </div>
 
       <div class="row justify-end" style="margin-right: 15px">
-        <q-btn
-          label="Crear TNC"
-          color="positive"
-          icon="add_circle"
-          @click="CreateTNC"
-        />
+        <q-btn label="Crear TNC" color="positive" icon="add_circle" @click="CreateTNC" />
       </div>
 
-      <q-table
-        class="col-xs-12 col-sm-12 col-md-12"
-        title=""
-        style="margin: 15px"
-        separator="cell"
-        no-data-label="No hay registros"
-        show-bottom
-        flat
-        bordered
-        :data="ListTNC"
-        :columns="columnsTNC"
-        :rows-per-page-options="[10]"
-      >
+      <q-table class="col-xs-12 col-sm-12 col-md-12" title="" style="margin: 15px" separator="cell"
+        no-data-label="No hay registros" show-bottom flat bordered :data="ListTNC" :columns="columnsTNC"
+        :rows-per-page-options="[10]">
         <!-- :visible-columns="vcCertificado" -->
         <template v-slot:top="props">
-          <q-btn
-            color="primary"
-            icon-right="archive"
-            label=""
-            no-caps
-            @click="exportTable(ListTNC, columnsTNC)"
-          />
+          <q-btn color="primary" icon-right="archive" label="" no-caps @click="exportTable(ListTNC, columnsTNC)" />
           <q-space />
-          <q-btn
-            flat
-            round
-            dense
-            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="props.toggleFullscreen"
-            class="q-ml-md"
-          />
+          <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+            @click="props.toggleFullscreen" class="q-ml-md" />
           <q-space />
-          <q-select
-            v-model="vcTNC"
-            multiple
-            outlined
-            dense
-            options-dense
-            :display-value="$q.lang.table.columns"
-            emit-value
-            map-options
-            :options="columnsTNC"
-            option-value="name"
-            options-cover
-            style="min-width: 150px"
-          />
+          <q-select v-model="vcTNC" multiple outlined dense options-dense :display-value="$q.lang.table.columns"
+            emit-value map-options :options="columnsTNC" option-value="name" options-cover style="min-width: 150px" />
         </template>
 
         <template v-slot:body-cell-Descripcion="props" flat class="">
-          <q-td
-            key="Descripcion"
-            :props="props"
-            class="cursor-pointer"
-            @click="viewDescription(props.row.DescripcionProblema)"
-          >
+          <q-td key="Descripcion" :props="props" class="cursor-pointer"
+            @click="viewDescription(props.row.DescripcionProblema)">
             <q-btn class="" label="" icon="visibility" flat />
             <!-- <p class=""  >{{ props.row.DescripcionProblema }}</p> -->
           </q-td>
         </template>
-        <template v-slot:body-cell-Operaciones="props">
-          <q-td key="Operaciones" :props="props" auto-width>
+        <template class="row justify-start" v-slot:body-cell-Operaciones="props">
+          <q-td  key="Operaciones"  :props="props" auto-width>
             <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-            <q-btn
-              icon="visibility"
-              color="black"
-              align="center"
-              flat
-              @click="VerificarResponsabilidad(props.row, 1)"
-            />
-            <q-btn
-              icon="folder"
-              flat
-              color="yellow"
-              @click="openEvidence(props.row.IdTNC)"
-            />
-            <q-btn
-              icon="edit"
-              flat
-              v-if="BtnCalidad"
-              color="primary"
-              @click="VisibleBtn(props.row.IdTNC)"
-            />
+            <q-btn icon="arrow_forward_ios" color="positive" flat
+              @click="VerificarResponsabilidad(props.row, 1)" />
+            <q-btn icon="folder" flat color="yellow" @click="openEvidence(props.row.IdTNC)" />
+            <q-btn icon="edit" flat v-if="BtnCalidad" color="primary" @click="VisibleBtn(props.row.IdTNC)" />
+            <q-btn icon="picture_as_pdf" v-if="props.row.FechaCierre != 'En Curso'" @click="PrintTNC(props.row.IdTNC)"
+              flat color="negative" />
           </q-td>
         </template>
       </q-table>
@@ -264,22 +160,10 @@
 
     <q-page-container v-if="mostrarse == true">
       <div class="q-pa-md row items-center q-gutter-md">
-        <q-input
-          class="col-xs-12 col-sm-4 col-md-2 q-pt-sm"
-          stack-label
-          label="Fecha Inicio"
-          disable
-          v-model="Trabajo.FechaApertura"
-          type="date"
-          outlined
-        />
-        <q-input
-          label="Detectado Por"
-          v-model="Trabajo.Detectado"
-          :disable="DetectadoView"
-          filled
-          class="col-xs-12 col-sm-7 col-md-4 q-pt-sm"
-        />
+        <q-input class="col-xs-12 col-sm-4 col-md-2 q-pt-sm" stack-label label="Fecha Inicio" disable
+          v-model="Trabajo.FechaApertura" type="date" outlined />
+        <q-input label="Detectado Por" v-model="Trabajo.Detectado" :disable="DetectadoView" filled
+          class="col-xs-12 col-sm-7 col-md-4 q-pt-sm" />
 
         <q-card class="my-card col-xs-12 col-sm-6 col-md-3 q-pt-sm">
           <q-card-section>
@@ -289,13 +173,8 @@
           <q-separator />
 
           <q-card-actions>
-            <q-btn
-              style="width: 100%"
-              label="Abrir"
-              icon="edit_note"
-              color="primary"
-              @click="editor('DescripcionProblema', Editar, leer)"
-            />
+            <q-btn style="width: 100%" label="Abrir" icon="edit_note" color="primary"
+              @click="editor('DescripcionProblema', Editar, leer)" />
           </q-card-actions>
         </q-card>
 
@@ -305,84 +184,40 @@
           </q-card-section>
           <q-separator />
           <q-card-actions>
-            <q-btn
-              style="width: 100%"
-              label="Abrir"
-              icon="edit_note"
-              color="primary"
-              @click="editor('ValoracionImpacto', Editar, leer)"
-            />
+            <q-btn style="width: 100%" label="Abrir" icon="edit_note" color="primary"
+              @click="editor('ValoracionImpacto', Editar, leer)" />
           </q-card-actions>
         </q-card>
 
-        <q-card
-          flat
-          bordered
-          class="my-card bg-gray col-xs-12 col-sm-12 col-md-4"
-        >
+        <q-card flat bordered class="my-card bg-gray col-xs-12 col-sm-12 col-md-4">
           <q-card-section style="padding: 10px">
             <div class="column items-left q-gutter-md">
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="" style="width: 50%">Acepta Trabajo No Conforme</p>
-                <q-option-group
-                  v-model="Trabajo.AceptaTNC"
-                  :disable="OptionsDisabledM"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                  @input="AceptaTNC(Trabajo.AceptaTNC)"
-                />
+                <q-option-group v-model="Trabajo.AceptaTNC" :disable="OptionsDisabledM" :options="options"
+                  color="primary" inline dense @input="AceptaTNC(Trabajo.AceptaTNC)" />
               </div>
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="" style="width: 50%">Afecta los Resultados Previos</p>
-                <q-option-group
-                  v-model="Trabajo.AfectaResultadosPrevios"
-                  :disable="OptionsDisabledMo"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                />
+                <q-option-group v-model="Trabajo.AfectaResultadosPrevios" :disable="OptionsDisabledMo"
+                  :options="options" color="primary" inline dense />
               </div>
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="text-left" style="width: 50%">
                   Se Detiene la Actividad
                 </p>
-                <q-option-group
-                  v-model="Trabajo.DetieneActividad"
-                  :disable="OptionsDisabled"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                  @input="DetieneVisibles()"
-                />
+                <q-option-group v-model="Trabajo.DetieneActividad" :disable="OptionsDisabled" :options="options"
+                  color="primary" inline dense @input="DetieneVisibles()" />
 
-                <div
-                  class="row justify-center"
-                  v-if="EditEmailDetener"
-                  style="margin-left: 5px; margin-top: 10px; height: 15px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="EditEmail(2, 2)"
-                    :disable="OptionsDisabled"
-                  />
+                <div class="row justify-center" v-if="EditEmailDetener"
+                  style="margin-left: 5px; margin-top: 10px; height: 15px">
+                  <q-btn color="positive" icon="edit_note" @click="EditEmail(2, 2)" :disable="OptionsDisabled" />
                 </div>
-                <div
-                  class="row justify-center"
-                  v-if="ShowEmailInd"
-                  style="margin-left: 5px; margin-top: 10px; height: 15px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="ReadEmail(1)"
-                  />
+                <div class="row justify-center" v-if="ShowEmailInd"
+                  style="margin-left: 5px; margin-top: 10px; height: 15px">
+                  <q-btn color="positive" icon="edit_note" @click="ReadEmail(1)" />
                 </div>
                 <!--   @input="DetieneVisibles(Trabajo.DetieneActividad)" -->
               </div>
@@ -391,38 +226,16 @@
                 <p class="text-left" style="width: 50%">
                   Se Debe Notificar al Usuario
                 </p>
-                <q-option-group
-                  v-model="Trabajo.NotificarUsuario"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                  :disable="OptionsDisabled"
-                  @input="NotificarVisibles(Trabajo.NotificarUsuario)"
-                />
-                <div
-                  class="row justify-center"
-                  v-if="EditNotificacion"
-                  style="margin-left: 5px; margin-top: 10px; height: 15px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="OpenNotificacion"
-                    :disable="OptionsDisabled"
-                  />
+                <q-option-group v-model="Trabajo.NotificarUsuario" :options="options" color="primary" inline dense
+                  :disable="OptionsDisabled" @input="NotificarVisibles(Trabajo.NotificarUsuario)" />
+                <div class="row justify-center" v-if="EditNotificacion"
+                  style="margin-left: 5px; margin-top: 10px; height: 15px">
+                  <q-btn color="positive" icon="edit_note" @click="OpenNotificacion" :disable="OptionsDisabled" />
                 </div>
 
-                <div
-                  class="row justify-center"
-                  v-if="ShowEmailMas"
-                  style="margin-left: 5px; margin-top: 10px; height: 15px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="ReadEmail(2)"
-                  />
+                <div class="row justify-center" v-if="ShowEmailMas"
+                  style="margin-left: 5px; margin-top: 10px; height: 15px">
+                  <q-btn color="positive" icon="edit_note" @click="ReadEmail(2)" />
                 </div>
                 <!-- colocar de nuevo disabled  ----------------------------- -->
                 <!-- -->
@@ -432,37 +245,16 @@
                 <p class="text-left" style="width: 50%">
                   Anular Certificado de Calibración o informe de medidor
                 </p>
-                <q-option-group
-                  v-model="Trabajo.AnularDocumento"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                  @input="AnularDocumento(Trabajo.AnularDocumento)"
-                  :disable="OptionsDisabled"
-                />
-                <div
-                  class="row justify-center"
-                  v-if="InfoAnular"
-                  style="margin-left: 5px; margin-top: 10px; height: 15px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="RetomarAnulacion(1)"
-                  />
+                <q-option-group v-model="Trabajo.AnularDocumento" :options="options" color="primary" inline dense
+                  @input="AnularDocumento(Trabajo.AnularDocumento)" :disable="OptionsDisabled" />
+                <div class="row justify-center" v-if="InfoAnular"
+                  style="margin-left: 5px; margin-top: 10px; height: 15px">
+                  <q-btn color="positive" icon="edit_note" @click="RetomarAnulacion(1)" />
                 </div>
 
-                <div
-                  class="row justify-center"
-                  v-if="ShowAnular"
-                  style="margin-left: 5px; margin-top: 10px; height: 15px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="RetomarAnulacion(2)"
-                  />
+                <div class="row justify-center" v-if="ShowAnular"
+                  style="margin-left: 5px; margin-top: 10px; height: 15px">
+                  <q-btn color="positive" icon="edit_note" @click="RetomarAnulacion(2)" />
                 </div>
               </div>
             </div>
@@ -480,14 +272,8 @@
             <q-separator />
 
             <q-card-actions>
-              <q-btn
-                style="width: 100%"
-                label="Abrir"
-                icon="edit_note"
-                color="primary"
-                @click="editor('ExpliqueAccion', Editar, leer)"
-                :disabled="RAcciondiasable"
-              />
+              <q-btn style="width: 100%" label="Abrir" icon="edit_note" color="primary"
+                @click="editor('ExpliqueAccion', Editar, leer)" :disabled="RAcciondiasable" />
             </q-card-actions>
           </q-card>
 
@@ -495,15 +281,8 @@
             <q-card-section>
               <div class="row justify-center q-gutter-md" style="margin-top: 0">
                 <p class="h5 text-center">¿REQUIERE ACCIÓN CORRECTIVA?</p>
-                <q-option-group
-                  v-model="Trabajo.RequiereAccionCorrectiva"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                  :disable="RAcciondiasableOption"
-                  @input="SaveOpt"
-                />
+                <q-option-group v-model="Trabajo.RequiereAccionCorrectiva" :options="options" color="primary" inline
+                  dense :disable="RAcciondiasableOption" @input="ValidarOpt" />
               </div>
             </q-card-section>
           </q-card>
@@ -516,36 +295,15 @@
             <q-separator />
 
             <q-card-actions>
-              <q-btn
-                style="width: 100%"
-                label="Abrir"
-                icon="edit_note"
-                color="primary"
-                :disabled="RAcciondiasable"
-                @click="AccionVisibles"
-              />
+              <q-btn style="width: 100%" label="Abrir" icon="edit_note" color="primary" :disabled="RAcciondiasable"
+                @click="AccionVisibles" />
             </q-card-actions>
           </q-card>
           <div class="col-xs-8 col-sm-9 col-md-6 q-field--with-bottom">
-            <q-select
-              :disable="GeneralView"
-              filled
-              v-model="Trabajo.ResponsableAccion"
-              map-options
-              emit-value
-              option-value="LoginUsuario"
-              option-label="NombrePersona"
-              :options="listaUsuarios"
-              :rules="[regla]"
-              use-input
-              hide-dropdown-icon
-              hide-selected
-              fill-input
-              input-debounce="0"
-              label="Responsable de la Acción"
-              @filter="filterFnUsuario"
-              @blur="ValidarResponsables(1)"
-            >
+            <q-select :disable="GeneralView" filled v-model="Trabajo.ResponsableAccion" map-options emit-value
+              option-value="LoginUsuario" option-label="NombrePersona" :options="listaUsuarios" :rules="[regla]"
+              use-input hide-dropdown-icon hide-selected fill-input input-debounce="0" label="Responsable de la Acción"
+              @filter="filterFnUsuario" @blur="ValidarResponsables(1)">
               <template v-slot:prepend>
                 <q-icon name="person" size="lg" />
               </template>
@@ -553,8 +311,7 @@
                 <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                   <q-item-section>
                     <q-item-label v-html="scope.opt.NombrePersona" />
-                    <q-item-label caption
-                      >Login: {{ scope.opt.LoginUsuario }}
+                    <q-item-label caption>Login: {{ scope.opt.LoginUsuario }}
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -569,42 +326,24 @@
             </q-select>
           </div>
 
-          <q-btn
-            class="col-xs-3 col-sm-2 col-md-2 q-pt-sm"
-            style="height: 60px"
-            label="evidencias"
-            icon="folder_open"
-            color="warning"
-            @click="EvidenciaVisibles"
-            :disabled="Evidenciadisable"
-            v-if="ShowEvidence == true"
-          />
+          <q-btn class="col-xs-3 col-sm-2 col-md-2 q-pt-sm" style="height: 60px" label="evidencias" icon="folder_open"
+            color="warning" @click="EvidenciaVisibles" :disabled="Evidenciadisable" v-if="ShowEvidence == true" />
 
-          <q-btn
-            class="col-xs-3 col-sm-2 col-md-2 q-pt-sm"
-            style="height: 60px"
-            label="evidencias"
-            icon="folder_open"
-            color="warning"
-            @click="ShowEvidenceVisible = true"
-            v-if="ShowEvidence == false"
-          />
+          <q-btn class="col-xs-3 col-sm-2 col-md-2 q-pt-sm" style="height: 60px" label="evidencias" icon="folder_open"
+            color="warning" @click="ShowEvidenceVisible = true" v-if="ShowEvidence == false" />
 
           <!-- volver a colocar -->
           <!--  :disabled="Evidenciadisable" -->
         </div>
 
-        <q-card
-          class="row justify-center items-center q-gutter-md col-xs-12 col-sm-5 col-md-4 q-pt-sm"
-        >
+        <q-card class="row justify-center items-center q-gutter-md col-xs-12 col-sm-5 col-md-4 q-pt-sm">
           <div class="row q-gutter-sm" style="margin-top: 0">
             <p class="h5 text-center" style="font-weight: bold">
               AUTORIZADO POR:
             </p>
             <div>
               <P class="text-center" style="margin-bottom: 0">
-                {{ cc.Aprobo_contcambios }}</P
-              >
+                {{ cc.Aprobo_contcambios }}</P>
               <p class="text-center">{{ cc.Cargoaprobo_contcambios }}</p>
             </div>
           </div>
@@ -614,42 +353,17 @@
           <q-card-section>
             <div class="row justify-center q-gutter-md" style="margin-top: 0">
               <p class="h5 text-center">REANUDAR ACTIVIDAD</p>
-              <div
-                class="row items-center justify-center"
-                style="margin-top: 0"
-              >
-                <q-option-group
-                  v-model="Trabajo.ReanudarActividad"
-                  :options="options"
-                  color="primary"
-                  inline
-                  dense
-                  @input="ReanudaActividad(Trabajo.ReanudarActividad)"
-                  :disable="ResumeActivity"
-                />
+              <div class="row items-center justify-center" style="margin-top: 0">
+                <q-option-group v-model="Trabajo.ReanudarActividad" :options="options" color="primary" inline dense
+                  @input="ReanudaActividad(Trabajo.ReanudarActividad)" :disable="ResumeActivity" />
                 <!--  -->
 
-                <div
-                  class="row justify-center items-center"
-                  v-if="EditEmailReanudar"
-                  style="margin-left: 5px; margin-top: 0; padding-top: 0"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="EditEmail(3, 3)"
-                  />
+                <div class="row justify-center items-center" v-if="EditEmailReanudar"
+                  style="margin-left: 5px; margin-top: 0; padding-top: 0">
+                  <q-btn color="positive" icon="edit_note" @click="EditEmail(3, 3)" />
                 </div>
-                <div
-                  class="row justify-center"
-                  v-if="ShowEmailReanudar"
-                  style="margin-left: 5px; margin-top: 10px"
-                >
-                  <q-btn
-                    color="positive"
-                    icon="edit_note"
-                    @click="ReadEmail(3)"
-                  />
+                <div class="row justify-center" v-if="ShowEmailReanudar" style="margin-left: 5px; margin-top: 10px">
+                  <q-btn color="positive" icon="edit_note" @click="ReadEmail(3)" />
                 </div>
               </div>
             </div>
@@ -664,38 +378,16 @@
           <q-separator />
 
           <q-card-actions>
-            <q-btn
-              style="width: 100%"
-              label="Abrir"
-              icon="edit_note"
-              color="primary"
-              @click="editor('SeguimientoAccion', Editar, leer)"
-              :disabled="DesAccionTomada"
-            />
+            <q-btn style="width: 100%" label="Abrir" icon="edit_note" color="primary"
+              @click="editor('SeguimientoAccion', Editar, leer)" :disabled="DesAccionTomada" />
           </q-card-actions>
         </q-card>
 
         <div class="col-xs-12 col-sm-7 col-md-4 q-field--with-bottom">
-          <q-select
-            :disable="GeneralView"
-            filled
-            v-model="Trabajo.ResponsableSeguimiento"
-            map-options
-            emit-value
-            option-value="LoginUsuario"
-            option-label="NombrePersona"
-            :options="listaUsuarios"
-            :rules="[regla]"
-            use-input
-            hide-dropdown-icon
-            hide-selected
-            fill-input
-            input-debounce="0"
-            label="Responsable de Seguimiento"
-            @filter="filterFnUsuario"
-            style="padding-top: 40px"
-            @blur="ValidarResponsables(2)"
-          >
+          <q-select :disable="GeneralView" filled v-model="Trabajo.ResponsableSeguimiento" map-options emit-value
+            option-value="LoginUsuario" option-label="NombrePersona" :options="listaUsuarios" :rules="[regla]" use-input
+            hide-dropdown-icon hide-selected fill-input input-debounce="0" label="Responsable de Seguimiento"
+            @filter="filterFnUsuario" style="padding-top: 40px" @blur="ValidarResponsables(2)">
             <template v-slot:prepend>
               <q-icon name="person" size="lg" />
             </template>
@@ -703,8 +395,7 @@
               <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                 <q-item-section>
                   <q-item-label v-html="scope.opt.NombrePersona" />
-                  <q-item-label caption
-                    >Login: {{ scope.opt.LoginUsuario }}
+                  <q-item-label caption>Login: {{ scope.opt.LoginUsuario }}
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -718,38 +409,13 @@
             </template>
           </q-select>
         </div>
-        <q-input
-          class="col-xs-12 col-sm-4 col-md-2 q-pt-sm"
-          stack-label
-          label="Fecha Cierre"
-          readonly
-          disable
-          v-model="Trabajo.FechaCierre"
-          type="date"
-          outlined
-          style="padding-top: 4px"
-        />
+        <q-input class="col-xs-12 col-sm-4 col-md-2 q-pt-sm" stack-label label="Fecha Cierre" readonly disable
+          v-model="Trabajo.FechaCierre" type="date" outlined style="padding-top: 4px" />
         <div class="col-xs-12 col-sm-12 col-md-4 q-field--with-bottom">
-          <q-select
-            :disable="GeneralView"
-            filled
-            v-model="Trabajo.LoginCierra"
-            map-options
-            emit-value
-            option-value="LoginUsuario"
-            option-label="NombrePersona"
-            :options="listaUsuarios"
-            :rules="[regla]"
-            use-input
-            hide-dropdown-icon
-            hide-selected
-            fill-input
-            input-debounce="0"
-            label="Cerrado por"
-            @filter="filterFnUsuario"
-            style="padding-top: 40px"
-            @blur="ValidarResponsables(3)"
-          >
+          <q-select :disable="GeneralView" filled v-model="Trabajo.LoginCierra" map-options emit-value
+            option-value="LoginUsuario" option-label="NombrePersona" :options="listaUsuarios" :rules="[regla]" use-input
+            hide-dropdown-icon hide-selected fill-input input-debounce="0" label="Cerrado por" @filter="filterFnUsuario"
+            style="padding-top: 40px" @blur="ValidarResponsables(3)">
             <template v-slot:prepend>
               <q-icon name="person" size="lg" />
             </template>
@@ -757,8 +423,7 @@
               <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                 <q-item-section>
                   <q-item-label v-html="scope.opt.NombrePersona" />
-                  <q-item-label caption
-                    >Login: {{ scope.opt.LoginUsuario }}
+                  <q-item-label caption>Login: {{ scope.opt.LoginUsuario }}
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -774,46 +439,17 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-5 q-gutter-sm">
-          <q-btn
-            label="Guardar"
-            icon="save"
-            color="positive"
-            class="col-xs-12 col-sm-6 col-md-2 q-pt-sm"
-            @click="AvisoVisible = true"
-            v-if="BtnSaveGeneral"
-          />
-          <q-btn
-            label="guardar Cambios"
-            v-if="BtnSaveChange"
-            @click="CreatorChanges"
-            color="positive"
-            icon="save"
-            class="col-xs-12 col-sm-5 col-md-2 q-pt-sm"
-          />
-          <q-btn
-            icon="save"
-            @click="AvisoVisibleTwo = true"
-            class="col-xs-12 col-sm-6 col-md-2 q-pt-sm"
-            color="positive"
-            label="guardar"
-            v-if="BtnSaveAceptaTNC"
-          />
-          <q-btn
-            label="regresar"
-            icon="keyboard_return"
-            color="negative"
-            class="col-xs-12 col-sm-5 col-md-2 q-pt-sm"
-            @click="ReturnView"
-          />
+          <q-btn label="Guardar" icon="save" color="positive" class="col-xs-12 col-sm-6 col-md-2 q-pt-sm"
+            @click="AvisoVisible = true" v-if="BtnSaveGeneral" />
+          <q-btn label="guardar Cambios" v-if="BtnSaveChange" @click="CreatorChanges" color="positive" icon="save"
+            class="col-xs-12 col-sm-5 col-md-2 q-pt-sm" />
+          <q-btn icon="save" @click="AvisoVisibleTwo = true" class="col-xs-12 col-sm-6 col-md-2 q-pt-sm"
+            color="positive" label="guardar" v-if="BtnSaveAceptaTNC" />
+          <q-btn label="regresar" icon="keyboard_return" color="negative" class="col-xs-12 col-sm-5 col-md-2 q-pt-sm"
+            @click="ReturnView" />
 
-          <q-btn
-            label="Cerrar Trabajo"
-            v-if="BtnCerrarTNC"
-            icon="assignment_turned_in"
-            color="positive"
-            class="col-xs-12 col-sm-5 col-md-2 q-pt-sm"
-            @click="CerrarTNC"
-          />
+          <q-btn label="Cerrar Trabajo" v-if="BtnCerrarTNC" icon="assignment_turned_in" color="positive"
+            class="col-xs-12 col-sm-5 col-md-2 q-pt-sm" @click="CerrarTNC" />
           <!-- <q-btn
           label="Terminar"
           icon="pending_actions"
@@ -829,28 +465,16 @@
           <q-btn icon="close" flat color="red" v-close-popup size="20px" />
         </div>
 
-        <q-carousel
-          control-color="primary"
-          animated
-          v-model="slide"
-          arrows
-          infinite
-          style="width: 750px; height: 450px; max-width: none"
-        >
+        <q-carousel control-color="primary" animated v-model="slide" arrows infinite
+          style="width: 750px; height: 450px; max-width: none">
           <q-carousel-slide :name="1" img-src="~assets/imagen1.png" />
-          <q-carousel-slide
-            :name="2"
-            style="
+          <q-carousel-slide :name="2" style="
               display: flex;
               justify-content: center;
               align-items: center;
               height: 450px;
-            "
-          >
-            <img
-              src="~assets/imagen2.png"
-              style="max-width: 100%; max-height: 100%"
-            />
+            ">
+            <img src="~assets/imagen2.png" style="max-width: 100%; max-height: 100%" />
           </q-carousel-slide>
           <!-- <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
           <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" /> -->
@@ -865,186 +489,71 @@
         <q-card-section>
           <div class="text-h6 text-center">{{ TitleEditor }}</div>
         </q-card-section>
-        <div
-          v-if="editores.editor2 == true"
-          class="row justify-end"
-          style="margin-right: 15px"
-        >
-          <q-btn
-            icon="visibility"
-            label="Gestión de riesgo"
-            color="primary"
-            @click="GestionRiego = true"
-          />
+        <div v-if="editores.editor2 == true" class="row justify-end" style="margin-right: 15px">
+          <q-btn icon="visibility" label="Gestión de riesgo" color="primary" @click="GestionRiego = true" />
         </div>
         <q-card-section>
-          <q-editor
-            v-if="editores.editor1 == true"
-            v-model="BoxText.DescripcionProblema"
-          />
-          <p
-            v-if="editores.leer1 == true && Trabajo.DescripcionProblema"
-            v-html="Trabajo.DescripcionProblema"
-          ></p>
+          <q-editor v-if="editores.editor1 == true" v-model="BoxText.DescripcionProblema" />
+          <p v-if="editores.leer1 == true && Trabajo.DescripcionProblema" v-html="Trabajo.DescripcionProblema"></p>
           <p v-else-if="editores.leer1 == true">
             Aún no se ha registrado información
           </p>
 
-          <q-editor
-            v-if="editores.editor2 == true"
-            v-model="BoxText.ValoracionImpacto"
-          />
-          <p
-            v-if="editores.leer2 == true && Trabajo.ValoracionImpacto"
-            v-html="Trabajo.ValoracionImpacto"
-          ></p>
+          <q-editor v-if="editores.editor2 == true" v-model="BoxText.ValoracionImpacto" />
+          <p v-if="editores.leer2 == true && Trabajo.ValoracionImpacto" v-html="Trabajo.ValoracionImpacto"></p>
           <p v-else-if="editores.leer2 == true">
             Aún no se ha registrado información
           </p>
 
-          <q-editor
-            v-if="editores.editor3 == true"
-            v-model="BoxText.DesAccionCorrectiva"
-          />
-          <p
-            v-if="editores.leer3 == true && Trabajo.DesAccionCorrectiva"
-            v-html="Trabajo.DesAccionCorrectiva"
-          ></p>
+          <q-editor v-if="editores.editor3 == true" v-model="BoxText.DesAccionCorrectiva" />
+          <p v-if="editores.leer3 == true && Trabajo.DesAccionCorrectiva" v-html="Trabajo.DesAccionCorrectiva"></p>
           <p v-else-if="editores.leer3 == true">
             Aún no se ha registrado información
           </p>
 
-          <q-editor
-            v-if="editores.editor4 == true"
-            v-model="BoxText.SeguimientoAccion"
-          />
-          <p
-            v-if="editores.leer4 == true && Trabajo.SeguimientoAccion"
-            v-html="Trabajo.SeguimientoAccion"
-          ></p>
+          <q-editor v-if="editores.editor4 == true" v-model="BoxText.SeguimientoAccion" />
+          <p v-if="editores.leer4 == true && Trabajo.SeguimientoAccion" v-html="Trabajo.SeguimientoAccion"></p>
           <p v-else-if="editores.leer4 == true">
             Aún no se ha registrado información
           </p>
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn
-            v-if="BtnBoxTextRead"
-            label="continuar"
-            color="positive"
-            @click="handleOk"
-          />
-          <q-btn
-            v-if="BtnBoxText"
-            label="Cancelar"
-            color="negative"
-            v-close-popup
-            @click="CancelInfo"
-          />
-          <q-btn
-            v-if="BtnBoxText"
-            label="Guardar"
-            icon="save"
-            color="positive"
-            @click="SaveInfoBtn"
-          />
-          <q-btn
-            v-if="BtnBoxText2"
-            label="Cancelar"
-            color="negative"
-            v-close-popup
-            @click="CancelInfo"
-          />
-          <q-btn
-            v-if="BtnBoxText2"
-            label="Guardar"
-            icon="save"
-            color="positive"
-            @click="SaveInfoBtn2"
-          />
-          <q-btn
-            v-if="BtnSeguimientoAccion"
-            label="Cancelar"
-            color="negative"
-            v-close-popup
-            @click="CancelInfo"
-          />
-          <q-btn
-            v-if="BtnSeguimientoAccion"
-            label="Guardar"
-            icon="save"
-            color="positive"
-            @click="SaveSeguimientoAccion"
-          />
-          <q-btn
-            v-if="BtnDesAccionCorrectiva"
-            label="Cancelar"
-            color="negative"
-            v-close-popup
-            @click="CancelInfo"
-          />
-          <q-btn
-            v-if="BtnDesAccionCorrectiva"
-            label="Guardars"
-            icon="save"
-            color="positive"
-            @click="SaveDesAccionCorrectiva"
-          />
+          <q-btn v-if="BtnBoxTextRead" label="continuar" color="positive" @click="handleOk" />
+          <q-btn v-if="BtnBoxText" label="Cancelar" color="negative" v-close-popup @click="CancelInfo" />
+          <q-btn v-if="BtnBoxText" label="Guardar" icon="save" color="positive" @click="SaveInfoBtn" />
+          <q-btn v-if="BtnBoxText2" label="Cancelar" color="negative" v-close-popup @click="CancelInfo" />
+          <q-btn v-if="BtnBoxText2" label="Guardar" icon="save" color="positive" @click="SaveInfoBtn2" />
+          <q-btn v-if="BtnSeguimientoAccion" label="Cancelar" color="negative" v-close-popup @click="CancelInfo" />
+          <q-btn v-if="BtnSeguimientoAccion" label="Guardar" icon="save" color="positive"
+            @click="SaveSeguimientoAccion" />
+          <q-btn v-if="BtnDesAccionCorrectiva" label="Cancelar" color="negative" v-close-popup @click="CancelInfo" />
+          <q-btn v-if="BtnDesAccionCorrectiva" label="Guardars" icon="save" color="positive"
+            @click="SaveDesAccionCorrectiva" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="AccionVisible"
-      persistent
-      class="col-xs-12 col-sm-12 col-md-5"
-    >
+    <q-dialog v-model="AccionVisible" persistent class="col-xs-12 col-sm-12 col-md-5">
       <q-card v-if="CreateAccion" style="width: 600px; max-width: none">
         <q-card-section class="q-gutter-sm">
           <div class="text-h6 text-center">{{ TitleEditor }}</div>
 
           <div class="row justify-end q-gutter-sm">
-            <q-btn
-              label="Ver acciones"
-              icon="visibility"
-              color="primary"
-              @click="ReadActions"
-            />
-            <q-btn
-              label="Agregar Acción"
-              @click="AddAction"
-              icon="add_box"
-              color="positive "
-            />
+            <q-btn label="Ver acciones" icon="visibility" color="primary" @click="ReadActions" />
+            <q-btn label="Agregar Acción" @click="AddAction" icon="add_box" color="positive " />
           </div>
           <q-scroll-area style="height: 200px">
             <div class="q-pa-sm">
-              <div
-                v-for="(item, index) in Action"
-                :key="index"
-                class="q-gutter-sm"
-              >
+              <div v-for="(item, index) in Action" :key="index" class="q-gutter-sm">
                 <div class="row q-gutter-sm">
-                  <p
-                    class="row items-center justify-center col-xs-1 col-sm-1 col-md-1"
-                    style="font-weight: bold; font-size: 1.5em; width: 20px"
-                  >
+                  <p class="row items-center justify-center col-xs-1 col-sm-1 col-md-1"
+                    style="font-weight: bold; font-size: 1.5em; width: 20px">
                     {{ index + 1 }}
                   </p>
 
-                  <q-input
-                    class="col-xs-9 col-sm-9 col-md-9"
-                    v-model="datos[index]"
-                    type="text"
-                    autogrow
-                    filled
-                  />
-                  <q-btn
-                    icon="delete"
-                    class="col-xs-1 col-sm-1 col-md-1"
-                    color="red"
-                    @click="RemoveAction(index)"
-                  />
+                  <q-input class="col-xs-9 col-sm-9 col-md-9" v-model="datos[index]" type="text" autogrow filled />
+                  <q-btn icon="delete" class="col-xs-1 col-sm-1 col-md-1" color="red" @click="RemoveAction(index)" />
                 </div>
               </div>
             </div>
@@ -1053,12 +562,7 @@
 
         <q-card-actions align="right">
           <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn
-            label="guardar"
-            icon="save"
-            color="positive"
-            @click="ProcesarActions"
-          />
+          <q-btn label="guardar" icon="save" color="positive" @click="ProcesarActions" />
         </q-card-actions>
       </q-card>
 
@@ -1070,43 +574,25 @@
 
           <q-scroll-area v-if="SinInfo.Evidencias" style="height: 300px">
             <div class="q-pa-sm" style="width: 700px">
-              <div
-                v-for="(item, index) in Acciones"
-                :key="index"
-                style="width: 100%"
-                class="q-gutter-sm"
-              >
+              <div v-for="(item, index) in Acciones" :key="index" style="width: 100%" class="q-gutter-sm">
                 <div class="row q-gutter-sm" style="width: 100%">
-                  <p
-                    class="row justify-center col-xs-1 col-sm-1 col-md-1"
-                    style="font-weight: bold; font-size: 1.5em; width: 20px"
-                  >
+                  <p class="row justify-center col-xs-1 col-sm-1 col-md-1"
+                    style="font-weight: bold; font-size: 1.5em; width: 20px">
                     {{ index + 1 }}
                   </p>
 
-                  <div
-                    :class="[
-                      'row',
-                      'col-xs-5',
-                      'col-sm-8',
-                      BtnAcciones ? 'col-md-9' : 'col-md-8',
-                    ]"
-                  >
-                    <q-input
-                      :class="['col-xs-8', 'col-sm-10', 'col-md-10']"
-                      v-if="item.editing"
-                      filled
-                      v-model="item.DescripcionAccion"
-                      label="Descripción de la Acción"
-                      @blur="saveAction(item)"
-                      @keyup.enter="saveAction(item)"
-                    />
+                  <div :class="[
+                    'row',
+                    'col-xs-5',
+                    'col-sm-8',
+                    BtnAcciones ? 'col-md-9' : 'col-md-8',
+                  ]">
+                    <q-input :class="['col-xs-8', 'col-sm-10', 'col-md-10']" v-if="item.editing" filled
+                      v-model="item.DescripcionAccion" label="Descripción de la Acción" @blur="saveAction(item)"
+                      @keyup.enter="saveAction(item)" />
 
-                    <p
-                      v-else
-                      style="border-radius: 5px; padding: 3px; margin-bottom: 0"
-                      class="bg-grey-3 col-xs-8 col-sm-12 col-md-12"
-                    >
+                    <p v-else style="border-radius: 5px; padding: 3px; margin-bottom: 0"
+                      class="bg-grey-3 col-xs-8 col-sm-12 col-md-12">
                       {{ item.DescripcionAccion }}
                     </p>
                     <p class="text-italic text-caption">
@@ -1115,34 +601,13 @@
                     </p>
                   </div>
 
-                  <div
-                    v-if="BtnAcciones"
-                    class="row q-gutter-xs col-xs-2 col-sm-2 col-md-2"
-                    style="margin-top: 0"
-                  >
-                    <q-btn
-                      style="width: 40px; height: 40px"
-                      class="col-xs-4 col-sm-4 col-md-4"
-                      icon="save"
-                      color="positive"
-                      @click="saveAction(item)"
-                      v-if="item.editing"
-                    />
-                    <q-btn
-                      style="width: 40px; height: 40px"
-                      class="col-xs-4 col-sm-4 col-md-4"
-                      icon="edit"
-                      color="primary"
-                      @click="editAction(item)"
-                      v-if="!item.editing"
-                    />
-                    <q-btn
-                      style="width: 40px; height: 40px"
-                      class="col-xs-4 col-sm-4 col-md-4"
-                      icon="delete"
-                      color="red"
-                      @click="ProcesarEliminacion(item, index)"
-                    />
+                  <div v-if="BtnAcciones" class="row q-gutter-xs col-xs-2 col-sm-2 col-md-2" style="margin-top: 0">
+                    <q-btn style="width: 40px; height: 40px" class="col-xs-4 col-sm-4 col-md-4" icon="save"
+                      color="positive" @click="saveAction(item)" v-if="item.editing" />
+                    <q-btn style="width: 40px; height: 40px" class="col-xs-4 col-sm-4 col-md-4" icon="edit"
+                      color="primary" @click="editAction(item)" v-if="!item.editing" />
+                    <q-btn style="width: 40px; height: 40px" class="col-xs-4 col-sm-4 col-md-4" icon="delete"
+                      color="red" @click="ProcesarEliminacion(item, index)" />
                   </div>
                 </div>
               </div>
@@ -1155,75 +620,39 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn
-            v-if="BtnAcciones"
-            label="regresar"
-            color="primary"
-            @click="ReturnActions"
-          />
-          <q-btn
-            v-if="!BtnAcciones"
-            label="continuar"
-            color="positive"
-            v-close-popup
-          />
+          <q-btn v-if="BtnAcciones" label="regresar" color="primary" @click="ReturnActions" />
+          <q-btn v-if="!BtnAcciones" label="continuar" color="positive" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="EvidenciaVisible"
-      persistent
-      class="col-xs-12 col-sm-12 col-md-5"
-    >
+    <q-dialog v-model="EvidenciaVisible" persistent class="col-xs-12 col-sm-12 col-md-5">
       <q-card style="width: 600px">
         <q-card-section class="q-gutter-sm">
           <div class="text-h6 text-center">EVIDENCIAS</div>
 
           <q-scroll-area style="height: 200px">
-            <div
-              v-for="(item, index) in Action"
-              :key="index"
-              class="q-gutter-sm"
-            >
+            <div v-for="(item, index) in Action" :key="index" class="q-gutter-sm">
               <div class="row q-gutter-sm">
-                <p
-                  class="row items-center justify-center col-xs-1 col-sm-1 col-md-1"
-                  style="font-weight: bold; font-size: 1.5em; width: 20px"
-                >
+                <p class="row items-center justify-center col-xs-1 col-sm-1 col-md-1"
+                  style="font-weight: bold; font-size: 1.5em; width: 20px">
                   {{ index + 1 }}
                 </p>
 
-                <q-file
-                  v-model="files[index]"
-                  label="Evidencias de Accion"
-                  use-chips
-                  filled
-                  multiple
-                  append
-                  style="max-width: 300px"
-                />
+                <q-file v-model="files[index]" label="Evidencias de Accion" use-chips filled multiple append
+                  style="max-width: 300px" />
               </div>
             </div>
           </q-scroll-area>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn label="Cancel" color="negative" v-close-popup />
-          <q-btn
-            label="guardar"
-            icon="save"
-            color="positive"
-            @click="SaveEvidence"
-          />
+          <q-btn label="guardar" icon="save" color="positive" @click="SaveEvidence" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="AnularVisible"
-      persistent
-      class="col-xs-12 col-sm-12 col-md-5"
-    >
+    <q-dialog v-model="AnularVisible" persistent class="col-xs-12 col-sm-12 col-md-5">
       <q-card style="width: 800px; max-width: none">
         <q-card-section>
           <p class="text-h6 text-center" v-if="ReadAnular == false">
@@ -1232,24 +661,13 @@
           <p class="text-h6 text-center" v-if="ReadAnular">
             Documentos Anulados
           </p>
-          <q-btn
-            v-if="AnularM"
-            label="Anular documento"
-            icon="add"
-            color="positive"
-            @click="AnularMore"
-          />
+          <q-btn v-if="AnularM" label="Anular documento" icon="add" color="positive" @click="AnularMore" />
         </q-card-section>
         <q-separator />
 
         <q-card-section v-if="ReadAnular == false" class="q-gutter-sm">
-          <q-select
-            filled
-            v-model="Trabajo.TipoDocumento"
-            :options="TipoDocumentos"
-            label="Tipo documento"
-            @input="ObtenerVigencias"
-          />
+          <q-select filled v-model="Trabajo.TipoDocumento" :options="TipoDocumentos" label="Tipo documento"
+            @input="ObtenerVigencias" />
 
           <!-- <q-select
             filled
@@ -1257,13 +675,8 @@
             :options="Documentos"
             label="Documento"
           /> -->
-          <q-input
-            label="No. Orden Trabajo"
-            v-if="Trabajo.TipoDocumento.value === 'Certificado'"
-            filled
-            type="number"
-            v-model="Id_programacionorden"
-            @keyup.enter="
+          <q-input label="No. Orden Trabajo" v-if="Trabajo.TipoDocumento.value === 'Certificado'" filled type="number"
+            v-model="Id_programacionorden" @keyup.enter="
               consultarFiltroEntregar(
                 consultaGeneral,
                 isEntregado,
@@ -1271,41 +684,21 @@
                 fechaIni,
                 fechaFin
               )
-            "
-          />
-          <q-scroll-area
-            v-if="Trabajo.TipoDocumento.value === 'Certificado'"
-            style="height: 200px"
-          >
-            <div
-              v-for="(item, index) in ListaCertificados"
-              :key="index"
-              class="q-gutter-sm"
-            >
+              " />
+          <q-scroll-area v-if="Trabajo.TipoDocumento.value === 'Certificado'" style="height: 200px">
+            <div v-for="(item, index) in ListaCertificados" :key="index" class="q-gutter-sm">
               <div class="row q-gutter-sm">
-                <p
-                  class="row justify-center col-xs-1 col-sm-1 col-md-1"
-                  style="font-weight: bold; font-size: 1.5em; width: 20px"
-                ></p>
+                <p class="row justify-center col-xs-1 col-sm-1 col-md-1"
+                  style="font-weight: bold; font-size: 1.5em; width: 20px"></p>
 
                 <div class="row items-center">
                   <q-item-section class="row items-center" style="width: 50px">
-                    <q-checkbox
-                      @input="
-                        CambioCheckbox(item.IdCertificado, item.NCertificado)
-                      "
-                      v-model="IdsAprobar"
-                      :val="item.IdCertificado"
-                    >
+                    <q-checkbox @input="
+                      CambioCheckbox(item.IdCertificado, item.NCertificado)
+                      " v-model="IdsAprobar" :val="item.IdCertificado">
                       <q-tooltip> Anular </q-tooltip>
                     </q-checkbox>
-                    <q-icon
-                      class=""
-                      v-if="item.Aprobado === 1"
-                      color="green"
-                      name="cancel"
-                      size="1.9rem"
-                    >
+                    <q-icon class="" v-if="item.Aprobado === 1" color="green" name="cancel" size="1.9rem">
                       <q-tooltip> Anulado </q-tooltip>
                     </q-icon>
                   </q-item-section>
@@ -1317,42 +710,17 @@
             </div>
           </q-scroll-area>
 
-          <q-select
-            v-if="Trabajo.TipoDocumento.value === 'Informes'"
-            filled
-            v-model="VigenciaInforme"
-            :options="Vigencias"
-            label="Vigencia"
-          />
+          <q-select v-if="Trabajo.TipoDocumento.value === 'Informes'" filled v-model="VigenciaInforme"
+            :options="Vigencias" label="Vigencia" />
 
-          <div
-            v-if="Trabajo.TipoDocumento.value === 'Informes'"
-            class="col-xs-12 col-sm-7 col-md-4"
-          >
-            <q-select
-              filled
-              v-model="Trabajo.IdDocumento"
-              map-options
-              emit-value
-              :option-value="
-                (val) => ({
-                  IdDocumento: val.IdInforme,
-                  NDocumento: val.NInforme,
-                })
-              "
-              option-label="NInforme"
-              :options="ListaInformes"
-              use-input
-              hide-dropdown-icon
-              hide-selected
-              fill-input
-              input-debounce="0"
-              label="NInforme"
-              @filter="filterFnInformes"
-              style="padding-top: 5px"
-              @blur="AddDocumentoAnular"
-              @keyup.enter="AddDocumentoAnular"
-            >
+          <div v-if="Trabajo.TipoDocumento.value === 'Informes'" class="col-xs-12 col-sm-7 col-md-4">
+            <q-select filled v-model="Trabajo.IdDocumento" map-options emit-value :option-value="(val) => ({
+                IdDocumento: val.IdInforme,
+                NDocumento: val.NInforme,
+              })
+              " option-label="NInforme" :options="ListaInformes" use-input hide-dropdown-icon hide-selected fill-input
+              input-debounce="0" label="NInforme" @filter="filterFnInformes" style="padding-top: 5px"
+              @blur="AddDocumentoAnular" @keyup.enter="AddDocumentoAnular">
               <template v-slot:prepend>
                 <q-icon name="person" size="lg" />
               </template>
@@ -1360,8 +728,7 @@
                 <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
                   <q-item-section>
                     <q-item-label v-html="scope.opt.NInforme" />
-                    <q-item-label caption
-                      >IdInforme: {{ scope.opt.IdInforme }}
+                    <q-item-label caption>IdInforme: {{ scope.opt.IdInforme }}
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -1377,25 +744,16 @@
           </div>
 
           <div>
-            <q-chip
-              v-for="(dato, index) in DocumentosAnular"
-              removable
-              @remove="removeDocumentoAnular(index, dato.TipoDocumento)"
-              :key="index"
-              class="q-mt-sm q-mr-sm"
-            >
+            <q-chip v-for="(dato, index) in DocumentosAnular" removable
+              @remove="removeDocumentoAnular(index, dato.TipoDocumento)" :key="index" class="q-mt-sm q-mr-sm">
               {{ dato.TipoDocumento }} - {{ dato.NDocumento }}
             </q-chip>
           </div>
         </q-card-section>
 
         <q-card-section class="row q-gutter-sm" v-if="ReadAnular">
-          <div
-            v-for="(item, index) in DocumentosAnular"
-            :key="index"
-            class="bg-grey-12"
-            style="padding: 5px; border-radius: 5px"
-          >
+          <div v-for="(item, index) in DocumentosAnular" :key="index" class="bg-grey-12"
+            style="padding: 5px; border-radius: 5px">
             <div class="column items-center text-h6">
               <p style="margin: 0; padding: 1px">
                 Tipo Documento:
@@ -1413,58 +771,19 @@
         </q-card-actions>
 
         <q-card-actions v-if="ReadAnular == false" align="right">
-          <q-btn
-            v-if="BtnSaveAnular2"
-            label="Cancelar"
-            color="negative"
-            v-close-popup
-            @click="CancelAnular(1)"
-          />
-          <q-btn
-            v-if="BtnSaveAnular2"
-            label="guardar"
-            icon="save"
-            color="positive"
-            @click="SaveAnular(1)"
-          />
+          <q-btn v-if="BtnSaveAnular2" label="Cancelar" color="negative" v-close-popup @click="CancelAnular(1)" />
+          <q-btn v-if="BtnSaveAnular2" label="guardar" icon="save" color="positive" @click="SaveAnular(1)" />
 
-          <q-btn
-            v-if="BtnSaveAnular"
-            label="regresar"
-            color="negative"
-            v-close-popup
-            @click="CancelAnular(0)"
-          />
-          <q-btn
-            v-if="BtnSaveAnular"
-            label="guardar cambioss"
-            icon="save"
-            color="positive"
-            @click="SaveAnular(2)"
-          />
+          <q-btn v-if="BtnSaveAnular" label="regresar" color="negative" v-close-popup @click="CancelAnular(0)" />
+          <q-btn v-if="BtnSaveAnular" label="guardar cambioss" icon="save" color="positive" @click="SaveAnular(2)" />
 
-          <q-btn
-            v-if="BtnAnularMore"
-            label="regresar"
-            color="negative"
-            @click="CancelAnular(2)"
-          />
-          <q-btn
-            v-if="BtnAnularMore"
-            label="guardar cambiosm"
-            icon="save"
-            color="positive"
-            @click="SaveAnular(3)"
-          />
+          <q-btn v-if="BtnAnularMore" label="regresar" color="negative" @click="CancelAnular(2)" />
+          <q-btn v-if="BtnAnularMore" label="guardar cambiosm" icon="save" color="positive" @click="SaveAnular(3)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="NotificarVisible"
-      persistent
-      class="col-xs-12 col-sm-12 col-md-5"
-    >
+    <q-dialog v-model="NotificarVisible" persistent class="col-xs-12 col-sm-12 col-md-5">
       <q-card style="width: 700px; max-width: none" class="q-gutter-xs">
         <p class="text-h6 text-center text-weight-bolder">
           Notificación para Usuario
@@ -1474,22 +793,11 @@
           <div class="row items-center q-gutter-sm">
             <div class="col-2 text-left text-weight-bold">Para:</div>
             <div class="col-10">
-              <q-chip
-                v-for="(email, index) in PaqEmail.Emails"
-                :key="index"
-                removable
-                @remove="removeEmailPaq(index)"
-              >
+              <q-chip v-for="(email, index) in PaqEmail.Emails" :key="index" removable @remove="removeEmailPaq(index)">
                 {{ email }}
               </q-chip>
-              <q-input
-                v-model="emailInput"
-                @keyup.enter="addEmail"
-                @blur="addEmail"
-                placeholder="Agregar destinatario"
-                hide-bottom-space
-                dense
-              />
+              <q-input v-model="emailInput" @keyup.enter="addEmail" @blur="addEmail" placeholder="Agregar destinatario"
+                hide-bottom-space dense />
             </div>
           </div>
         </q-card-section>
@@ -1497,56 +805,19 @@
         <q-card-section style="padding-top: 10px" class="q-gutter-xs">
           <q-input label="Asunto" filled autogrow v-model="PaqEmail.Asunto" />
 
-          <q-editor
-            v-model="PaqEmail.Mensaje"
-            placeholder="Escribe tu mensaje aquí..."
-          />
+          <q-editor v-model="PaqEmail.Mensaje" placeholder="Escribe tu mensaje aquí..." />
 
-          <q-file
-            v-model="PaqEmail.NotificacionFiles"
-            use-chips
-            label="Adjuntar archivos"
-            multiple
-            filled
-          />
-          <q-btn
-            v-if="EmailOk == true"
-            label="nuevo mensaje"
-            icon="add"
-            color="info"
-            @click="AddEmailMasivo"
-          />
+          <q-file v-model="PaqEmail.NotificacionFiles" use-chips label="Adjuntar archivos" multiple filled />
+          <q-btn v-if="EmailOk == true" label="nuevo mensaje" icon="add" color="info" @click="AddEmailMasivo" />
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn
-            v-if="ReturnMensajes == false"
-            label="cancelar"
-            color="negative"
-            v-close-popup
-            @click="CancelarNotificacion"
-          />
-          <q-btn
-            v-if="ReturnMensajes == true"
-            label="Regresar"
-            icon="keyboard_return"
-            color="negative"
-            v-close-popup
-          />
-          <q-btn
-            v-if="EmailOk == true"
-            label="Guardar correo"
-            icon="save"
-            color="positive"
-            @click="OkEmail"
-          />
-          <q-btn
-            v-if="EmailOk == false"
-            label="guardar cambios"
-            icon="save"
-            color="positive"
-            @click="SaveChange(1, IndexEdit, 'NOTIFICA')"
-          />
+          <q-btn v-if="ReturnMensajes == false" label="cancelar" color="negative" v-close-popup
+            @click="CancelarNotificacion" />
+          <q-btn v-if="ReturnMensajes == true" label="Regresar" icon="keyboard_return" color="negative" v-close-popup />
+          <q-btn v-if="EmailOk == true" label="Guardar correo" icon="save" color="positive" @click="OkEmail" />
+          <q-btn v-if="EmailOk == false" label="guardar cambios" icon="save" color="positive"
+            @click="SaveChange(1, IndexEdit, 'NOTIFICA')" />
 
           <!-- @click="SaveNotificacion" -->
           <!-- sendEmail
@@ -1555,47 +826,23 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="EditEmailVisible"
-      persistent
-      class="col-xs-12 col-sm-12 col-md-5"
-    >
+    <q-dialog v-model="EditEmailVisible" persistent class="col-xs-12 col-sm-12 col-md-5">
       <q-card style="width: 900px; max-width: none" class="q-gutter-xs">
         <p class="text-h6 text-center">MENSAJES POR ENVIAR</p>
-        <q-btn
-          v-if="ShowEmail == false"
-          label="Agregar Mensaje"
-          icon="add"
-          color="positive"
-          @click="AddMensaje"
-        />
+        <q-btn v-if="ShowEmail == false" label="Agregar Mensaje" icon="add" color="positive" @click="AddMensaje" />
 
         <q-card-section v-if="ShowEmail == true">
-          <div
-            v-for="(item, index) in EmailsMasivos"
-            :key="index"
-            class="q-gutter-none"
-          >
-            <div
-              @click="ShowEmailMasivo(index)"
-              class="row items-center bg-grey-3 hover-shadow"
-              style="cursor: pointer; border: 1px solid #b0b0b0ff"
-            >
-              <p
-                style="margin: 5px"
-                class="row text-weight-bold items-center col-xs-11 col-sm-11 col-md-4 ellipsis"
-              >
+          <div v-for="(item, index) in EmailsMasivos" :key="index" class="q-gutter-none">
+            <div @click="ShowEmailMasivo(index)" class="row items-center bg-grey-3 hover-shadow"
+              style="cursor: pointer; border: 1px solid #b0b0b0ff">
+              <p style="margin: 5px" class="row text-weight-bold items-center col-xs-11 col-sm-11 col-md-4 ellipsis">
                 {{ item.EmailsTxt }}
               </p>
               <div class="row col-xs-11 col-sm-11 col-md-6">
                 <p style="margin: 5px" class="row ellipsis">
-                  <b>{{ item.Asunto }}</b
-                  >&nbsp; -
+                  <b>{{ item.Asunto }}</b>&nbsp; -
                 </p>
-                <p
-                  style="cursor: pointer; margin: 5px"
-                  class="row col-xs-11 col-sm-11 col-md-3 ellipsis"
-                >
+                <p style="cursor: pointer; margin: 5px" class="row col-xs-11 col-sm-11 col-md-3 ellipsis">
                   {{ item.Mensaje }}
                 </p>
               </div>
@@ -1610,43 +857,23 @@
         </q-card-section>
 
         <q-card-section v-if="ShowEmail == false">
-          <div
-            v-for="(item, index) in EmailsMasivos"
-            :key="index"
-            class="q-gutter-none"
-          >
-            <div
-              @click="EditEmail(1, index)"
-              class="row items-center bg-grey-3 hover-shadow"
-              style="cursor: pointer; border: 1px solid #b0b0b0ff"
-            >
-              <p
-                style="margin: 5px"
-                class="row text-weight-bold items-center col-xs-11 col-sm-11 col-md-4 ellipsis"
-              >
+          <div v-for="(item, index) in EmailsMasivos" :key="index" class="q-gutter-none">
+            <div @click="EditEmail(1, index)" class="row items-center bg-grey-3 hover-shadow"
+              style="cursor: pointer; border: 1px solid #b0b0b0ff">
+              <p style="margin: 5px" class="row text-weight-bold items-center col-xs-11 col-sm-11 col-md-4 ellipsis">
                 {{ item.Emails[0] }}
               </p>
               <div class="row col-xs-11 col-sm-11 col-md-6">
                 <p style="margin: 5px" class="row ellipsis">
-                  <b>{{ item.Asunto }}</b
-                  >&nbsp; -
+                  <b>{{ item.Asunto }}</b>&nbsp; -
                 </p>
-                <p
-                  style="cursor: pointer; margin: 5px"
-                  class="row col-xs-11 col-sm-11 col-md-3 ellipsis"
-                >
+                <p style="cursor: pointer; margin: 5px" class="row col-xs-11 col-sm-11 col-md-3 ellipsis">
                   {{ item.Mensaje }}
                 </p>
               </div>
 
               <div class="col-xs-11 col-sm-11 col-md-1">
-                <q-btn
-                  icon="delete"
-                  class="col-xs-1 col-sm-1 col-md-1"
-                  color="red"
-                  flat
-                  @click="removeEmail(index)"
-                />
+                <q-btn icon="delete" class="col-xs-1 col-sm-1 col-md-1" color="red" flat @click="removeEmail(index)" />
               </div>
               <!-- @click="GetEvidenceId(item.index) -->
 
@@ -1659,19 +886,8 @@
         <q-card-actions align="right">
           <!-- @click="CancelarNotificacion"  -->
 
-          <q-btn
-            label="continuar"
-            color="positive"
-            v-if="ShowEmail == false"
-            v-close-popup
-            @click="Retornar"
-          />
-          <q-btn
-            label="regresar"
-            color="positive"
-            v-if="ShowEmail == true"
-            v-close-popup
-          />
+          <q-btn label="continuar" color="positive" v-if="ShowEmail == false" v-close-popup @click="Retornar" />
+          <q-btn label="regresar" color="positive" v-if="ShowEmail == true" v-close-popup />
           <!-- @click="SaveNotificacion" -->
           <!-- sendEmail
           Notificaciones -->
@@ -1679,11 +895,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="DetenerVisible"
-      persistent
-      class="col-xs-12 col-sm-12 col-md-5"
-    >
+    <q-dialog v-model="DetenerVisible" persistent class="col-xs-12 col-sm-12 col-md-5">
       <q-card style="width: 600px" class="q-gutter-xs">
         <p class="text-h5 text-center text-weight-bolder">
           Informar a Usuarios
@@ -1693,76 +905,30 @@
           <div class="row items-center q-gutter-sm">
             <div class="col-2 text-left text-weight-bold">Para:</div>
             <div class="col-10">
-              <q-chip
-                v-for="(email, index) in PaqEmailDetener.Emails"
-                :key="index"
-                removable
-                @remove="removeEmailD(index)"
-              >
+              <q-chip v-for="(email, index) in PaqEmailDetener.Emails" :key="index" removable
+                @remove="removeEmailD(index)">
                 {{ email }}
               </q-chip>
-              <q-input
-                v-model="emailInput"
-                @keyup.enter="addEmailD"
-                @blur="addEmailD"
-                placeholder="Agregar destinatario"
-                hide-bottom-space
-                dense
-              />
+              <q-input v-model="emailInput" @keyup.enter="addEmailD" @blur="addEmailD"
+                placeholder="Agregar destinatario" hide-bottom-space dense />
             </div>
           </div>
         </q-card-section>
 
         <q-card-section class="q-gutter-xs">
-          <q-input
-            label="Asunto"
-            filled
-            autogrow
-            v-model="PaqEmailDetener.Asunto"
-          />
+          <q-input label="Asunto" filled autogrow v-model="PaqEmailDetener.Asunto" />
 
-          <q-editor
-            v-model="PaqEmailDetener.Mensaje"
-            placeholder="Escribe tu mensaje aquí..."
-          />
+          <q-editor v-model="PaqEmailDetener.Mensaje" placeholder="Escribe tu mensaje aquí..." />
 
-          <q-file
-            v-model="PaqEmailDetener.NotificacionFiles"
-            use-chips
-            label="Adjuntar archivos"
-            multiple
-            filled
-          />
+          <q-file v-model="PaqEmailDetener.NotificacionFiles" use-chips label="Adjuntar archivos" multiple filled />
         </q-card-section>
 
         <q-card-actions v-if="BtnDetiene" align="right">
-          <q-btn
-            label="cancelar"
-            v-if="EditEmailDetener == false"
-            color="negative"
-            v-close-popup
-            @click="CancelarD"
-          />
-          <q-btn
-            label="Guardar "
-            v-if="EditEmailDetener == false"
-            icon="save"
-            color="positive"
-            @click="SaveD"
-          />
-          <q-btn
-            label="Regresar"
-            v-if="EditEmailDetener == true"
-            color="negative"
-            v-close-popup
-          />
-          <q-btn
-            label="Guardar cambios"
-            v-if="EditEmailDetener == true"
-            icon="save"
-            color="positive"
-            @click="SaveChange(2, 2, 'DETIENE')"
-          />
+          <q-btn label="cancelar" v-if="EditEmailDetener == false" color="negative" v-close-popup @click="CancelarD" />
+          <q-btn label="Guardar " v-if="EditEmailDetener == false" icon="save" color="positive" @click="SaveD" />
+          <q-btn label="Regresar" v-if="EditEmailDetener == true" color="negative" v-close-popup />
+          <q-btn label="Guardar cambios" v-if="EditEmailDetener == true" icon="save" color="positive"
+            @click="SaveChange(2, 2, 'DETIENE')" />
           <!-- @click="SaveNotificacion"
            @click="OkDetener"
            @click="CancelarD"  -->
@@ -1775,33 +941,11 @@
         </q-card-actions>
 
         <q-card-actions v-if="BtnReanuda" align="right">
-          <q-btn
-            label="cancelar"
-            v-if="!BtnReanudaEdit"
-            color="negative"
-            v-close-popup
-            @click="CancelarT"
-          />
-          <q-btn
-            label="Guardar"
-            v-if="!BtnReanudaEdit"
-            icon="save"
-            color="positive"
-            @click="SaveT"
-          />
-          <q-btn
-            label="regresar"
-            v-if="BtnReanudaEdit"
-            v-close-popup
-            color="negative"
-          />
-          <q-btn
-            label="Guardar"
-            v-if="BtnReanudaEdit"
-            icon="save"
-            color="positive"
-            @click="SaveChange(3, 3, 'REANUDA')"
-          />
+          <q-btn label="cancelar" v-if="!BtnReanudaEdit" color="negative" v-close-popup @click="CancelarT" />
+          <q-btn label="Guardar" v-if="!BtnReanudaEdit" icon="save" color="positive" @click="SaveT" />
+          <q-btn label="regresar" v-if="BtnReanudaEdit" v-close-popup color="negative" />
+          <q-btn label="Guardar" v-if="BtnReanudaEdit" icon="save" color="positive"
+            @click="SaveChange(3, 3, 'REANUDA')" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -1858,63 +1002,41 @@
 
         <q-card-actions align="center">
           <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn
-            label="Continuar"
-            color="positive"
-            @click="ProcesarEnvioNoAceptaTNC"
-          />
+          <q-btn label="Continuar" color="positive" @click="ProcesarEnvioNoAceptaTNC" />
           <!-- <q-btn label="correo" color="positive" @click="sendEmail(Emails, 9)" /> -->
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="ShowEvidenceVisible"
-      class="col-xs-12 col-sm-12 col-md-5"
-      persistent
-    >
+    <q-dialog v-model="ShowEvidenceVisible" class="col-xs-12 col-sm-12 col-md-5" persistent>
       <q-card style="width: 800px">
         <q-card-section>
           <div class="text-h5 text-center text-weight-bolder">Evidencias</div>
         </q-card-section>
 
         <q-card-section>
-          <div
-            class="bg-white"
-            style="
+          <div class="bg-white" style="
               width: 95% !important;
               max-width: none;
               min-height: none;
               height: 95%;
-            "
-          >
-            <p
-              v-if="SinInfo.Evidencias == true"
-              class="text-weight-bold q-ma-none"
-            >
+            ">
+            <p v-if="SinInfo.Evidencias == true" class="text-weight-bold q-ma-none">
               Presione alguna de las acciones para ver sus evidencias
             </p>
 
             <q-scroll-area v-if="SinInfo.Evidencias" style="height: 300px">
               <div class="q-pa-sm">
-                <div
-                  v-for="(item, index) in Acciones"
-                  :key="index"
-                  class="q-gutter-sm"
-                >
+                <div v-for="(item, index) in Acciones" :key="index" class="q-gutter-sm">
                   <div class="row q-gutter-sm">
-                    <p
-                      class="row justify-center col-xs-1 col-sm-1 col-md-1"
-                      style="font-weight: bold; font-size: 1.5em; width: 20px"
-                    >
+                    <p class="row justify-center col-xs-1 col-sm-1 col-md-1"
+                      style="font-weight: bold; font-size: 1.5em; width: 20px">
                       {{ index + 1 }}
                     </p>
 
-                    <p
-                      style="cursor: pointer; border-radius: 5px; padding: 3px"
+                    <p style="cursor: pointer; border-radius: 5px; padding: 3px"
                       class="row items-center justify-center bg-grey-3 col-xs-11 col-sm-11 col-md-11"
-                      @click="GetEvidenceId(item.IdAccion)"
-                    >
+                      @click="GetEvidenceId(item.IdAccion)">
                       {{ item.DescripcionAccion }}
                     </p>
 
@@ -1945,10 +1067,7 @@
 
               </div>  -->
 
-            <q-dialog
-              v-model="dialogoAbierto"
-              :content-css="{ width: '95%', height: '95%' }"
-            >
+            <q-dialog v-model="dialogoAbierto" :content-css="{ width: '95%', height: '95%' }">
               <q-img :src="imagenSeleccionada" fit="" />
             </q-dialog>
           </div>
@@ -1960,11 +1079,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="ShowEvidenceIndividualVisible"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="ShowEvidenceIndividualVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
           <div class="text-h5 text-center" style="padding: 16px 16px 0 16px">
@@ -1975,131 +1090,55 @@
         <q-card-section>
           <q-scroll-area style="height: 400px">
             <div class="q-pa-sm q-gutter-sm">
-              <q-btn
-                v-if="AccionesResponsable"
-                icon="add"
-                label="agregar evidencia"
-                @click="OpenModalArchivos()"
-                color="positive"
-              />
-              <q-file
-                ref="ArchivosVarios"
-                multiple
-                append
-                v-model="FileSave"
-                @input="CargarArchivos"
-                style="display: none"
-              />
+              <q-btn v-if="AccionesResponsable" icon="add" label="agregar evidencia" @click="OpenModalArchivos()"
+                color="positive" />
+              <q-file ref="ArchivosVarios" multiple append v-model="FileSave" @input="CargarArchivos"
+                style="display: none" />
               <!--   @input="handleFileInput" -->
-              <div
-                v-if="AccionesSeguimiento"
-                class="row justify-end q-gutter-sm"
-              >
-                <q-btn
-                  label="Aprobar todos"
-                  color="blue"
-                  @click="AprobarTodos"
-                />
-                <q-btn
-                  :disabled="IdsAprobar.length === 0"
-                  label="Aprobar"
-                  color="green"
-                  @click="Aprobar"
-                />
+              <div v-if="AccionesSeguimiento" class="row justify-end q-gutter-sm">
+                <q-btn label="Aprobar todos" color="blue" @click="AprobarTodos" />
+                <q-btn :disabled="IdsAprobar.length === 0" label="Aprobar" color="green" @click="Aprobar" />
               </div>
               <q-scroll-area style="height: 320px">
                 <div>
                   <div v-if="Evidencias.length === 0" class="q-gutter-sm">
-                    <p
-                      class="text-center"
-                      style="font-weight: bold; font-size: 1.5em"
-                    >
-                      Sin evidencias
+                    <p class="text-center" style="font-weight: bold; font-size: 1.5em">
+                      Sin Evidencias Aún
                     </p>
                   </div>
                   <div v-else>
-                    <div
-                      v-for="(item, index) in Evidencias"
-                      :key="index"
-                      class="q-gutter-sm"
-                    >
+                    <div v-for="(item, index) in Evidencias" :key="index" class="q-gutter-sm">
                       <div class="row q-gutter-sm">
-                        <p
-                          class="row justify-center col-xs-1 col-sm-1 col-md-1"
-                          style="
+                        <p class="row justify-center col-xs-1 col-sm-1 col-md-1" style="
                             font-weight: bold;
                             font-size: 1.5em;
                             width: 20px;
-                          "
-                        ></p>
+                          "></p>
 
                         <div class="row items-center">
-                          <p
-                            outlined
-                            multiple
-                            ellipsis
-                            style="max-width: 320px"
-                          >
+                          <p outlined multiple ellipsis style="max-width: 320px">
                             {{ item.Ruta }}
                           </p>
-                          <q-btn
-                            icon="download"
-                            color="green"
-                            flat
-                            dense
-                            size="20px"
-                            @click="Descarga(item.Ruta)"
-                          >
+                          <q-btn icon="download" color="green" flat dense size="20px" @click="Descarga(item.Ruta)">
                             <q-tooltip> Descargar </q-tooltip>
                           </q-btn>
-                          <q-btn
-                            v-if="AccionesResponsable"
-                            icon="publish"
-                            color="blue"
-                            flat
-                            dense
-                            size="20px"
-                            @click="OpenModalArchivoIndividual(index)"
-                          >
+                          <q-btn v-if="AccionesResponsable" icon="publish" color="blue" flat dense size="20px"
+                            @click="OpenModalArchivoIndividual(index)">
                             <q-tooltip> Remplazar </q-tooltip>
                           </q-btn>
-                          <q-file
-                            :ref="'fileInputs' + index"
-                            v-model="File"
-                            style="display: none"
-                            @input="UpdateArchivo(item.IdEvidencia)"
-                          />
+                          <q-file :ref="'fileInputs' + index" v-model="File" style="display: none"
+                            @input="UpdateArchivo(item.IdEvidencia)" />
                           <!--   @input="handleFileInput" -->
-                          <q-btn
-                            v-if="AccionesResponsable"
-                            @click="ModalEvidencia(index, item)"
-                            icon="delete"
-                            color="red"
-                            flat
-                            dense
-                            size="20px"
-                          >
+                          <q-btn v-if="AccionesResponsable" @click="ModalEvidencia(index, item)" icon="delete"
+                            color="red" flat dense size="20px">
                             <q-tooltip> Eliminar </q-tooltip>
                           </q-btn>
-                          <q-item-section
-                            class="row items-center"
-                            style="width: 50px"
-                          >
-                            <q-checkbox
-                              :disable="AprobarSeguimiento"
-                              v-if="item.Aprobado === 0"
-                              v-model="IdsAprobar"
-                              :val="item.IdEvidencia"
-                            >
+                          <q-item-section class="row items-center" style="width: 50px">
+                            <q-checkbox :disable="AprobarSeguimiento" v-if="item.Aprobado === 0" v-model="IdsAprobar"
+                              :val="item.IdEvidencia">
                               <q-tooltip> Aprobar </q-tooltip>
                             </q-checkbox>
-                            <q-icon
-                              class=""
-                              v-if="item.Aprobado === 1"
-                              color="green"
-                              name="check_circle"
-                              size="1.9rem"
-                            >
+                            <q-icon class="" v-if="item.Aprobado === 1" color="green" name="check_circle" size="1.9rem">
                               <q-tooltip> Aprobado </q-tooltip>
                             </q-icon>
                           </q-item-section>
@@ -2118,72 +1157,43 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog
-      v-model="ShowEmailIndividualVisible"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="ShowEmailIndividualVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
-          <div
-            class="text-h5 text-center text-weight-bolder"
-            style="padding: 16px 16px 0 16px"
-          >
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
             Vizualizar Correo Notificación Usuario
           </div>
         </q-card-section>
 
         <q-card-section>
           <div v-if="SinInfo.Detiene">
-            <div
-              class="q-gutter-xs"
-              v-for="(item, index) in EmailsP"
-              :key="index"
-            >
-              <p
-                class="text-weight-bold"
-                style="margin-bottom: 0; font-size: 1.34em"
-              >
+            <div class="q-gutter-xs" v-for="(item, index) in EmailsP" :key="index">
+              <p class="text-weight-bold" style="margin-bottom: 0; font-size: 1.34em">
                 Correos
               </p>
 
-              <div
-                class="row bg-grey-4"
-                style="border-radius: 4px; padding: 5px"
-              >
+              <div class="row bg-grey-4" style="border-radius: 4px; padding: 5px">
                 <p>
                   {{ item.EmailsTxt }}
                 </p>
               </div>
-              <p
-                class="text-weight-bold"
-                style="margin-bottom: 0; font-size: 1.34em"
-              >
+              <p class="text-weight-bold" style="margin-bottom: 0; font-size: 1.34em">
                 Asunto
               </p>
               <p class="row bg-grey-4" style="border-radius: 4px; padding: 5px">
                 {{ item.Asunto }}
               </p>
-              <p
-                class="text-weight-bold"
-                style="margin-bottom: 0; font-size: 1.34em"
-              >
+              <p class="text-weight-bold" style="margin-bottom: 0; font-size: 1.34em">
                 Mensaje
               </p>
               <p class="row bg-grey-4" style="border-radius: 4px; padding: 5px">
                 {{ item.Mensaje }}
               </p>
-              <p
-                class="text-weight-bold"
-                style="margin-bottom: 0; font-size: 1.34em"
-              >
+              <p class="text-weight-bold" style="margin-bottom: 0; font-size: 1.34em">
                 Archivos
               </p>
               <div class="row q-gutter-xs">
-                <p
-                  class="row bg-grey-4"
-                  style="padding: 5px; border-radius: 4px"
-                >
+                <p class="row bg-grey-4" style="padding: 5px; border-radius: 4px">
                   {{ item.ArchivosTxt }}
                 </p>
               </div>
@@ -2201,17 +1211,10 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="DeleteAccionVisible"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="DeleteAccionVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
-          <div
-            class="text-h5 text-center text-weight-bolder"
-            style="padding: 16px 16px 0 16px"
-          >
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
             ¿Esta Seguro de eliminar la Acción?
           </div>
         </q-card-section>
@@ -2227,25 +1230,14 @@
 
         <q-card-actions align="center">
           <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn
-            label="Confirmar"
-            color="positive"
-            @click="DeleteAccion(PaqAccion)"
-          />
+          <q-btn label="Confirmar" color="positive" @click="DeleteAccion(PaqAccion)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog
-      v-model="ModalEvi"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="ModalEvi" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
-          <div
-            class="text-h5 text-center text-weight-bolder"
-            style="padding: 16px 16px 0 16px"
-          >
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
             ¿Esta Seguro de eliminar la Evidencia?
           </div>
         </q-card-section>
@@ -2260,67 +1252,32 @@
 
         <q-card-actions align="center">
           <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn
-            label="Confirmar"
-            color="positive"
-            @click="RemoveEvidencia(PaqEvidencia)"
-          />
+          <q-btn label="Confirmar" color="positive" @click="RemoveEvidencia(PaqEvidencia)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="ArchivosVisible"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="ArchivosVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
-          <div
-            class="text-h5 text-center text-weight-bolder"
-            style="padding: 16px 16px 0 16px"
-          >
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
             Archivos a guardar
           </div>
-          <q-btn
-            label="agregar"
-            icon="add"
-            color="positive"
-            @click="AddMoreFiles"
-          />
-          <q-file
-            ref="AddArchivos"
-            append
-            multiple
-            v-model="FileTem"
-            style="display: none"
-            @input="transferirArchivos"
-          />
+          <q-btn label="agregar" icon="add" color="positive" @click="AddMoreFiles" />
+          <q-file ref="AddArchivos" append multiple v-model="FileTem" style="display: none"
+            @input="transferirArchivos" />  
         </q-card-section>
 
         <q-card-section>
           <q-scroll-area class="q-gutter-sm" style="height: 300px">
-            <div
-              class="q-gutter-sm"
-              v-for="(item, index) in FileSave"
-              :key="index"
-            >
+            <div class="q-gutter-sm" v-for="(item, index) in FileSave" :key="index">
               <div class="row">
-                <p
-                  style="max-width: 600px; border-radius: 4px; padding: 5px"
-                  outlined
-                  ellipsis
-                  class="bg-grey-4 col-xs-10 col-sm-10 col-md-10"
-                >
+                <p style="max-width: 600px; border-radius: 4px; padding: 5px" outlined ellipsis
+                  class="bg-grey-4 col-xs-10 col-sm-10 col-md-10">
                   {{ item.name }}
                 </p>
-                <q-btn
-                  color="negative"
-                  style="width: 40px; height: 40px"
-                  class="col-xs-1 col-sm-1 col-md-1"
-                  icon="delete"
-                  @click="RemoveFileSave(index)"
-                />
+                <q-btn color="negative" style="width: 40px; height: 40px" class="col-xs-1 col-sm-1 col-md-1"
+                  icon="delete" @click="RemoveFileSave(index)" />
               </div>
             </div>
           </q-scroll-area>
@@ -2333,17 +1290,10 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="ModalCalidad"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="ModalCalidad" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
-          <div
-            class="text-h5 text-center text-weight-bolder"
-            style="padding: 16px 16px 0 16px"
-          >
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
             Modificar TNC
           </div>
         </q-card-section>
@@ -2351,21 +1301,10 @@
         <q-card-section>
           <p class="text-weight-bold">Modificar como:</p>
           <div class="q-gutter-xs">
-            <q-btn
-              label="Creador"
-              color="secondary"
-              @click="PermisosCalidad(1, IdTNC)"
-            />
-            <q-btn
-              color="secondary"
-              label="Responsable de acción"
-              @click="PermisosCalidad(2, IdTNC, 'CALIACCION')"
-            />
-            <q-btn
-              color="secondary"
-              label="Responsable de Seguimiento"
-              @click="PermisosCalidad(3, IdTNC, 'CALISEGUIMIENTO')"
-            />
+            <q-btn label="Creador" color="secondary" @click="PermisosCalidad(1, IdTNC)" />
+            <q-btn color="secondary" label="Responsable de acción" @click="PermisosCalidad(2, IdTNC, 'CALIACCION')" />
+            <q-btn color="secondary" label="Responsable de Seguimiento"
+              @click="PermisosCalidad(3, IdTNC, 'CALISEGUIMIENTO')" />
           </div>
         </q-card-section>
         <q-card-actions align="center">
@@ -2374,17 +1313,10 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog
-      v-model="ModalMultiple"
-      class="col-xs-12 col-sm-12 col-md-12"
-      persistent
-    >
+    <q-dialog v-model="ModalMultiple" class="col-xs-12 col-sm-12 col-md-12" persistent>
       <q-card style="width: 600px; max-width: none">
         <q-card-section style="padding: 16px 16px 0 16px">
-          <div
-            class="text-h5 text-center text-weight-bolder"
-            style="padding: 16px 16px 0 16px"
-          >
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
             Modificar TNC
           </div>
         </q-card-section>
@@ -2392,34 +1324,35 @@
         <q-card-section>
           <p class="text-weight-bold">ingresar como:</p>
           <div class="q-gutter-xs">
-            <q-btn
-              color="secondary"
-              label="Creador"
-              v-if="BtnCrea"
-              @click="PermisosMultiple(1, IdTNC)"
-            />
-            <q-btn
-              label="Responsable Acción"
-              color="primary"
-              v-if="BtnAccion"
-              @click="PermisosMultiple(2, IdTNC)"
-            />
-            <q-btn
-              color="secondary"
-              label="Responsable de Seguimiento"
-              v-if="BtnSeguimiento"
-              @click="PermisosMultiple(3, IdTNC)"
-            />
-            <q-btn
-              color="secondary"
-              label="Responsable de cierre"
-              v-if="BtnCierra"
-              @click="PermisosMultiple(4, IdTNC)"
-            />
+            <q-btn color="secondary" label="Creador" v-if="BtnCrea" @click="PermisosMultiple(1, IdTNC)" />
+            <q-btn label="Responsable Acción" color="primary" v-if="BtnAccion" @click="PermisosMultiple(2, IdTNC)" />
+            <q-btn color="secondary" label="Responsable de Seguimiento" v-if="BtnSeguimiento"
+              @click="PermisosMultiple(3, IdTNC)" />
+            <q-btn color="secondary" label="Responsable de cierre" v-if="BtnCierra"
+              @click="PermisosMultiple(4, IdTNC)" />
           </div>
         </q-card-section>
         <q-card-actions align="center">
           <q-btn label="regresar" color="negative" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="ModalSaveOpt">
+      <q-card style="width: 600px; max-width: none">
+        <q-card-section style="padding: 16px 16px 0 16px">
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+            ADVERTENCIA <q-icon name="warning" color="warning" />
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <p class="text-weight-bold">Seleccionar esta opción como "NO", eliminara las acciones y sus respectivas evidencias, ¿Desea Continuar?</p>
+
+        </q-card-section>
+        <q-card-actions align="center">
+          <q-btn label="regresar" color="primary"  @click="ReturnValOpt"/>
+          <q-btn label="Continuar" color="positive"  @click="SaveOpt(1)"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -2503,6 +1436,7 @@ export default {
       BtnReanuda: false,
       BtnReanudaEdit: false,
       BtnDetiene: false,
+      ModalSaveOpt:false,
       slide: 1,
       Action: [0],
       IdAccion: "",
@@ -2779,6 +1713,20 @@ export default {
       this.IdTNC = IdTNC;
       this.ModalCalidad = true;
     },
+    PrintTNC(IdTNC) {
+   
+
+        api.get(`/medidor/ImprimirTNC/${IdTNC}`, { responseType: 'arraybuffer' })
+          .then(response => {
+            const blob = new Blob([response.data], { type: 'application/pdf' })
+            const blobURL = URL.createObjectURL(blob)
+            window.open(blobURL)
+            this.$q.loading.hide()
+          }).catch(error => {
+            console.log(error)
+            this.$q.loading.hide()
+          })
+    },
 
     PermisosCalidad(Op, IdTNC, Permiso) {
       this.Permiso = Permiso;
@@ -3052,19 +2000,44 @@ export default {
         this.EditEmailReanudar = false;
         this.BtnReanudaEdit = false;
       }
-      this.SaveOpt();
+      this.SaveOpt(0);
     },
 
-    SaveOpt() {
+    SaveOpt(ConfirmDelete) {
       this.Trabajo.ReanudarActividad;
       this.Trabajo.RequiereAccionCorrectiva;
       api
-        .post("/medidor/UpdateOpts/", this.Trabajo)
-        .then((responde) => {})
+        .post(`/medidor/UpdateOpts/${ConfirmDelete}`, this.Trabajo)
+        .then((responde) => { 
+          this.ModalSaveOpt = false
+          if(ConfirmDelete > 0){
+            this.RAcciondiasable = true
+          }
+        })
         .catch((error) => {
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
     },
+    ValidarOpt(){
+      if( this.Trabajo.RequiereAccionCorrectiva > 0){
+        this.RAcciondiasable = false
+        this.SaveOpt(0) 
+      }else{
+        if(this.Acciones.length > 0){
+          this.ModalSaveOpt = true
+        }else{
+          this.RAcciondiasable = true
+        }
+      }
+     
+    },
+    ReturnValOpt(){
+      this.Trabajo.RequiereAccionCorrectiva = 1
+      this.ModalSaveOpt = false
+    },
+
+
+
     Aprobar() {
       const dataToSend = this.IdsAprobar.map((id) => {
         return {
@@ -3602,7 +2575,7 @@ export default {
         this.BtnReanudaEdit = true;
       }
     },
-    editD() {},
+    editD() { },
     CancelarNotificacion() {
       this.Trabajo.NotificarUsuario = 0;
       this.PaqEmail = {
@@ -4833,8 +3806,13 @@ export default {
       if (Login == this.Trabajo.ResponsableAccion) {
         this.leer = true;
         this.Editar = false;
-        this.RAcciondiasable = false;
-        this.RAcciondiasableOption = false;
+        this.RAcciondiasableOption = false
+        console.log(this.Trabajo.RequiereAccionCorrectiva)
+        if(this.Trabajo.RequiereAccionCorrectiva > 0){
+          this.RAcciondiasable = false;
+        }else{
+          this.RAcciondiasable = true;
+        }
         this.DesAccionTomada = false;
         this.Evidenciadisable = false;
         this.CreateAccion = true;
@@ -5095,7 +4073,7 @@ export default {
 };
 </script>
 <style>
-.q-table > thead > tr {
+.q-table>thead>tr {
   background: #d1d1d1;
   color: #000;
   position: sticky;
