@@ -503,25 +503,25 @@
           <q-btn icon="visibility" label="Gestión de riesgo" color="primary" @click="GestionRiego = true" />
         </div>
         <q-card-section>
-          <q-editor v-if="editores.editor1 == true" v-model="BoxText.DescripcionProblema" />
+          <q-input type="textarea" v-if="editores.editor1 == true" v-model="BoxText.DescripcionProblema" />
           <p v-if="editores.leer1 == true && Trabajo.DescripcionProblema" v-html="Trabajo.DescripcionProblema"></p>
           <p v-else-if="editores.leer1 == true">
             Aún no se ha registrado información
           </p>
 
-          <q-editor v-if="editores.editor2 == true" v-model="BoxText.ValoracionImpacto" />
+          <q-input type="textarea" v-if="editores.editor2 == true" v-model="BoxText.ValoracionImpacto" />
           <p v-if="editores.leer2 == true && Trabajo.ValoracionImpacto" v-html="Trabajo.ValoracionImpacto"></p>
           <p v-else-if="editores.leer2 == true">
             Aún no se ha registrado información
           </p>
 
-          <q-editor v-if="editores.editor3 == true" v-model="BoxText.DesAccionCorrectiva" />
+          <q-input type="textarea" v-if="editores.editor3 == true" v-model="BoxText.DesAccionCorrectiva" />
           <p v-if="editores.leer3 == true && Trabajo.DesAccionCorrectiva" v-html="Trabajo.DesAccionCorrectiva"></p>
           <p v-else-if="editores.leer3 == true">
             Aún no se ha registrado información
           </p>
 
-          <q-editor v-if="editores.editor4 == true" v-model="BoxText.SeguimientoAccion" />
+          <q-input type="textarea" v-if="editores.editor4 == true" v-model="BoxText.SeguimientoAccion" />
           <p v-if="editores.leer4 == true && Trabajo.SeguimientoAccion" v-html="Trabajo.SeguimientoAccion"></p>
           <p v-else-if="editores.leer4 == true">
             Aún no se ha registrado información
