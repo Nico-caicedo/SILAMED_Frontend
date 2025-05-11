@@ -25,12 +25,16 @@
                 <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="todasFechas"
                   checked-icon="check" color="green" label="Todas las fechas" unchecked-icon="clear" />
 
-                  <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="certificado"
+                  <!-- <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="certificado"
                   checked-icon="check" color="orange" label="Certificado" unchecked-icon="clear" @change="Cambio" @click.native="Cambio('certificado')"/>
                   <q-toggle class="col-xs-12 col-sm-6 col-md-2 q-field--with-bottom q-pt-sm" v-model="informe"
-                  checked-icon="check" color="yellow" label="Informe" unchecked-icon="clear"  @change="Cambio" @click.native="Cambio('informe')" />
+                  checked-icon="check" color="yellow" label="Informe" unchecked-icon="clear"  @change="Cambio" @click.native="Cambio('informe')" /> -->
 
-                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm" stack-label label="Fecha Inicio"
+
+                  <q-select filled  v-model="Documento" emit-value map-options :options="options" label="Tipo Documento"
+                   class="col-xs-12 col-sm-6 col-md-3 q-field--with-bottom q-pt-sm" />
+                <q-input class="col-xs-12 col-sm-6 col-md-3 q-pt-sm"
+                 stack-label label="Fecha Inicio"
                   :readonly="todasFechas === true" v-model="fechaIni" type="date" outlined>
                   <template v-slot:prepend>
                     <q-icon name="date_range" size="lg" />
@@ -42,7 +46,7 @@
                     <q-icon name="date_range" size="lg" />
                   </template>
                 </q-input>
-                <q-table v-if="certificado == true" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                <q-table v-if="Documento == 'Certificados'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
                   flat bordered :data="ListaCertificados" :columns="columnsCertificado" row-key="IdCertificado"
                   selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcCertificado">
                   <template v-slot:header-selection="scope">
@@ -64,8 +68,8 @@
                   </template>
                 </q-table>
 
-                <q-table v-if="informe == true" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
-                  flat bordered :data="ListaInformes" :columns="columnsInforme" row-key="IdInforme"
+                <q-table v-if="Documento == 'Informes'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                  flat bordered :data="Listaocumentos" :columns="columnsInforme" row-key="IdInforme"
                   selection="multiple" :selected.sync="SelectedInformes" :visible-columns="viInforme">
                   <template v-slot:header-selection="scope">
                     <q-toggle v-model="scope.selected" />
@@ -85,6 +89,52 @@
                       option-value="name" options-cover style="min-width: 150px" />
                   </template>
                 </q-table>
+
+                <q-table v-if="Documento == 'Trabajo No Conforme'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                  flat bordered :data="ListaCertificados" :columns="columnsTNC" row-key="IdCertificado"
+                  selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcTNC">
+                  <template v-slot:header-selection="scope">
+                    <q-toggle v-model="scope.selected" />
+                  </template>
+                  <template v-slot:body-selection="scope">
+                    <q-toggle v-model="scope.selected" dense />
+                  </template>
+                  <template v-slot:top="props">
+                    <q-btn color="primary" icon-right="archive" label="" no-caps
+                      @click="exportTable(ListaCertificados, columnsTNC)" />
+                    <q-space />
+                    <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                      @click="props.toggleFullscreen" class="q-ml-md" />
+                    <q-space />
+                    <q-select v-model="vcCertificado" multiple outlined dense options-dense
+                      :display-value="$q.lang.table.columns" emit-value map-options :options="columnsTNC"
+                      option-value="name" options-cover style="min-width: 150px" />
+                  </template>
+                </q-table>
+
+                <q-table v-if="Documento == 'Acciones Correctivas'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
+                  flat bordered :data="ListaCertificados" :columns="columnsAC" row-key="IdCertificado"
+                  selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcAC">
+                  <template v-slot:header-selection="scope">
+                    <q-toggle v-model="scope.selected" />
+                  </template>
+                  <template v-slot:body-selection="scope">
+                    <q-toggle v-model="scope.selected" dense />
+                  </template>
+                  <template v-slot:top="props">
+                    <q-btn color="primary" icon-right="archive" label="" no-caps
+                      @click="exportTable(ListaCertificados, columnsAC)" />
+                    <q-space />
+                    <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                      @click="props.toggleFullscreen" class="q-ml-md" />
+                    <q-space />
+                    <q-select v-model="vcCertificado" multiple outlined dense options-dense
+                      :display-value="$q.lang.table.columns" emit-value map-options :options="columnsAC"
+                      option-value="name" options-cover style="min-width: 150px" />
+                  </template>
+                </q-table>
+
+                
               </div>
               <div class="row justify-center q-pa-sm">
                 <q-btn label="Consultar" icon="search" outline align="center" unelevated
@@ -92,8 +142,8 @@
                 </q-btn>
               </div>
               <q-stepper-navigation>
-                <q-btn color="primary" v-if="certificado == true" @click="EnviarCertificados()" label="Autorizar" />
-                <q-btn color="primary" v-if="informe == true" @click="EnviarInformes()" label="Autorizar" />
+                <q-btn color="primary" v-if="Documento == 'Certificados'" @click="EnviarCertificados()" label="Autorizar" />
+                <q-btn color="primary" v-if="Documento == 'Informes'" @click="EnviarInformes()" label="Autorizar" />
               </q-stepper-navigation>
             </q-step>
 
@@ -337,7 +387,12 @@ export default {
       ListaCertificados: [],
       ListaInformes:[],
       listaClientes: [],
-      columnsCertificado: [
+      options: [{ label: 'Certificados', value: "Certificados" }
+      ,{ label: 'Informes', value: 'Informes' }
+      ,{ label: 'Trabajo No Conforme', value: "Trabajo No Conforme" }
+      ,{ label: 'Acciones Correctivas', value: "Acciones Correctivas" }],
+      Documento:'Certificados',
+        columnsCertificado: [
         { name: 'IdCertificado', label: 'Id', field: 'IdCertificado', sortable: true },
         { name: 'Id_calibracion', align: 'left', label: 'IdCal', field: 'Id_calibracion', sortable: true },
         { name: 'Id_ordenentrada', label: 'OrdenEntrada', field: 'Id_ordenentrada', sortable: true },
@@ -378,8 +433,27 @@ export default {
         { name: 'FechaEmision', align: 'left', label: 'FechaEmisión', field: 'FechaEmision' },
        ]
       ,
+      columnsTNC:[  
+        // { name: 'IdInforme', align: 'left', label: 'Id', field: 'IdInforme', required: true },
+        // { name: 'IdOrdenEntradad', align: 'left', label: 'Id_OrdenEntradad', field: 'IdOrdenEntradad' },
+        { name: 'NTNC', align: 'left', label: 'No. TNC', field: 'NInforme' },
+        {name: 'Responsable', align: 'left', label: 'Responsable', field: 'Responsable'},
+        { name: 'FechaEmision', align: 'left', label: 'FechaEmisión', field: 'FechaEmision' },
+       ]
+      ,
+      columnsAC:[  
+        { name: 'IdInforme', align: 'left', label: 'Id', field: 'IdInforme', required: true },
+        // { name: 'IdOrdenEntradad', align: 'left', label: 'Id_OrdenEntradad', field: 'IdOrdenEntradad' },
+        { name: 'No. AC', align: 'left', label: 'NAC', field: 'NAC' },
+        {name: 'Responsable', align: 'left', label: 'Responsable', field: 'Responsable'},
+        { name: 'FechaEmision', align: 'left', label: 'FechaEmisión', field: 'FechaEmision' },
+       ]
+      ,
       vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad'],
-      viInforme: ['IdInforme', 'NInforme', 'SerialMedidor']
+      viInforme: ['IdInforme', 'NInforme', 'SerialMedidor'],
+      vcTNC:['NTNC','Responsable','FechaEmision' ],
+      vcAC:['NAC','Responsable','FechaEmisión']
+     
     }
   },
   mounted() {
@@ -719,7 +793,7 @@ export default {
       } else {
         ipo = this.Id_programacionorden
       }
-      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${Certificado}/${Informe}`)
+      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${this.Documento}`)
         .then((response) => {
           if(this.informe){
             self.ListaInformes = response.data

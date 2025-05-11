@@ -31,12 +31,12 @@
         </template>
 
         <template v-slot:body-cell-Hallazgos="props" flat class="">
-          <q-td key="Hallazgos" :props="props" class="cursor-pointer" @click="viewDescription(props.row.evidencia)">
+          <q-td key="Hallazgos" :props="props" class="cursor-pointer"  @click="viewDescription(props.row.Hallazgo, 'Hallazgos')">
             <q-btn class="" label="" icon="visibility" flat color="" />
           </q-td>
         </template>
         <template v-slot:body-cell-NCSimiliares="props" flat class="">
-          <q-td key="NCSimiliares" :props="props" class="cursor-pointer" @click="viewDescription(props.row.evidencia)">
+          <q-td key="NCSimiliares" :props="props" class="cursor-pointer"  @click="viewDescription(props.row.NCSimilares, 'NCSimilares')">
             <q-btn class="" label="" icon="visibility" flat />
           </q-td>
         </template>
@@ -49,6 +49,21 @@
           </q-td>
         </template>
       </q-table>
+      <q-dialog v-model="DescripcionVisible" persistent>
+        <q-card style="width: 600px">
+          <q-card-section>
+            <div class="text-h5 text-center">{{ titleDescripcion }}</div>
+          </q-card-section>
+
+          <q-card-section>
+            <p>{{ Descripcion }}</p>
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn label="Ok" color="positive" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page-container>
 
     <q-page-container v-if="!Mostrar">
@@ -174,33 +189,10 @@
             Implementadas</p>
           <q-separator />
 
-          <q-input :disable="EvaluarDisable" type="text" autogrow filled label="Escriba aqui..." />
+          <q-input :disable="EvaluarDisable" type="textarea" v-model="Evaluacion" autogrow filled label="Escriba aqui..." />
 
-          <p class="text-subtitle1 text-center text-capitalize">Firma Responsable Cierre</p>
-          <q-separator />
+          <q-btn :disable="EvaluarDisable" @click="SaveEvaluacion" icon="save"  color="positive" label="guardar"/>
 
-          <q-btn :disable="EvaluarDisable" label="Cargar Firma" color="positive" icon="publish" @click="$refs.fileInput.pickFiles()" />
-          <q-checkbox :disable="EvaluarDisable" v-model="autorizado" label="Autorizo el uso de mi firma en este documento" color="primary" />
-
-          <q-file ref="fileInput" style="display: none;" filled v-model="file" label="Seleccionar imagen" accept="image/*"
-            @input="onFileChange" />
-
-            <q-dialog v-model="cropDialog" persistent>
-  <q-card style="min-width: 500px;">
-    <q-card-section>
-      <canvas ref="cropCanvas" style="max-width: 100%; border: 1px solid #ccc;"></canvas>
-    </q-card-section>
-    <q-card-actions align="around">
-      <q-btn label="Girar 90°" color="info" @click="rotateImage" />
-      <q-btn label="Procesar Firma" color="positive" @click="processImage" />
-      <q-btn label="Cancelar" color="negative" @click="cropDialog = false" />
-    </q-card-actions>
-  </q-card>
-</q-dialog>
-
-<div v-if="croppedImage" style="margin-top: 20px;">
-  <q-img :src="croppedImage" style="width: 300px; height: 150px; border: 1px dashed #ccc;" />
-</div>
         </div>
 
       </div>
@@ -307,17 +299,6 @@ export default {
   data() {
     return {
       Responsables: { ResponsableEvaluar: '', ResponsableVerificar: '' },
-      file: null,
-    cropDialog: false,
-    canvas: null,
-    ctx: null,
-    img: new Image(),
-    imageUrl: '',
-    croppedImage: null,
-    rotation: 0,
-    fixedWidth: 300,  // Ancho final deseado
-    fixedHeight: 150, // Alto final deseado
-      autorizado: false,
       AprobarSeguimiento: false,
       IdsAprobar: [],
       ArchivosVisible: false,
@@ -330,6 +311,7 @@ export default {
         { IdTipoEvaluacion: "I", Nombre: "Interna" },
         { IdTipoEvaluacion: "E", Nombre: "Externa" },
       ],
+      Evaluacion: '',
       AccionCorrectiva: {
         IdAccionCorrectiva: 0,
         IdTipoEvaluacion: "",
@@ -421,100 +403,34 @@ export default {
       EvaluarDisable:true,
       VerificarState:false,
       VerificarDisable:true,
+      DescripcionVisible: false,
+      Descripcion: '',
+      titleDescripcion: ''
 
     };
   },
   methods: {
-    onFileChange(event) {
-    const file = event && event.target ? event.target.files[0] : this.file;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imageUrl = e.target.result;
-        this.rotation = 0;
-        this.openCropDialog();
-      };
-      reader.readAsDataURL(file);
-    }
-  },
-  openCropDialog() {
-    this.cropDialog = true;
-    this.$nextTick(() => {
-      this.setupCanvas();
-    });
-  },
-  setupCanvas() {
-    this.canvas = this.$refs.cropCanvas;
-    this.ctx = this.canvas.getContext('2d');
+ 
+ SaveEvaluacion(){
+  console.log(this.GlobalIdAc, this.Evaluacion)
+  // api
+  //       .post(`/AcCorrectivas/SaveEvaluacion/${this.Evaluacion,}`, )
+  //       .then((response) => {
+  //         this.IdsAprobar = [];
+  //         this.GetArchivosId(this.IdEvidencia);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Tipo Identificacion - Fallo la conexion " + error);
+  //       });
+ }
+    ,
+  viewDescription(Description, title) {
+    console.log(Description)
+      this.DescripcionVisible = true;
+      this.Descripcion = Description;
+      this.titleDescripcion = title
+    },
 
-    this.img.onload = () => {
-      this.drawImage();
-    };
-    this.img.src = this.imageUrl;
-  },
-  drawImage() {
-    const ctx = this.ctx;
-    const canvas = this.canvas;
-    const rotation = this.rotation % 360;
-    const img = this.img;
-
-    // Ajuste de tamaño del canvas
-    if (rotation === 90 || rotation === 270) {
-      canvas.width = img.height;
-      canvas.height = img.width;
-    } else {
-      canvas.width = img.width;
-      canvas.height = img.height;
-    }
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-
-    // Centramos para rotar
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate((rotation * Math.PI) / 180);
-
-    ctx.drawImage(img, -img.width / 2, -img.height / 2);
-    ctx.restore();
-  },
-  rotateImage() {
-    this.rotation = (this.rotation + 90) % 360;
-    this.drawImage();
-  },
-  processImage() {
-    // 1. Quitar fondo blanco (hacerlo transparente)
-    const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    const data = imageData.data;
-
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-
-      // Si es casi blanco, hacerlo transparente
-      if (r > 200 && g > 200 && b > 200) {
-        data[i + 3] = 0; // alpha en 0
-      }
-    }
-    this.ctx.putImageData(imageData, 0, 0);
-
-    // 2. Redibujar en un nuevo canvas de tamaño fijo
-    const finalCanvas = document.createElement('canvas');
-    finalCanvas.width = this.fixedWidth;
-    finalCanvas.height = this.fixedHeight;
-    const finalCtx = finalCanvas.getContext('2d');
-
-    finalCtx.clearRect(0, 0, this.fixedWidth, this.fixedHeight);
-    finalCtx.drawImage(
-      this.canvas,
-      0, 0, this.canvas.width, this.canvas.height,
-      0, 0, this.fixedWidth, this.fixedHeight
-    );
-
-    // 3. Guardar imagen final
-    this.croppedImage = finalCanvas.toDataURL('image/png');
-    this.cropDialog = false;
-  },
   GuardarResponsables(){
 console.log(this.AccionCorrectiva)
 let a = 0
