@@ -821,6 +821,7 @@ export default {
       const self = this
       let Certificado = true
       let Informe = false
+      let Documento = 'certificados'
       let consulta = '-1'
       let todasLasFechas = 0
       let isEntregadoCertificado = 0
@@ -848,7 +849,7 @@ export default {
       } else {
         ipo = this.Id_programacionorden
       }
-      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${Certificado}/${Informe}`)
+      api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${Documento}`)
         .then((response) => {
           self.ListaCertificados = response.data
           self.$q.loading.hide()

@@ -6,13 +6,26 @@
       </q-toolbar>
     </q-header>
     <q-page-container v-if="Mostrar">
-      <q-btn label="Actividades" />
+
       <q-table class="col-xs-12 col-sm-12 col-md-12" title="" style="margin: 15px" separator="cell"
         no-data-label="No hay registros" show-bottom flat bordered :data="DocsAc" :columns="columnsDocAc"
         :rows-per-page-options="[10]">
         <!-- :visible-columns="vcCertificado" -->
-        <template v-slot:top="props">
+        <template class="row justify-around" v-slot:top="props">
           <q-space />
+          <div class="q-gutter-sm">
+            <q-btn label="Actividades" color="positive" @click="GetAccionesSemaforo">
+              <q-tooltip>
+                Acciones
+              </q-tooltip>
+            </q-btn>
+            <q-btn icon="calendar_month" @click="GetAccionesFecha" color="positive">
+
+              <q-tooltip>
+                Acciones Por Fechas
+              </q-tooltip>
+            </q-btn>
+          </div>
           <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
             @click="props.toggleFullscreen" class="q-ml-md" />
           <q-space />
@@ -42,6 +55,31 @@
           </q-td>
         </template>
       </q-table>
+      <q-dialog v-model="ShowDate">
+        <div class="bg-white" style="width: 800px;">
+          <q-splitter v-model="splitterModel" style="height: 450px;">
+
+            <template v-slot:before>
+              <div class="q-pa-md">
+                <q-date v-model="date" :events="events" event-color="orange" />
+              </div>
+            </template>
+
+            <template v-slot:after>
+              <q-tab-panels v-model="date" animated transition-prev="jump-up" transition-next="jump-up">
+                <q-tab-panel v-for="(acciones, fecha) in FechasAgrupadas" :key="fecha" :name="fecha">
+                  <div class="text-h4 q-mb-md">{{ fecha }}</div>
+                  <div class="row items-center " v-for="accion in acciones" :key="accion.IdAC">
+                    <p><strong>Acción:</strong> {{ accion.AccionTxt }}</p>
+                    <q-btn icon="arrow_forward_ios" @click="ChangeView(accion.IdAC)" flat color="positive" />
+                  </div>
+                </q-tab-panel>
+              </q-tab-panels>
+            </template>
+          </q-splitter>
+        </div>
+      </q-dialog>
+
 
       <q-dialog v-model="DescripcionVisible" persistent>
         <q-card style="width: 600px">
@@ -55,6 +93,44 @@
 
           <q-card-actions align="right">
             <q-btn label="Ok" color="positive" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <q-dialog v-model="ShowDateSemaforo" class="col-xs-12 col-sm-12 col-md-12" persistent>
+        <q-card style="width: 600px; max-width: none">
+          <q-card-section style="padding: 16px 16px 0 16px">
+            <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+              Acciones
+            </div>
+            <div class="row q-gutter-sm">
+              <q-btn   label="Tiempo límite se acerca" dense flat round  size="10px" >
+                <q-icon name="lens" color="red" />
+              </q-btn>
+              <q-btn   label="Pronto a vencer" dense flat round  size="10px"  >
+              <q-icon name="lens" color="yellow" />
+              </q-btn>
+              <q-btn   label="Aún hay tiempo"  dense flat round size="10px" >
+                <q-icon name="lens" color="green" />
+              </q-btn>
+            </div>
+          </q-card-section>
+
+          <q-card-section>
+            <div  class="row items-center" v-for="(accion) in ListAccionesSemaforo" :key="accion">
+              <p style="width: 80%;" class="text-h6 text-center">
+                {{ accion.AccionTxt }}
+              </p>
+              <q-btn style="width: 10%;" v-if="accion.ValorSemaforo == 1" dense flat round icon="lens" size="10px" color="red" />
+              <q-btn style="width: 10%;" v-if="accion.ValorSemaforo == 2" dense flat round icon="lens" size="10px" color="yellow" />
+              <q-btn style="width: 10%;" v-if="accion.ValorSemaforo == 3" dense flat round icon="lens" size="10px" color="green" />
+              <q-btn style="width: 10%;" icon="arrow_forward_ios" @click="ChangeView(accion.IdAC)" flat color="positive" />
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="center">
+            <q-btn label="ok" color="positive" v-close-popup />
+
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -146,14 +222,14 @@
               </q-td>
             </template>
             <template v-slot:body-cell-operaciones="props">
-              <q-td  v-if="Visible" key="operaciones" :props="props" auto-width>
+              <q-td v-if="Visible" key="operaciones" :props="props" auto-width>
                 <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
                 <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
                 <q-btn icon="edit" @click="EditAccion(props.row.key)" flat color="primary" />
               </q-td>
-              <q-td  v-if="!Visible" key="operaciones" :props="props" auto-width>
+              <q-td v-if="!Visible" key="operaciones" :props="props" auto-width>
                 <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-                <p>  No Disponibles</p>
+                <p> No Disponibles</p>
               </q-td>
             </template>
           </q-table>
@@ -180,7 +256,7 @@
                 <p class="">{{ props.row.evidencia }}</p>
               </q-td>
             </template>
-            <template  v-slot:body-cell-operaciones="props">
+            <template v-slot:body-cell-operaciones="props">
               <q-td v-if="Visible" key="operaciones" :props="props" auto-width>
                 <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
                 <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
@@ -188,7 +264,7 @@
               </q-td>
               <q-td v-if="!Visible" key="operaciones" :props="props" auto-width>
                 <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-                  <p>No Disponibles</p>
+                <p>No Disponibles</p>
               </q-td>
             </template>
           </q-table>
@@ -268,8 +344,8 @@
                   <q-file :ref="'fileInputs' + index" v-model="File" style="display: none"
                     @input="UpdateArchivo(item.IdArchivo)" />
                   <!-- @input="handleFileInput" -->
-                  <q-btn v-if="Visible" @click="ModalEvidencia(index, item)" icon="delete" color="red" flat
-                    dense size="20px">
+                  <q-btn v-if="Visible" @click="ModalEvidencia(index, item)" icon="delete" color="red" flat dense
+                    size="20px">
                     <q-tooltip> Eliminar </q-tooltip>
                   </q-btn>
                   <q-item-section class="row items-center" style="width: 50px">
@@ -294,27 +370,27 @@
 
       </q-dialog>
       <q-dialog v-model="ModalArch" class="col-xs-12 col-sm-12 col-md-12" persistent>
-      <q-card style="width: 600px; max-width: none">
-        <q-card-section style="padding: 16px 16px 0 16px">
-          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
-            ¿Esta Seguro de eliminar el Archivo?
-          </div>
-        </q-card-section>
+        <q-card style="width: 600px; max-width: none">
+          <q-card-section style="padding: 16px 16px 0 16px">
+            <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+              ¿Esta Seguro de eliminar el Archivo?
+            </div>
+          </q-card-section>
 
-        <q-card-section>
-          <div>
-            <p class="text-h6 text-center">
-              Una vez eliminado no podra ser recuperado.
-            </p>
-          </div>
-        </q-card-section>
+          <q-card-section>
+            <div>
+              <p class="text-h6 text-center">
+                Una vez eliminado no podra ser recuperado.
+              </p>
+            </div>
+          </q-card-section>
 
-        <q-card-actions align="center">
-          <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn label="Confirmar" color="positive" @click="RemoveArchivo(PaqEvidencia)" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+          <q-card-actions align="center">
+            <q-btn label="Cancelar" color="negative" v-close-popup />
+            <q-btn label="Confirmar" color="positive" @click="RemoveArchivo(PaqEvidencia)" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
 
 
       <q-dialog v-model="ArchivosVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
@@ -362,6 +438,13 @@ export default {
   name: "AccionesCorrectivas",
   data() {
     return {
+      splitterModel: 55,
+      date: '',
+      FechasAgrupadas: [],
+      events: [],
+      ShowDate: false,
+      ShowDateSemaforo: false,
+      ListAccionesSemaforo: [],
       ModalArch: false,
       ArchivosVisible: false,
       File: null,
@@ -481,7 +564,7 @@ export default {
     ModalEvidencia(index, PaqEvidencia) {
       this.ModalArch = true;
       this.PaqEvidencia = { index: index, PaqEvidencia: PaqEvidencia };
-      console.log('  this.PaqEvidencia',  this.PaqEvidencia)
+      console.log('  this.PaqEvidencia', this.PaqEvidencia)
     },
     RemoveArchivo(Evidencia) {
       this.showLoading("procesando datos", QSpinnerOval);
@@ -510,6 +593,48 @@ export default {
         });
     },
 
+    GetAccionesFecha() {
+      api
+        .post("/AcCorrectivas/GetAccionesFecha/")
+        .then((response) => {
+          if (response.data) {
+            // this.GetEvidenceId(this.IdAccion);
+            console.log(response.data)
+            this.FechasAgrupadas = response.data
+            this.events = Object.keys(response.data)
+            console.log("Fechas recibidas:", this.events);
+            this.ShowDate = true
+          }
+        })
+        .catch((error) => {
+          // Manejar el error
+          console.error("Error al subir archivos:", error);
+
+          // Ocultar indicador de carga si es necesario
+          this.$q.loading.hide();
+        });
+    },
+
+
+    GetAccionesSemaforo() {
+      api
+        .post("/AcCorrectivas/GetAccionesSemaforo/")
+        .then((response) => {
+          if (response.data) {
+            // this.GetEvidenceId(this.IdAccion);
+            console.log(response.data)
+            this.ListAccionesSemaforo = response.data
+            this.ShowDateSemaforo = true
+          }
+        })
+        .catch((error) => {
+          // Manejar el error
+          console.error("Error al subir archivos:", error);
+
+          // Ocultar indicador de carga si es necesario
+          this.$q.loading.hide();
+        });
+    },
     viewDescription(Description, title) {
       this.DescripcionVisible = true;
       this.Descripcion = Description;
@@ -890,6 +1015,7 @@ export default {
   mounted() {
     this.GetDocsAC();
     this.usuario = this.$q.localStorage.getItem("usuarioSILAMED");
+    this.date = utils.fechaActual()
   },
 };
 </script>

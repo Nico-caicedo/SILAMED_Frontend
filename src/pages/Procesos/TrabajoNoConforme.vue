@@ -148,12 +148,61 @@
             <q-btn icon="arrow_forward_ios" color="positive" flat
               @click="VerificarResponsabilidad(props.row, 1)" />
             <q-btn icon="folder" flat color="yellow" @click="openEvidence(props.row.IdTNC)" />
-            <q-btn icon="edit" flat v-if="BtnCalidad" color="primary" @click="VisibleBtn(props.row.IdTNC)" />
-            <q-btn icon="picture_as_pdf" v-if="props.row.FechaCierre != 'En Curso'" @click="PrintTNC(props.row.IdTNC)"
+            <q-btn icon="edit" flat v-if="BtnCalidad" color="primary" @click="VisibleBtn(props.row.IdTNC)"  />
+            <q-btn icon="picture_as_pdf" v-if="props.row.Autorizado > 0" @click="PrintTNC(props.row.IdTNC)"
               flat color="negative" />
+              <q-btn icon="delete" flat v-if="BtnCalidad" color="negative" @click="DialogDelete(props.row.IdTNC)" />
           </q-td>
         </template>
       </q-table>
+
+      
+    <q-dialog v-model="DeleteAccionVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
+      <q-card style="width: 600px; max-width: none">
+        <q-card-section style="padding: 16px 16px 0 16px">
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+            ¿Esta Seguro de eliminar la Acción?
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div>
+            <p class="text-h6">
+              Confirmar la eliminación de la acción, lo cual también eliminará
+              sus evidencias.
+            </p>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="center">
+          <q-btn label="Cancelar" color="negative" v-close-popup />
+          <q-btn label="Confirmar" color="positive" @click="DeleteAccion(PaqAccion)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="ModalDelete" class="col-xs-12 col-sm-12 col-md-12" persistent>
+      <q-card style="width: 600px; max-width: none">
+        <q-card-section style="padding: 16px 16px 0 16px">
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+            ¿Este seguro de eliminar el Trabajo No Conforme?
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <div>
+            <p class="text-h6 text-center">
+              Una vez eliminado la información no se podra recuperar
+            </p>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="center">
+          <q-btn label="Cancelar" color="negative" v-close-popup @click="GlobalIdTNC = ''" />
+          <q-btn label="Confirmar" color="positive" @click="deleteTNC()" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     </q-page-container>
 
     <!-- vista para crear trabajo no conforme -->
@@ -618,6 +667,7 @@
                       color="primary" @click="editAction(item)" v-if="!item.editing" />
                     <q-btn style="width: 40px; height: 40px" class="col-xs-4 col-sm-4 col-md-4" icon="delete"
                       color="red" @click="ProcesarEliminacion(item, index)" />
+                      
                   </div>
                 </div>
               </div>
@@ -1408,6 +1458,8 @@ export default {
       ShowEmailInd: false,
       ShowEmailReanudar: false,
       ShowEmailMas: false,
+      ModalDelete: false,
+      GlobalIdTNC:'',
       IdsAprobar: [],
       AccionesSeguimiento: false,
       AccionesResponsable: false,
@@ -1975,8 +2027,25 @@ export default {
     CerrarTNC() {
       this.EstadoEvidenciaId(this.Trabajo.IdTNC);
       // this.sendEmail(this.EmailsReanudar,this.Trabajo.IdTNC)
-      if (this.EstadoEvidencias) {
-        api
+   if(this.Trabajo.RequiereAccionCorrectiva == 1){
+    this.Notificaciones(
+          "Sin acciones o evidencias no aprobadass",
+          "warning",
+          "bottom"
+        );
+        return
+   }else if(this.Trabajo.RequiereAccionCorrectiva == 0){
+    if (!this.EstadoEvidencias && this.Trabajo.RequiereAccionCorrectiva == 1) {
+ 
+        this.Notificaciones(
+          "Sin acciones o evidencias no aprobadas",
+          "warning",
+          "bottom"
+        );
+        return
+      }
+
+      api
           .post(
             `/medidor/CloseTNC/${this.Trabajo.IdTNC}/${this.Trabajo.ReanudarActividad}`
           )
@@ -1994,13 +2063,7 @@ export default {
           .catch((error) => {
             console.error("Tipo Identificacion - Fallo la conexion " + error);
           });
-      } else {
-        this.Notificaciones(
-          "Sin acciones o evidencias no aprobadas",
-          "warning",
-          "bottom"
-        );
-      }
+    }
     },
     ReanudaActividad(Op) {
       if (Op == 1) {
@@ -2033,12 +2096,14 @@ export default {
     ValidarOpt(){
       if( this.Trabajo.RequiereAccionCorrectiva > 0){
         this.RAcciondiasable = false
-        this.SaveOpt(0) 
+        this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva) 
       }else{
         if(this.Acciones.length > 0){
           this.ModalSaveOpt = true
+          
         }else{
           this.RAcciondiasable = true
+          this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva) 
         }
       }
      
@@ -3285,7 +3350,7 @@ export default {
         this.Notificaciones(campoInvalido.mensaje, "negative", "bottom");
         this.$q.loading.hide();
       } else {
-        this.Trabajo.FechaCierra = null;
+        this.Trabajo.FechaCierre = null;
         this.ProcesarDatos();
       }
     },
@@ -3577,6 +3642,26 @@ export default {
     },
     ClearAcciones() {
       this.Acciones = [];
+    },
+
+    DialogDelete(IdTNC){
+      this.GlobalIdTNC = IdTNC
+      this.ModalDelete = true;
+
+    },
+    deleteTNC(){
+      api
+        .post(`/medidor/DeleteTNC/${this.GlobalIdTNC}`, )
+        .then((response) => {
+          if (response.data) {
+            this.ModalDelete = false;
+          }
+          this.GetTNC();
+        })
+        .catch((error) => {
+          utils.mensaje("Fallo la conexion " + error);
+
+        });
     },
 
     ProcesarActions() {
@@ -3920,6 +4005,7 @@ export default {
       this.OptionsDisabledMo = false;
       this.ReadAnular = false;
       this.ShowEmail = false;
+   
       this.ResumeActivity = true;
       this.DesAccionTomada = true;
       this.mostrarse = true;
@@ -3935,6 +4021,7 @@ export default {
       this.Evidenciadisable = true;
       this.Trabajo.FechaCierre = utils.fechaActual();
       this.Trabajo.FechaApertura = utils.fechaActual();
+      
     },
     ReturnView() {
       this.GetTNC();
@@ -3950,6 +4037,7 @@ export default {
         DetieneActividad: 0,
         NotificarUsuario: 0,
         AnularDocumento: 0,
+        RepiteActividad:0,
         TipoDocumento: "",
         IdDocumento: "",
         ID_CONTCAMBIOS: 0,
