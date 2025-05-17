@@ -69,7 +69,7 @@
                 </q-table>
 
                 <q-table v-if="Documento == 'Informes'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
-                  flat bordered :data="Listaocumentos" :columns="columnsInforme" row-key="IdInforme"
+                  flat bordered :data="ListaInformes" :columns="columnsInforme" row-key="IdInforme"
                   selection="multiple" :selected.sync="SelectedInformes" :visible-columns="viInforme">
                   <template v-slot:header-selection="scope">
                     <q-toggle v-model="scope.selected" />
@@ -91,8 +91,8 @@
                 </q-table>
 
                 <q-table v-if="Documento == 'Trabajo No Conforme'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
-                  flat bordered :data="ListaCertificados" :columns="columnsTNC" row-key="IdCertificado"
-                  selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcTNC">
+                  flat bordered :data="ListaTNC" :columns="columnsTNC" row-key="IdTNC"
+                  selection="multiple" :selected.sync="SelectedTNC" :visible-columns="vcTNC">
                   <template v-slot:header-selection="scope">
                     <q-toggle v-model="scope.selected" />
                   </template>
@@ -101,12 +101,12 @@
                   </template>
                   <template v-slot:top="props">
                     <q-btn color="primary" icon-right="archive" label="" no-caps
-                      @click="exportTable(ListaCertificados, columnsTNC)" />
+                      @click="exportTable(ListaTNC, columnsTNC)" />
                     <q-space />
                     <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
                       @click="props.toggleFullscreen" class="q-ml-md" />
                     <q-space />
-                    <q-select v-model="vcCertificado" multiple outlined dense options-dense
+                    <q-select v-model="vcTNC" multiple outlined dense options-dense
                       :display-value="$q.lang.table.columns" emit-value map-options :options="columnsTNC"
                       option-value="name" options-cover style="min-width: 150px" />
                   </template>
@@ -144,6 +144,8 @@
               <q-stepper-navigation>
                 <q-btn color="primary" v-if="Documento == 'Certificados'" @click="EnviarCertificados()" label="Autorizar" />
                 <q-btn color="primary" v-if="Documento == 'Informes'" @click="EnviarInformes()" label="Autorizar" />
+                <q-btn color="primary" v-if="Documento == 'Trabajo No Conforme'" @click="EnviarTNC()" label="Autorizar" />
+                <q-btn color="primary" v-if="Documento == 'Acciones Correctivas'" @click="EnviarInformes()" label="Autorizar" />
               </q-stepper-navigation>
             </q-step>
 
@@ -384,8 +386,12 @@ export default {
       ListaMedidoresEntregar: [],
       SelectedCertificados: [],
       SelectedInformes: [],
+      SelectedAC: [],
+      SelectedTNC: [],
       ListaCertificados: [],
       ListaInformes:[],
+      ListaTNC:[],
+      ListaAC:[],
       listaClientes: [],
       options: [{ label: 'Certificados', value: "Certificados" }
       ,{ label: 'Informes', value: 'Informes' }
@@ -436,9 +442,9 @@ export default {
       columnsTNC:[  
         // { name: 'IdInforme', align: 'left', label: 'Id', field: 'IdInforme', required: true },
         // { name: 'IdOrdenEntradad', align: 'left', label: 'Id_OrdenEntradad', field: 'IdOrdenEntradad' },
-        { name: 'NTNC', align: 'left', label: 'No. TNC', field: 'NInforme' },
-        {name: 'Responsable', align: 'left', label: 'Responsable', field: 'Responsable'},
-        { name: 'FechaEmision', align: 'left', label: 'FechaEmisión', field: 'FechaEmision' },
+        { name: 'NTNC', align: 'left', label: 'No. TNC', field: 'NTNC' },
+        {name: 'Responsable', align: 'left', label: 'Responsable', field: 'LoginCrea'},
+        { name: 'FechaEmision', align: 'left', label: 'Fecha Creación', field: 'FechaApertura' },
        ]
       ,
       columnsAC:[  
@@ -602,7 +608,81 @@ export default {
           this.$q.loading.hide()
         })
     },
+    AutorizarTNC(TNC) {
+      const Login = this.usuario.LoginUsuario
+      this.$q.loading.show()
+      api.post(`/certificado/InsertTNCAutorizar/${Login}`, TNC)
+        .then(response => {
+          this.$q.loading.hide()
+          this.consultarFiltroEntregar(this.consultaGeneral, this.todasFechas, this.fechaIni, this.fechaFin)
+        }).catch(error => {
+          console.log(error)
+          this.$q.loading.hide()
+        })
+    },
     EnviarInformes() {
+      const self = this
+
+      let informes = []
+      for (const em of self.SelectedInformes) {
+        informes.push(em.IdInforme)
+      }
+      console.log(informes)
+
+      if (self.SelectedInformes.length > 0) {
+        this.$q.dialog({
+          title: 'SILAMED',
+          dark: true,
+          message: 'Está seguro autorizar ' + self.SelectedInformes.length + ' informe?',
+          cancel: true,
+          persistent: true,
+          html: true
+        }).onOk(() => {
+
+          if (informes.length > 0) {
+            self.AutorizarInformes(informes)
+          }
+
+        }).onCancel(() => {
+        })
+      }
+      // else {
+      //   self.step = 2
+      // }
+    }
+    ,
+    EnviarTNC() {
+      const self = this
+
+      let TNC = []
+      for (const em of self.SelectedTNC) {
+        TNC.push(em.IdTNC)
+      }
+      console.log(TNC)
+
+      if (self.SelectedTNC.length > 0) {
+        this.$q.dialog({
+          title: 'SILAMED',
+          dark: true,
+          message: 'Está seguro autorizar ' + (self.SelectedTNC.length) + ' Trabajo No Conforme?',
+          cancel: true,
+          persistent: true,
+          html: true
+        }).onOk(() => {
+
+          if (TNC.length > 0) {
+            self.AutorizarTNC(TNC)
+          }
+
+        }).onCancel(() => {
+        })
+      }
+      // else {
+      //   self.step = 2
+      // }
+    }
+    ,
+    EnviarAC() {
       const self = this
 
       let informes = []
@@ -795,15 +875,30 @@ export default {
       }
       api.get(`/certificado/mostrarMedidoresEntregadosFechas/${consulta}/${isEntregadoCertificado}/${todasLasFechas}/${fechaIni}/${fechaFin}/${ioe}/${ipo}/${Login}/${this.Documento}`)
         .then((response) => {
-          if(this.informe){
+          if(this.Documento == 'Informes'){
             self.ListaInformes = response.data
             console.log(self.ListaInformes)
           }
 
 
-          if(this.certificado){
+          if(this.Documento == 'Certificados'){
             self.ListaCertificados = response.data
             console.log(self.ListaCertificados)
+          }
+
+          if(this.Documento == 'Trabajo No Conforme'){
+              self.ListaTNC = response.data.map(item => {
+    const fecha = new Date(item.FechaApertura);
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+
+    return {
+      ...item,
+      FechaApertura: `${año}-${mes}-${dia}`
+    };
+  });
+            console.log(self.ListaTNC)
           }
           
           self.$q.loading.hide()

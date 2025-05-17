@@ -46,6 +46,9 @@
             <q-btn icon="arrow_forward_ios" @click="ChangeView(props.row.IdAC)" flat color="positive" />
             <q-btn icon="edit" to="/Procesos/AccionesCorrectivas" flat color="primary" />
             <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
+            <q-btn icon="picture_as_pdf" @click="PrintAC(props.row.IdAC)"
+              flat color="negative" />
+              <!-- v-if="props.row.Autorizado > 0" -->
           </q-td>
         </template>
       </q-table>
@@ -430,6 +433,21 @@ export default {
       this.Descripcion = Description;
       this.titleDescripcion = title
     },
+
+    PrintAC(IdAC) { 
+
+   api.get(`/AcCorrectivas/ImprimirAC/${IdAC}`, { responseType: 'arraybuffer' })
+     .then(response => {
+       const blob = new Blob([response.data], { type: 'application/pdf' })
+       const blobURL = URL.createObjectURL(blob)
+       window.open(blobURL)
+       this.$q.loading.hide()
+     }).catch(error => {
+       console.log(error)
+       this.$q.loading.hide()
+     })
+},
+
 
   GuardarResponsables(){
 console.log(this.AccionCorrectiva)
