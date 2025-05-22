@@ -143,65 +143,64 @@
           </q-td>
         </template>
         <template class="row justify-start" v-slot:body-cell-Operaciones="props">
-          <q-td  key="Operaciones"  :props="props" auto-width>
+          <q-td key="Operaciones" :props="props" auto-width>
             <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-            <q-btn icon="arrow_forward_ios" color="positive" flat
-              @click="VerificarResponsabilidad(props.row, 1)" />
+            <q-btn icon="arrow_forward_ios" color="positive" flat @click="VerificarResponsabilidad(props.row, 1)" />
             <q-btn icon="folder" flat color="yellow" @click="openEvidence(props.row.IdTNC)" />
-            <q-btn icon="edit" flat v-if="BtnCalidad" color="primary" @click="VisibleBtn(props.row.IdTNC)"  />
-            <q-btn icon="picture_as_pdf" v-if="props.row.Autorizado > 0" @click="PrintTNC(props.row.IdTNC)"
-              flat color="negative" />
-              <q-btn icon="delete" flat v-if="BtnCalidad" color="negative" @click="DialogDelete(props.row.IdTNC)" />
+            <q-btn icon="edit" flat v-if="BtnCalidad" color="primary" @click="VisibleBtn(props.row.IdTNC)" />
+            <q-btn icon="picture_as_pdf" v-if="props.row.Autorizado > 0" @click="PrintTNC(props.row.IdTNC)" flat
+              color="negative" />
+            <q-btn icon="delete" flat v-if="BtnCalidad" color="negative" @click="DialogDelete(props.row.IdTNC)" />
           </q-td>
         </template>
       </q-table>
 
-      
-    <q-dialog v-model="DeleteAccionVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
-      <q-card style="width: 600px; max-width: none">
-        <q-card-section style="padding: 16px 16px 0 16px">
-          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
-            ¿Esta Seguro de eliminar la Acción?
-          </div>
-        </q-card-section>
 
-        <q-card-section>
-          <div>
-            <p class="text-h6">
-              Confirmar la eliminación de la acción, lo cual también eliminará
-              sus evidencias.
-            </p>
-          </div>
-        </q-card-section>
+      <q-dialog v-model="DeleteAccionVisible" class="col-xs-12 col-sm-12 col-md-12" persistent>
+        <q-card style="width: 600px; max-width: none">
+          <q-card-section style="padding: 16px 16px 0 16px">
+            <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+              ¿Esta Seguro de eliminar la Acción?
+            </div>
+          </q-card-section>
 
-        <q-card-actions align="center">
-          <q-btn label="Cancelar" color="negative" v-close-popup />
-          <q-btn label="Confirmar" color="positive" @click="DeleteAccion(PaqAccion)" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <q-dialog v-model="ModalDelete" class="col-xs-12 col-sm-12 col-md-12" persistent>
-      <q-card style="width: 600px; max-width: none">
-        <q-card-section style="padding: 16px 16px 0 16px">
-          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
-            ¿Este seguro de eliminar el Trabajo No Conforme?
-          </div>
-        </q-card-section>
+          <q-card-section>
+            <div>
+              <p class="text-h6">
+                Confirmar la eliminación de la acción, lo cual también eliminará
+                sus evidencias.
+              </p>
+            </div>
+          </q-card-section>
 
-        <q-card-section>
-          <div>
-            <p class="text-h6 text-center">
-              Una vez eliminado la información no se podra recuperar
-            </p>
-          </div>
-        </q-card-section>
+          <q-card-actions align="center">
+            <q-btn label="Cancelar" color="negative" v-close-popup />
+            <q-btn label="Confirmar" color="positive" @click="DeleteAccion(PaqAccion)" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      <q-dialog v-model="ModalDelete" class="col-xs-12 col-sm-12 col-md-12" persistent>
+        <q-card style="width: 600px; max-width: none">
+          <q-card-section style="padding: 16px 16px 0 16px">
+            <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+              ¿Este seguro de eliminar el Trabajo No Conforme?
+            </div>
+          </q-card-section>
 
-        <q-card-actions align="center">
-          <q-btn label="Cancelar" color="negative" v-close-popup @click="GlobalIdTNC = ''" />
-          <q-btn label="Confirmar" color="positive" @click="deleteTNC()" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+          <q-card-section>
+            <div>
+              <p class="text-h6 text-center">
+                Una vez eliminado la información no se podra recuperar
+              </p>
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="center">
+            <q-btn label="Cancelar" color="negative" v-close-popup @click="GlobalIdTNC = ''" />
+            <q-btn label="Confirmar" color="positive" @click="deleteTNC()" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
 
     </q-page-container>
 
@@ -243,14 +242,17 @@
             <div class="column items-left q-gutter-md">
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="" style="width: 50%">Acepta Trabajo No Conforme</p>
-                <q-option-group v-model="Trabajo.AceptaTNC" :disable="OptionsDisabledM" :options="options"
+                <q-option-group v-model="Trabajo.AceptaTNC" :disable="OptionsDisabled" :options="options"
                   color="primary" inline dense @input="AceptaTNC(Trabajo.AceptaTNC)" />
               </div>
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="" style="width: 50%">Afecta los Resultados Previos</p>
-                <q-option-group v-model="Trabajo.AfectaResultadosPrevios" :disable="OptionsDisabledMo"
-                  :options="options" color="primary" inline dense />
+                <q-option-group v-model="Trabajo.AfectaResultadosPrevios" :disable="OptionsDisabled"
+                  :options="options" color="primary" inline dense @input="AfectaVisible()" />
+
+                <div v-if="BtnShowAfecta" style="height: 15px;"><q-btn icon="edit_note" color="positive"
+                    @click="ShowAfecta = true" /></div>
               </div>
 
               <div class="row q-gutter-md" style="margin-top: 0">
@@ -272,12 +274,12 @@
               </div>
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="text-left" style="width: 50%">
-                 Se Repite la Actividad
+                  Se Repite la Actividad
                 </p>
                 <q-option-group v-model="Trabajo.RepiteActividad" :disable="OptionsDisabled" :options="options"
-                  color="primary" inline dense/>
+                  color="primary" inline dense />
 
-              
+
                 <!--   @input="DetieneVisibles(Trabajo.DetieneActividad)" -->
               </div>
 
@@ -500,7 +502,7 @@
         <div class="col-xs-12 col-sm-12 col-md-5 q-gutter-sm">
           <q-btn label="Guardar" icon="save" color="positive" class="col-xs-12 col-sm-6 col-md-2 q-pt-sm"
             @click="AvisoVisible = true" v-if="BtnSaveGeneral" />
-          <q-btn label="guardar Cambios" v-if="BtnSaveChange" @click="CreatorChanges" color="positive" icon="save"
+          <q-btn label="guardars Cambios" v-if="BtnSaveChange" @click="CreatorChanges" color="positive" icon="save"
             class="col-xs-12 col-sm-5 col-md-2 q-pt-sm" />
           <q-btn icon="save" @click="AvisoVisibleTwo = true" class="col-xs-12 col-sm-6 col-md-2 q-pt-sm"
             color="positive" label="guardar" v-if="BtnSaveAceptaTNC" />
@@ -518,6 +520,37 @@
         </div>
       </div>
     </q-page-container>
+
+    <q-dialog v-model="ShowAfecta" class="col-xs-12 col-sm-12 col-md-12" persistent>
+      <q-card style="width: 600px; max-width: none">
+        <q-card-section style="padding: 16px 16px 0 16px">
+          <div class="text-h5 text-center text-weight-bolder" style="padding: 16px 16px 0 16px">
+            Afecta Resultados Previos
+          </div>
+        </q-card-section>
+
+        <q-card-section>
+          <q-input v-if="AfectaTxtCreate" type="textarea" v-model="AfectaTxt" />
+          <q-input v-if="BtnEditAfecta"  type="textarea" v-model="AfectaTxt" />
+
+          <p v-if="AfectaTxtRead || !this.Trabajo.AfectaResultadosPreviosTxt == ''">{{ Trabajo.AfectaResultadosPreviosTxt }}</p>
+          
+        </q-card-section>
+
+        <q-card-actions v-if="AfectaTxtCreate" align="center">
+          <q-btn label="Cancelar" color="negative" v-close-popup />
+          <q-btn label="Guardar" @click="SaveChangesAfecta" color="positive" />
+        </q-card-actions>
+        <q-card-actions v-if="BtnEditAfecta" align="center">
+          <q-btn label="Cancelar" color="negative" @click="CancelAfectaTxt" v-close-popup />
+          <q-btn label="Guardar cambios" @click="SaveChangesAfecta" color="positive" />
+        </q-card-actions>
+        <q-card-actions v-if="AfectaTxtRead" align="center">
+          <q-btn label="Continuar" color="positive" v-close-popup />
+
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-dialog v-model="GestionRiego" persistent>
       <div class="q-pa-md bg-white" style="width: 800px; max-width: none">
         <div class="row justify-end">
@@ -587,7 +620,7 @@
           <q-btn v-if="BtnSeguimientoAccion" label="Guardar" icon="save" color="positive"
             @click="SaveSeguimientoAccion" />
           <q-btn v-if="BtnDesAccionCorrectiva" label="Cancelar" color="negative" v-close-popup @click="CancelInfo" />
-          <q-btn v-if="BtnDesAccionCorrectiva" label="Guardars" icon="save" color="positive"
+          <q-btn v-if="BtnDesAccionCorrectiva" label="Guardar" icon="save" color="positive"
             @click="SaveDesAccionCorrectiva" />
         </q-card-actions>
       </q-card>
@@ -667,7 +700,7 @@
                       color="primary" @click="editAction(item)" v-if="!item.editing" />
                     <q-btn style="width: 40px; height: 40px" class="col-xs-4 col-sm-4 col-md-4" icon="delete"
                       color="red" @click="ProcesarEliminacion(item, index)" />
-                      
+
                   </div>
                 </div>
               </div>
@@ -775,9 +808,9 @@
 
           <div v-if="Trabajo.TipoDocumento.value === 'Informes'" class="col-xs-12 col-sm-7 col-md-4">
             <q-select filled v-model="Trabajo.IdDocumento" map-options emit-value :option-value="(val) => ({
-                IdDocumento: val.IdInforme,
-                NDocumento: val.NInforme,
-              })
+              IdDocumento: val.IdInforme,
+              NDocumento: val.NInforme,
+            })
               " option-label="NInforme" :options="ListaInformes" use-input hide-dropdown-icon hide-selected fill-input
               input-debounce="0" label="NInforme" @filter="filterFnInformes" style="padding-top: 5px"
               @blur="AddDocumentoAnular" @keyup.enter="AddDocumentoAnular">
@@ -1010,7 +1043,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="DescripcionVisible" persistent>
+    <q-dialog v-model="DescripcionVisible" >
       <q-card style="width: 600px">
         <q-card-section>
           <div class="text-h5 text-center">Descripción Del Problema</div>
@@ -1325,7 +1358,7 @@
           </div>
           <q-btn label="agregar" icon="add" color="positive" @click="AddMoreFiles" />
           <q-file ref="AddArchivos" append multiple v-model="FileTem" style="display: none"
-            @input="transferirArchivos" />  
+            @input="transferirArchivos" />
         </q-card-section>
 
         <q-card-section>
@@ -1407,12 +1440,13 @@
         </q-card-section>
 
         <q-card-section>
-          <p class="text-weight-bold">Seleccionar esta opción como "NO", eliminara las acciones y sus respectivas evidencias, ¿Desea Continuar?</p>
+          <p class="text-weight-bold">Seleccionar esta opción como "NO", eliminara las acciones y sus respectivas
+            evidencias, ¿Desea Continuar?</p>
 
         </q-card-section>
         <q-card-actions align="center">
-          <q-btn label="regresar" color="primary"  @click="ReturnValOpt"/>
-          <q-btn label="Continuar" color="positive"  @click="SaveOpt(1)"/>
+          <q-btn label="regresar" color="primary" @click="ReturnValOpt" />
+          <q-btn label="Continuar" color="positive" @click="SaveOpt(1)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -1435,6 +1469,12 @@ export default {
       FileSave: null,
       FileTem: null,
       BtnCalidad: false,
+      BtnShowAfecta: false,
+      ShowAfecta: false,
+      AfectaTxtRead: false,
+      AfectaTxtCreate:false,
+      BtnEditAfecta:false,
+      AfectaTxt: '',
       //
       GeneralView: true,
       DetectadoView: false,
@@ -1459,7 +1499,7 @@ export default {
       ShowEmailReanudar: false,
       ShowEmailMas: false,
       ModalDelete: false,
-      GlobalIdTNC:'',
+      GlobalIdTNC: '',
       IdsAprobar: [],
       AccionesSeguimiento: false,
       AccionesResponsable: false,
@@ -1498,7 +1538,7 @@ export default {
       BtnReanuda: false,
       BtnReanudaEdit: false,
       BtnDetiene: false,
-      ModalSaveOpt:false,
+      ModalSaveOpt: false,
       slide: 1,
       Action: [0],
       IdAccion: "",
@@ -1513,8 +1553,9 @@ export default {
         ValoracionImpacto: "",
         AceptaTNC: 1,
         AfectaResultadosPrevios: 0,
+        AfectaResultadosPreviosTxt: '',
         DetieneActividad: 0,
-        RepiteActividad:0,
+        RepiteActividad: 0,
         NotificarUsuario: 0,
         AnularDocumento: 0,
         TipoDocumento: "",
@@ -1541,8 +1582,9 @@ export default {
         ValoracionImpacto: "",
         AceptaTNC: 0,
         AfectaResultadosPrevios: 0,
+        AfectaResultadosPreviosTxt: '',
         DetieneActividad: 0,
-        RepiteActividad:0,
+        RepiteActividad: 0,
         NotificarUsuario: 0,
         AnularDocumento: 0,
         TipoDocumento: "",
@@ -1746,12 +1788,14 @@ export default {
   methods: {
     // permisos de dir calidad
     CreatorChanges() {
+      
       var Changes = {
         Detectado: this.Trabajo.Detectado,
         ResponsableAccion: this.Trabajo.ResponsableAccion,
         ResponsableSeguimiento: this.Trabajo.ResponsableSeguimiento,
         LoginCierra: this.Trabajo.LoginCierra,
         IdTNC: this.IdTNC,
+        AfectaResultadosPreviosTxt: this.Trabajo.AfectaResultadosPreviosTxt
       };
 
       api
@@ -1778,26 +1822,34 @@ export default {
       this.ModalCalidad = true;
     },
     PrintTNC(IdTNC) {
-   
 
-        api.get(`/medidor/ImprimirTNC/${IdTNC}`, { responseType: 'arraybuffer' })
-          .then(response => {
-            const blob = new Blob([response.data], { type: 'application/pdf' })
-            const blobURL = URL.createObjectURL(blob)
-            window.open(blobURL)
-            this.$q.loading.hide()
-          }).catch(error => {
-            console.log(error)
-            this.$q.loading.hide()
-          })
+
+      api.get(`/medidor/ImprimirTNC/${IdTNC}`, { responseType: 'arraybuffer' })
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'application/pdf' })
+          const blobURL = URL.createObjectURL(blob)
+          window.open(blobURL)
+          this.$q.loading.hide()
+        }).catch(error => {
+          console.log(error)
+          this.$q.loading.hide()
+        })
     },
 
-    PermisosCalidad(Op, IdTNC, Permiso) {
+    PermisosCalidad(OpRol, IdTNC, Permiso) {
+      
       this.Permiso = Permiso;
-      // Login == this.Trabajo.ResponsableAccion
-      this.GetIdTNC(IdTNC, 2);
       this.ModalCalidad = false;
-      this.ShowEmailInd = true;
+      // this.ShowEmailInd = true;
+      // Login == this.Trabajo.ResponsableAccion
+      this.GetIdTNC(IdTNC, 2,OpRol)
+      
+      
+  
+    },
+PermisosConDatos(Op){
+  this.ModalCalidad = false;
+      // this.ShowEmailInd = true;
       if (this.Trabajo.DetieneActividad > 0) {
         this.ShowEmailInd = true;
       } else {
@@ -1822,6 +1874,11 @@ export default {
         this.ShowAnular = false;
       }
 
+      if(this.Trabajo.AfectaResultadosPrevios > 0){
+          this.BtnShowAfecta = true
+     
+        }
+
       if (Op == 2) {
         this.leer = true;
         this.Editar = false;
@@ -1840,6 +1897,8 @@ export default {
         this.BtnAcciones = true;
         this.ShowEvidence = false;
         this.BtnSaveGeneral = false;
+        this.AfectaTxtRead = true
+   
       }
       // Login == this.Trabajo.ResponsableSeguimiento
       if (Op == 3) {
@@ -1862,6 +1921,8 @@ export default {
         this.ShowEvidenceVisible = false;
         this.DetectadoView = true;
         this.BtnSaveGeneral = false;
+        this.AfectaTxtRead = true
+       
       }
       // Login == this.Trabajo.LoginCierra
       if (Op == 1) {
@@ -1879,12 +1940,20 @@ export default {
         this.BtnAnularMore = true;
         this.BtnSaveChange = true;
         this.BtnSaveGeneral = false;
-
+        this.btn = false;
+        this.BtnEditAfecta = true;
         // if (this.Trabajo.DetieneActividad > 0) {
         if (this.Trabajo.DetieneActividad == 0) {
           this.ResumeActivity = true;
         } else if (this.Trabajo.DetieneActividad == 1) {
           this.ResumeActivity = false;
+        }
+
+
+        if(this.Trabajo.AfectaResultadosPrevios > 0){
+          this.BtnShowAfecta = true
+          this.BtnEditAfecta = true
+          this.AfectaTxt = this.Trabajo.AfectaResultadosPreviosTxt
         }
         // this.Trabajo.RequiereAccionCorrectiva = 0
 
@@ -1892,8 +1961,7 @@ export default {
         //   this.ResumeActivity = true
         // }
       }
-    },
-
+},
     // ----------------------//
     CambioCheckbox(id, NDocumento) {
       if (this.IdsAprobar.includes(id)) {
@@ -2027,25 +2095,25 @@ export default {
     CerrarTNC() {
       this.EstadoEvidenciaId(this.Trabajo.IdTNC);
       // this.sendEmail(this.EmailsReanudar,this.Trabajo.IdTNC)
-   if(this.Trabajo.RequiereAccionCorrectiva == 1){
-    this.Notificaciones(
+      if (this.Trabajo.RequiereAccionCorrectiva == 1) {
+        this.Notificaciones(
           "Sin acciones o evidencias no aprobadass",
           "warning",
           "bottom"
         );
         return
-   }else if(this.Trabajo.RequiereAccionCorrectiva == 0){
-    if (!this.EstadoEvidencias && this.Trabajo.RequiereAccionCorrectiva == 1) {
- 
-        this.Notificaciones(
-          "Sin acciones o evidencias no aprobadas",
-          "warning",
-          "bottom"
-        );
-        return
-      }
+      } else if (this.Trabajo.RequiereAccionCorrectiva == 0) {
+        if (!this.EstadoEvidencias && this.Trabajo.RequiereAccionCorrectiva == 1) {
 
-      api
+          this.Notificaciones(
+            "Sin acciones o evidencias no aprobadas",
+            "warning",
+            "bottom"
+          );
+          return
+        }
+
+        api
           .post(
             `/medidor/CloseTNC/${this.Trabajo.IdTNC}/${this.Trabajo.ReanudarActividad}`
           )
@@ -2063,7 +2131,7 @@ export default {
           .catch((error) => {
             console.error("Tipo Identificacion - Fallo la conexion " + error);
           });
-    }
+      }
     },
     ReanudaActividad(Op) {
       if (Op == 1) {
@@ -2083,9 +2151,9 @@ export default {
       this.Trabajo.RequiereAccionCorrectiva;
       api
         .post(`/medidor/UpdateOpts/${ConfirmDelete}`, this.Trabajo)
-        .then((responde) => { 
+        .then((responde) => {
           this.ModalSaveOpt = false
-          if(ConfirmDelete > 0){
+          if (ConfirmDelete > 0) {
             this.RAcciondiasable = true
           }
         })
@@ -2093,22 +2161,22 @@ export default {
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
     },
-    ValidarOpt(){
-      if( this.Trabajo.RequiereAccionCorrectiva > 0){
+    ValidarOpt() {
+      if (this.Trabajo.RequiereAccionCorrectiva > 0) {
         this.RAcciondiasable = false
-        this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva) 
-      }else{
-        if(this.Acciones.length > 0){
+        this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
+      } else {
+        if (this.Acciones.length > 0) {
           this.ModalSaveOpt = true
-          
-        }else{
+
+        } else {
           this.RAcciondiasable = true
-          this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva) 
+          this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
         }
       }
-     
+
     },
-    ReturnValOpt(){
+    ReturnValOpt() {
       this.Trabajo.RequiereAccionCorrectiva = 1
       this.ModalSaveOpt = false
     },
@@ -2525,6 +2593,14 @@ export default {
           NotificacionFiles: null,
         };
         this.EditEmailDetener = false;
+      }
+    },
+
+    AfectaVisible() {
+      if (this.Trabajo.AfectaResultadosPrevios > 0) {
+        this.BtnShowAfecta = true
+      } else {
+        this.BtnShowAfecta = false
       }
     },
     NotificarVisibles(notificar) {
@@ -3309,6 +3385,7 @@ export default {
     },
     ProcesarDatos() {
       this.TNC = this.Trabajo;
+      this.TNC.push(this.AfectaTxt)
       this.TNC.ID_CONTCAMBIOS = this.cc.Id_contcambios;
       if (this.TNC) this.InsertTNC(this.TNC);
     },
@@ -3564,9 +3641,10 @@ export default {
         this.BtnSaveGeneral = false;
       }
       this.ModalMultiple = false;
+
     },
 
-    GetIdTNC(IdTNC, Op) {
+    GetIdTNC(IdTNC, Op,OpRol) {
       api
         .post(`/medidor/TNCModify/${IdTNC}`)
         .then((response) => {
@@ -3584,9 +3662,14 @@ export default {
           this.mostrarse = true;
           this.EstadoEvidenciaId(IdTNC);
 
+
+          console.log(this.Trabajo)
+      
           if (Op == 1) {
             this.ValidarPermisos();
           }
+
+
           if (Op == 0) {
             if (this.Trabajo.DetieneActividad > 0) {
               this.ShowEmailInd = true;
@@ -3617,6 +3700,16 @@ export default {
             } else if (this.Trabajo.DetieneActividad == 1) {
               this.ResumeActivity = false;
             }
+          
+            if(this.Trabajo.AfectaResultadosPrevios > 0){
+              this.BtnShowAfecta = true
+              this.AfectaTxtRead = true 
+            }
+            
+         
+          }
+          if(Op == 2 ){
+            this.PermisosConDatos(OpRol)
           }
         })
         .catch((error) => {
@@ -3644,14 +3737,14 @@ export default {
       this.Acciones = [];
     },
 
-    DialogDelete(IdTNC){
+    DialogDelete(IdTNC) {
       this.GlobalIdTNC = IdTNC
       this.ModalDelete = true;
 
     },
-    deleteTNC(){
+    deleteTNC() {
       api
-        .post(`/medidor/DeleteTNC/${this.GlobalIdTNC}`, )
+        .post(`/medidor/DeleteTNC/${this.GlobalIdTNC}`,)
         .then((response) => {
           if (response.data) {
             this.ModalDelete = false;
@@ -3737,6 +3830,27 @@ export default {
           utils.mensaje("Fallo la conexion " + error);
           this.$q.loading.hide();
         });
+    },
+    SaveChangesAfecta(){
+      if(this.AfectaTxt == ''){
+        this.Notificaciones("Debe digitar texto para guardar", "warning", "bottom");
+        return
+      }
+    
+      this.Trabajo.AfectaResultadosPreviosTxt = this.AfectaTxt
+     
+      this.Notificaciones("Cambios guardados", "positive", "bottom");
+      this.ShowAfecta = false
+
+      
+    },
+
+
+
+    CancelAfectaTxt(){
+      this.AfectaTxt =   this.Trabajo.AfectaResultadosTxt 
+      this.ShowAfecta = false
+
     },
     UpdateAction(PaqAccion) {
       api
@@ -3862,6 +3976,12 @@ export default {
         this.ShowAnular = false;
       }
 
+      if(this.Trabajo.AfectaResultadosPrevios > 0)
+      {
+        this.BtnShowAfecta = true
+        this.AfectaTxtRead = true
+      }
+
       // if (loginVista === this.Trabajo.LoginCrea) {
       //   if (this.Trabajo.FechaCierre != "En Curso") {
       //     this.VistaGeneral();
@@ -3905,9 +4025,9 @@ export default {
         this.Editar = false;
         this.RAcciondiasableOption = false
         console.log(this.Trabajo.RequiereAccionCorrectiva)
-        if(this.Trabajo.RequiereAccionCorrectiva > 0){
+        if (this.Trabajo.RequiereAccionCorrectiva > 0) {
           this.RAcciondiasable = false;
-        }else{
+        } else {
           this.RAcciondiasable = true;
         }
         this.DesAccionTomada = false;
@@ -3997,6 +4117,7 @@ export default {
       this.BtnAcciones = false;
       this.EditEmailReanudar = false;
       this.ShowEmailInd = false;
+
     },
     CreateTNC() {
       this.DetectadoView = false;
@@ -4004,8 +4125,9 @@ export default {
       this.OptionsDisabledM = false;
       this.OptionsDisabledMo = false;
       this.ReadAnular = false;
+      this.AfectaTxtCreate = true
       this.ShowEmail = false;
-   
+      this.BtnShowAfecta = false
       this.ResumeActivity = true;
       this.DesAccionTomada = true;
       this.mostrarse = true;
@@ -4021,7 +4143,7 @@ export default {
       this.Evidenciadisable = true;
       this.Trabajo.FechaCierre = utils.fechaActual();
       this.Trabajo.FechaApertura = utils.fechaActual();
-      
+
     },
     ReturnView() {
       this.GetTNC();
@@ -4037,7 +4159,7 @@ export default {
         DetieneActividad: 0,
         NotificarUsuario: 0,
         AnularDocumento: 0,
-        RepiteActividad:0,
+        RepiteActividad: 0,
         TipoDocumento: "",
         IdDocumento: "",
         ID_CONTCAMBIOS: 0,
@@ -4051,7 +4173,12 @@ export default {
         Acciones: [],
         ReanudarActividad: 0,
       };
-
+      this.BtnShowAfecta = false;
+      this.AfectaTxtCreate = false
+      this.AfectaTxtRead = false
+      this.BtnEditAfecta = false
+      
+      this.BtnShowAfecta = false
       this.EditEmailReanudar = false;
       this.EditNotificacion = false;
       this.ShowEmailMas = false;
