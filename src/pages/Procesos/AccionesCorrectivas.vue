@@ -941,7 +941,8 @@ export default {
             "positive",
             "bottom-right"
           );
-
+          this.ReturnView()
+          this.GetDocsAC()
         })
         .catch((error) => {
           console.error("Tipo Identificacion - Fallo la conexion " + error);

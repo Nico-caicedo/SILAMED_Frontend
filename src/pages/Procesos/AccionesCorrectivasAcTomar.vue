@@ -115,8 +115,11 @@
               </q-btn>
             </div>
           </q-card-section>
-
-          <q-card-section>
+          <q-card-section v-if="ListAccionesSemaforo.length == 0">
+            <p  class="text-h6 text-center">Sin Acciones por el momento</p>
+          </q-card-section>
+          <q-card-section v-if="ListAccionesSemaforo.length > 0">
+            
             <div  class="row items-center" v-for="(accion) in ListAccionesSemaforo" :key="accion">
               <p style="width: 80%;" class="text-h6 text-center">
                 {{ accion.AccionTxt }}

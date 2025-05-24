@@ -31,12 +31,14 @@
         </template>
 
         <template v-slot:body-cell-Hallazgos="props" flat class="">
-          <q-td key="Hallazgos" :props="props" class="cursor-pointer"  @click="viewDescription(props.row.Hallazgo, 'Hallazgos')">
+          <q-td key="Hallazgos" :props="props" class="cursor-pointer"
+            @click="viewDescription(props.row.Hallazgo, 'Hallazgos')">
             <q-btn class="" label="" icon="visibility" flat color="" />
           </q-td>
         </template>
         <template v-slot:body-cell-NCSimiliares="props" flat class="">
-          <q-td key="NCSimiliares" :props="props" class="cursor-pointer"  @click="viewDescription(props.row.NCSimilares, 'NCSimilares')">
+          <q-td key="NCSimiliares" :props="props" class="cursor-pointer"
+            @click="viewDescription(props.row.NCSimilares, 'NCSimilares')">
             <q-btn class="" label="" icon="visibility" flat />
           </q-td>
         </template>
@@ -46,9 +48,8 @@
             <q-btn icon="arrow_forward_ios" @click="ChangeView(props.row.IdAC)" flat color="positive" />
             <q-btn icon="edit" to="/Procesos/AccionesCorrectivas" flat color="primary" />
             <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
-            <q-btn icon="picture_as_pdf" @click="PrintAC(props.row.IdAC)"
-              flat color="negative" />
-              <!-- v-if="props.row.Autorizado > 0" -->
+            <q-btn icon="picture_as_pdf" @click="PrintAC(props.row.IdAC)" flat color="negative" />
+            <!-- v-if="props.row.Autorizado > 0" -->
           </q-td>
         </template>
       </q-table>
@@ -125,40 +126,40 @@
           </q-select>
         </div>
 
-        <q-btn  label="Guardar responsables" icon="save" style="height: 40px;"
+        <q-btn label="Guardar responsables" icon="save" style="height: 40px;"
           class="q-ml-sm col-xs-11 col-sm-5 col-md-3" color="positive" @click="GuardarResponsables" />
       </div>
       <div v-if="!ResponsableState" class="flex q-gutter-md q-ma-xs">
 
-<!-- Responsable Verificar -->
-<div class="flex flex-col items-center bg-grey-3 q-pa-md rounded-lg shadow-sm">
-  <p class="text-bold text-dark text-body1 q-mb-xs">Responsable Verificar: </p>
- <div>
-  <p class="q-ma-none text-center text-dark text-body2">
-    {{ Informe.NombreResponsableVerificar || Informe.ResponsableVerificar }}
-  </p>
-  <p class="q-ma-none text-center text-grey-8 text-caption">
-    {{ Informe.CargoResponsableVerificar }}
-  </p>
- </div>
-</div>
+        <!-- Responsable Verificar -->
+        <div class="flex flex-col items-center bg-grey-3 q-pa-md rounded-lg shadow-sm">
+          <p class="text-bold text-dark text-body1 q-mb-xs">Responsable Verificar: </p>
+          <div>
+            <p class="q-ma-none text-center text-dark text-body2">
+              {{ Informe.NombreResponsableVerificar || Informe.ResponsableVerificar }}
+            </p>
+            <p class="q-ma-none text-center text-grey-8 text-caption">
+              {{ Informe.CargoResponsableVerificar }}
+            </p>
+          </div>
+        </div>
 
 
-<!-- Responsable Evaluar -->
-<div class="flex flex-col items-center bg-grey-3 q-pa-md rounded-lg shadow-sm">
-  <p class="text-bold text-dark text-body1 q-mb-xs">Responsable Evaluar: </p>
-  <div>
-    <p class="q-ma-none text-center text-dark text-body2">
-    {{ Informe.NombreResponsableEvaluar || Informe.ResponsableEvaluar }}
-  </p>
-  <p class="q-ma-none text-center text-grey-8 text-caption">
-    {{ Informe.CargoResponsableEvaluar }}
-  </p>
-  </div>
-</div>
+        <!-- Responsable Evaluar -->
+        <div class="flex flex-col items-center bg-grey-3 q-pa-md rounded-lg shadow-sm">
+          <p class="text-bold text-dark text-body1 q-mb-xs">Responsable Evaluar: </p>
+          <div>
+            <p class="q-ma-none text-center text-dark text-body2">
+              {{ Informe.NombreResponsableEvaluar || Informe.ResponsableEvaluar }}
+            </p>
+            <p class="q-ma-none text-center text-grey-8 text-caption">
+              {{ Informe.CargoResponsableEvaluar }}
+            </p>
+          </div>
+        </div>
 
 
-</div>
+      </div>
 
       <div>
         <p class="text-h5 text-center text-weight-bold">Acciones Implementadas</p>
@@ -192,9 +193,10 @@
             Implementadas</p>
           <q-separator />
 
-          <q-input :disable="EvaluarDisable" type="textarea" v-model="Evaluacion" autogrow filled label="Escriba aqui..." />
+          <q-input :disable="EvaluarDisable" type="textarea" v-model="Evaluacion" autogrow filled
+            label="Escriba aqui..." />
 
-          <q-btn :disable="EvaluarDisable" @click="SaveEvaluacion" icon="save"  color="positive" label="guardar"/>
+          <q-btn :disable="EvaluarDisable" @click="SaveEvaluacion" icon="save" color="positive" label="guardar" />
 
         </div>
 
@@ -239,7 +241,7 @@
           <q-card-section v-if="!FirtsView">
             <p class="text-h5 text-center">Archivos Adjuntos</p>
             <!-- v-if="AccionesSeguimiento" -->
-            <div  v-if="VerificarState" class="row justify-end q-gutter-sm">
+            <div v-if="VerificarState" class="row justify-end q-gutter-sm">
               <q-btn label="Aprobar todos" color="blue" @click="AprobarTodos" />
               <q-btn :disabled="IdsAprobar.length === 0" label="Aprobar" color="green" @click="Aprobar" />
             </div>
@@ -264,7 +266,8 @@
                     @input="UpdateArchivo(item.IdArchivo)" />
                   <!-- @input="handleFileInput" -->
                   <!-- v-if="AccionesResponsable" -->
-                  <q-btn v-if="VerificarState"  @click="ModalEvidencia(index, item)" icon="delete" color="red" flat dense size="20px">
+                  <q-btn v-if="VerificarState" @click="ModalEvidencia(index, item)" icon="delete" color="red" flat dense
+                    size="20px">
                     <q-tooltip> Eliminar </q-tooltip>
                   </q-btn>
                   <q-item-section class="row items-center" style="width: 50px">
@@ -402,10 +405,10 @@ export default {
       Active: true,
       Visible: false,
       ResponsableState: true,
-      EvaluarState:false,
-      EvaluarDisable:true,
-      VerificarState:false,
-      VerificarDisable:true,
+      EvaluarState: false,
+      EvaluarDisable: true,
+      VerificarState: false,
+      VerificarDisable: true,
       DescripcionVisible: false,
       Descripcion: '',
       titleDescripcion: ''
@@ -413,71 +416,71 @@ export default {
     };
   },
   methods: {
- 
- SaveEvaluacion(){
-  console.log(this.GlobalIdAc, this.Evaluacion)
-  // api
-  //       .post(`/AcCorrectivas/SaveEvaluacion/${this.Evaluacion,}`, )
-  //       .then((response) => {
-  //         this.IdsAprobar = [];
-  //         this.GetArchivosId(this.IdEvidencia);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Tipo Identificacion - Fallo la conexion " + error);
-  //       });
- }
+
+    SaveEvaluacion() {
+      console.log(this.GlobalIdAc, this.Evaluacion)
+      // api
+      //       .post(`/AcCorrectivas/SaveEvaluacion/${this.Evaluacion,}`, )
+      //       .then((response) => {
+      //         this.IdsAprobar = [];
+      //         this.GetArchivosId(this.IdEvidencia);
+      //       })
+      //       .catch((error) => {
+      //         console.error("Tipo Identificacion - Fallo la conexion " + error);
+      //       });
+    }
     ,
-  viewDescription(Description, title) {
-    console.log(Description)
+    viewDescription(Description, title) {
+      console.log(Description)
       this.DescripcionVisible = true;
       this.Descripcion = Description;
       this.titleDescripcion = title
     },
 
-    PrintAC(IdAC) { 
+    PrintAC(IdAC) {
 
-   api.get(`/AcCorrectivas/ImprimirAC/${IdAC}`, { responseType: 'arraybuffer' })
-     .then(response => {
-       const blob = new Blob([response.data], { type: 'application/pdf' })
-       const blobURL = URL.createObjectURL(blob)
-       window.open(blobURL)
-       this.$q.loading.hide()
-     }).catch(error => {
-       console.log(error)
-       this.$q.loading.hide()
-     })
-},
-
-
-  GuardarResponsables(){
-console.log(this.AccionCorrectiva)
-let a = 0
-    if(this.Responsables.ResponsableEvaluar != '' && this.Responsables.ResponsableVerificar != '' ){
-
-
-     let Evidencias = {
-      IdAC : this.GlobalIdAc,
-      ResponsableVerificar: this.Responsables.ResponsableVerificar,
-      ResponsableEvaluar: this.Responsables.ResponsableEvaluar
-    }
- api
-        .post("/AcCorrectivas/SaveResponsables", Evidencias)
-        .then((response) => {
-          this.IdsAprobar = [];
-          this.GetArchivosId(this.IdEvidencia);
+      api.get(`/AcCorrectivas/ImprimirAC/${IdAC}`, { responseType: 'arraybuffer' })
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'application/pdf' })
+          const blobURL = URL.createObjectURL(blob)
+          window.open(blobURL)
+          this.$q.loading.hide()
+        }).catch(error => {
+          console.log(error)
+          this.$q.loading.hide()
         })
-        .catch((error) => {
-          console.error("Tipo Identificacion - Fallo la conexion " + error);
-        });
-    }else{
-      this.Notificaciones(
+    },
+
+
+    GuardarResponsables() {
+      console.log(this.AccionCorrectiva)
+      let a = 0
+      if (this.Responsables.ResponsableEvaluar != '' && this.Responsables.ResponsableVerificar != '') {
+
+
+        let Evidencias = {
+          IdAC: this.GlobalIdAc,
+          ResponsableVerificar: this.Responsables.ResponsableVerificar,
+          ResponsableEvaluar: this.Responsables.ResponsableEvaluar
+        }
+        api
+          .post("/AcCorrectivas/SaveResponsables", Evidencias)
+          .then((response) => {
+            this.IdsAprobar = [];
+            this.GetArchivosId(this.IdEvidencia);
+          })
+          .catch((error) => {
+            console.error("Tipo Identificacion - Fallo la conexion " + error);
+          });
+      } else {
+        this.Notificaciones(
           "Faltan responsables por asignar",
           "negative",
           "bottom"
         );
-    }
-   
-  },
+      }
+
+    },
     ValidarCargo() {
       console.log(this.Informe)
 
@@ -622,45 +625,45 @@ let a = 0
       this.VerificarResponsables()
       this.Permisos()
     },
-    VerificarResponsables(){
-      let ResponsableEvaluar =  this.Informe.ResponsableEvaluar
+    VerificarResponsables() {
+      let ResponsableEvaluar = this.Informe.ResponsableEvaluar
       let ResponsableVerificar = this.Informe.ResponsableVerificar
-      if(ResponsableEvaluar != null && ResponsableVerificar != null){
+      if (ResponsableEvaluar != null && ResponsableVerificar != null) {
         this.ResponsableState = false
       }
 
     },
-    Permisos(){
+    Permisos() {
       let FechaCierre = this.Informe.FechaCierre
-      let ResponsableEvaluar =  this.Informe.LoginResponsableEvaluar
+      let ResponsableEvaluar = this.Informe.LoginResponsableEvaluar
       let ResponsableVerificar = this.Informe.LoginResponsableVerificar
       let usuario = this.usuario.LoginUsuario
       console.log(this.usuario)
-      if(FechaCierre != null){
+      if (FechaCierre != null) {
         this.ResponsableState = false
-      }else if(FechaCierre == null){
+      } else if (FechaCierre == null) {
         console.log(false)
-        if(usuario == ResponsableEvaluar){
-            this.EvaluarDisable = false
-            this.EvaluarState = true
-            console.log(true)
+        if (usuario == ResponsableEvaluar) {
+          this.EvaluarDisable = false
+          this.EvaluarState = true
+          console.log(true)
         }
 
-        if(usuario == ResponsableVerificar){
-         this.VerificarDisable = false
-         this.VerificarState = true
+        if (usuario == ResponsableVerificar) {
+          this.VerificarDisable = false
+          this.VerificarState = true
 
         }
 
-        if(usuario != ResponsableEvaluar && usuario != ResponsableVerificar){
+        if (usuario != ResponsableEvaluar && usuario != ResponsableVerificar) {
           this.ResponsableState = false
           this.EvaluarDisable = true
-      this.VerificarDisable = true
-      this.EvaluarState = false
+          this.VerificarDisable = true
+          this.EvaluarState = false
         }
       }
     },
-    SearchAutorizacion(){
+    SearchAutorizacion() {
 
     },
     ReturnView() {
@@ -704,7 +707,10 @@ let a = 0
         (Doc) => Doc.IdAC == IdAC
       )
       this.Informe = resultado[0]
-      console.log(this.Informe)
+      console.log('Informe',this.Informe)
+    },
+    ValidarResponsables(){
+
     },
     SearchEvidencia(IdAT) {
       api
