@@ -142,7 +142,7 @@
                 </q-btn>
               </div>
               <q-stepper-navigation>
-                <q-btn color="primary" v-if="Documento == 'Certificados'" @click="EnviarCertificados()" label="Autorizar" />
+                <q-btn color="primary" v-if="Documento == 'Certificados'" @click="EnviarCertificados()" label="Autorizars" />
                 <q-btn color="primary" v-if="Documento == 'Informes'" @click="EnviarInformes()" label="Autorizar" />
                 <q-btn color="primary" v-if="Documento == 'Trabajo No Conforme'" @click="EnviarTNC()" label="Autorizar" />
                 <q-btn color="primary" v-if="Documento == 'Acciones Correctivas'" @click="EnviarInformes()" label="Autorizar" />
