@@ -466,8 +466,14 @@ export default {
         api
           .post("/AcCorrectivas/SaveResponsables", Evidencias)
           .then((response) => {
-            this.IdsAprobar = [];
-            this.GetArchivosId(this.IdEvidencia);
+        
+            this.SearchDocAC(this.GlobalIdAc)
+         
+            this.Notificaciones(
+          "Responsables Asignados con éxito",
+          "positive",
+          "bottom"
+        );
           })
           .catch((error) => {
             console.error("Tipo Identificacion - Fallo la conexion " + error);
@@ -622,14 +628,14 @@ export default {
       this.Mostrar = false;
       this.SearchDocAC(IdAc)
       this.SearchActions(IdAc)
-      this.VerificarResponsables()
       this.Permisos()
     },
     VerificarResponsables() {
       let ResponsableEvaluar = this.Informe.ResponsableEvaluar
       let ResponsableVerificar = this.Informe.ResponsableVerificar
-      if (ResponsableEvaluar != null && ResponsableVerificar != null) {
-        this.ResponsableState = false
+      console.log('ss',ResponsableEvaluar,ResponsableVerificar)
+      if (ResponsableEvaluar == null && ResponsableVerificar == null) {
+        this.ResponsableState = true
       }
 
     },
@@ -660,6 +666,10 @@ export default {
           this.EvaluarDisable = true
           this.VerificarDisable = true
           this.EvaluarState = false
+        }
+
+        if(usuario == this.Informe.QuienTramitaAccion){
+         this.VerificarResponsables()
         }
       }
     },
@@ -701,16 +711,24 @@ export default {
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
     },
-    SearchDocAC(IdAC) {
-
-      var resultado = this.DocsAc.filter(
-        (Doc) => Doc.IdAC == IdAC
-      )
-      this.Informe = resultado[0]
-      console.log('Informe',this.Informe)
-    },
-    ValidarResponsables(){
-
+    SearchDocAC(IdAc) {
+      api
+        .get(`/AcCorrectivas/GetDocsIdAC/${IdAc}`)
+        .then((response) => {
+        
+          this.Informe = response.data
+          
+          this.Permisos()
+          this.VerificarResponsables()
+          console.log(this.Informe)
+        })
+        .catch((error) => {
+          console.error("Tipo Identificacion - Fallo la conexion " + error);
+        });
+      // var resultado = this.DocsAc.filter(
+      //   (Doc) => Doc.IdAC == IdAC
+      // )
+    
     },
     SearchEvidencia(IdAT) {
       api

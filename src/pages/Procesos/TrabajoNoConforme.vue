@@ -304,7 +304,7 @@
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="text-left" style="width: 50%">
-                  Anular Certificado de Calibración o informe de medidor
+                  Anular Certificado de Calibración, Informe de medidor o Informes de resultados 
                 </p>
                 <q-option-group v-model="Trabajo.AnularDocumento" :options="options" color="primary" inline dense
                   @input="AnularDocumento(Trabajo.AnularDocumento)" :disable="OptionsDisabled" />
@@ -530,11 +530,15 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input v-if="AfectaTxtCreate" type="textarea" v-model="AfectaTxt" />
-          <q-input v-if="BtnEditAfecta"  type="textarea" v-model="AfectaTxt" />
+          <q-input
+    v-if="AfectaTxtCreate || BtnEditAfecta"
+    type="textarea"
+    v-model="AfectaTxt"
+  />
 
-          <p v-if="AfectaTxtRead || !this.Trabajo.AfectaResultadosPreviosTxt == ''">{{ Trabajo.AfectaResultadosPreviosTxt }}</p>
-          
+  <p v-if="AfectaTxtRead">
+    {{ Trabajo.AfectaResultadosPreviosTxt }}
+  </p>
         </q-card-section>
 
         <q-card-actions v-if="AfectaTxtCreate" align="center">
@@ -2601,6 +2605,8 @@ PermisosConDatos(Op){
         this.BtnShowAfecta = true
       } else {
         this.BtnShowAfecta = false
+        this.AfectaTxt = ''
+        this.Trabajo.AfectaResultadosPreviosTxt = ''
       }
     },
     NotificarVisibles(notificar) {
@@ -3385,7 +3391,7 @@ PermisosConDatos(Op){
     },
     ProcesarDatos() {
       this.TNC = this.Trabajo;
-      this.TNC.push(this.AfectaTxt)
+      this.TNC.AfectaResultadosPreviosTxt = this.AfectaTxt
       this.TNC.ID_CONTCAMBIOS = this.cc.Id_contcambios;
       if (this.TNC) this.InsertTNC(this.TNC);
     },
