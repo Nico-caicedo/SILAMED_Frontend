@@ -2097,46 +2097,48 @@ PermisosConDatos(Op){
         });
     },
     CerrarTNC() {
-      this.EstadoEvidenciaId(this.Trabajo.IdTNC);
-      // this.sendEmail(this.EmailsReanudar,this.Trabajo.IdTNC)
-      if (this.Trabajo.RequiereAccionCorrectiva == 1) {
+  // Actualiza el estado de las evidencias
+  this.EstadoEvidenciaId(this.Trabajo.IdTNC);
+
+  // Validar si requiere acción correctiva y no hay evidencias aprobadas
+  if (this.Trabajo.RequiereAccionCorrectiva == 1 && !this.EstadoEvidencias) {
+    this.Notificaciones(
+      "No se pueden cerrar trabajos que requieren acción correctiva sin evidencias aprobadas.",
+      "warning",
+      "bottom"
+    );
+    return;
+  }
+
+  // Validar si NO requiere acción correctiva y tampoco hay evidencias aprobadas
+  if (this.Trabajo.RequiereAccionCorrectiva == 0 && !this.EstadoEvidencias) {
+    this.Notificaciones(
+      "Sin acciones o evidencias aprobadas para cerrar este trabajo.",
+      "warning",
+      "bottom"
+    );
+    return;
+  }
+
+  // Ejecutar cierre de TNC
+  api
+    .post(`/medidor/CloseTNC/${this.Trabajo.IdTNC}/${this.Trabajo.ReanudarActividad}`)
+    .then((response) => {
+      if (response.data) {
+        this.sendEmail(this.EmailsReanudar, this.Trabajo.IdTNC);
+        this.ReturnView();
         this.Notificaciones(
-          "Sin acciones o evidencias no aprobadass",
-          "warning",
+          "El trabajo no conforme ha sido cerrado.",
+          "positive",
           "bottom"
         );
-        return
-      } else if (this.Trabajo.RequiereAccionCorrectiva == 0) {
-        if (!this.EstadoEvidencias && this.Trabajo.RequiereAccionCorrectiva == 1) {
-
-          this.Notificaciones(
-            "Sin acciones o evidencias no aprobadas",
-            "warning",
-            "bottom"
-          );
-          return
-        }
-
-        api
-          .post(
-            `/medidor/CloseTNC/${this.Trabajo.IdTNC}/${this.Trabajo.ReanudarActividad}`
-          )
-          .then((response) => {
-            if (response.data) {
-              this.sendEmail(this.EmailsReanudar, this.Trabajo.IdTNC);
-              this.ReturnView();
-              this.Notificaciones(
-                "el trabajo no conforme ha sido cerrado",
-                "positive",
-                "bottom"
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Tipo Identificacion - Fallo la conexion " + error);
-          });
       }
-    },
+    })
+    .catch((error) => {
+      console.error("CerrarTNC - Error en la conexión:", error);
+    });
+},
+
     ReanudaActividad(Op) {
       if (Op == 1) {
         this.DetenerVisible = true;
@@ -2158,7 +2160,7 @@ PermisosConDatos(Op){
         .then((responde) => {
           this.ModalSaveOpt = false
           if (ConfirmDelete > 0) {
-            this.RAcciondiasable = true
+            this.RAcciondiasable = false
           }
         })
         .catch((error) => {
@@ -2170,11 +2172,12 @@ PermisosConDatos(Op){
         this.RAcciondiasable = false
         this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
       } else {
+        this.RAcciondiasable = true
         if (this.Acciones.length > 0) {
           this.ModalSaveOpt = true
 
         } else {
-          this.RAcciondiasable = true
+          // this.RAcciondiasable = true
           this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
         }
       }
