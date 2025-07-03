@@ -164,7 +164,7 @@
       <div>
         <p class="text-h5 text-center text-weight-bold">Acciones Implementadas</p>
       </div>
-      <div class="row">
+      <div class="row q-ml-lg">
         <q-select filled v-model="TipoAccion" emit-value map-options :options="options" label="Tipo de Acción"
           @input="FilterActions" class=" q-ml-sm col-xs-1 col-sm-1 col-md-2" />
       </div>
@@ -193,11 +193,16 @@
             Implementadas</p>
           <q-separator />
 
-          <q-input :disable="EvaluarDisable" type="textarea" v-model="Evaluacion" autogrow filled
+          <q-input v-if="ShowStateEva" :disable="EvaluarDisable" type="textarea" v-model="Evaluacion" autogrow filled
             label="Escriba aqui..." />
 
-          <q-btn :disable="EvaluarDisable" @click="SaveEvaluacion" icon="save" color="positive" label="guardar" />
+          <div class="bg-grey-4 " v-if="!ShowStateEva" >
+            <p class="text-justify q-pa-sm " v-if="Evaluacion != null  ">{{Evaluacion}}</p>
+            <p class="text-center bold-1 text-weight-medium" v-else>Aún no se ha cargado la evaluación.</p>
+          </div>
 
+          <q-btn v-if="ShowStateEva" :disable="EvaluarDisable" @click="SaveEvaluacion" icon="save" color="positive" label="guardar" />
+          <q-btn label="Cerrar Acción Correctiva"  icon="save" color="positive" @click="CerrarAc" v-if="btnClose"/>
         </div>
 
       </div>
@@ -307,6 +312,7 @@ export default {
       Responsables: { ResponsableEvaluar: '', ResponsableVerificar: '' },
       AprobarSeguimiento: false,
       IdsAprobar: [],
+      EstadoEvidencias: '',
       ArchivosVisible: false,
       File: null,
       FileSave: null,
@@ -336,6 +342,12 @@ export default {
       },
       Mostrar: true,
       columnsDocAc: [
+      {
+          name: "operaciones",
+          label: "Operaciones",
+          align: "center",
+          field: "operaciones",
+        },
         {
           name: "Consecutivo",
           label: "No. Ac",
@@ -380,12 +392,7 @@ export default {
           align: "center",
           field: "NCSimiliares",
         },
-        {
-          name: "operaciones",
-          label: "Operaciones",
-          align: "center",
-          field: "operaciones",
-        },
+     
       ],
       DocsAc: [],
       vcAC: ["acciones", "fecha", "evidencias"],
@@ -411,7 +418,9 @@ export default {
       VerificarDisable: true,
       DescripcionVisible: false,
       Descripcion: '',
-      titleDescripcion: ''
+      titleDescripcion: '',
+      btnClose: false,
+      ShowStateEva: false
 
     };
   },
@@ -419,15 +428,14 @@ export default {
 
     SaveEvaluacion() {
       console.log(this.GlobalIdAc, this.Evaluacion)
-      // api
-      //       .post(`/AcCorrectivas/SaveEvaluacion/${this.Evaluacion,}`, )
-      //       .then((response) => {
-      //         this.IdsAprobar = [];
-      //         this.GetArchivosId(this.IdEvidencia);
-      //       })
-      //       .catch((error) => {
-      //         console.error("Tipo Identificacion - Fallo la conexion " + error);
-      //       });
+      api
+            .post(`/AcCorrectivas/SaveEvaluacion/${this.Evaluacion}/${this.GlobalIdAc}`, )
+            .then((response) => {
+            
+            })
+            .catch((error) => {
+              console.error("Tipo Identificacion - Fallo la conexion " + error);
+            });
     }
     ,
     viewDescription(Description, title) {
@@ -474,6 +482,7 @@ export default {
           "positive",
           "bottom"
         );
+        this.btnClose = true
           })
           .catch((error) => {
             console.error("Tipo Identificacion - Fallo la conexion " + error);
@@ -486,6 +495,51 @@ export default {
         );
       }
 
+    },
+    CerrarAc(){
+     console.log(this.Informe)
+      if(this.VerificarAprobados()){
+      if(this.Informe.EvaluacionEficacia == ''){
+        this.Notificaciones(
+          "La evaluación de la eficacia no ha sido carga",
+          "negative",
+          "bottom"
+        );
+        return;
+      }
+
+
+      if(this.Informe.CausaRaiz == null && this.Informe.Efecto == null){
+        this.Notificaciones(
+          "faltan campos por completar en identificación de causas",
+          "negative",
+          "bottom"
+        );
+        return;
+      }
+
+      api
+        .post(`/AcCorrectivas/CloseAc/${this.GlobalIdAc}`)
+        .then((response) => {
+          this.Notificaciones(
+          "Se Cerrado la Acción Correctiva con Éxito ",
+          "negative",
+          "bottom"
+        );
+        })
+        .catch((error) => {
+          console.error("Tipo Identificacion - Fallo la conexion " + error);
+        });
+
+
+
+      }else{
+        this.Notificaciones(
+          "Faltan evidencias por aprobar o Evidencias no ha sido cargadas",
+          "negative",
+          "bottom"
+        );
+      }
     },
     ValidarCargo() {
       console.log(this.Informe)
@@ -573,6 +627,17 @@ export default {
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
     },
+    VerificarAprobados(){
+      api
+        .post(`/AcCorrectivas/VerificarAprobados/${this.GlobalIdAc}`)
+        .then((response) => {
+          this.EstadoEvidencias = response.data;
+          console.log(this.EstadoEvidencias)
+        })
+        .catch((error) => {
+          console.error("Tipo Identificacion - Fallo la conexion " + error);
+        });
+    },
 
     GetArchivosId(IdEvidencia) {
 
@@ -647,19 +712,28 @@ export default {
       console.log(this.usuario)
       if (FechaCierre != null) {
         this.ResponsableState = false
+        this.ShowStateEva = false
       } else if (FechaCierre == null) {
         console.log(false)
         if (usuario == ResponsableEvaluar) {
           this.EvaluarDisable = false
           this.EvaluarState = true
+          this.ShowStateEva = true
           console.log(true)
+        }
+
+        if (usuario != ResponsableEvaluar) {
+          this.ShowStateEva = false
         }
 
         if (usuario == ResponsableVerificar) {
           this.VerificarDisable = false
           this.VerificarState = true
-
         }
+        if(ResponsableVerificar && ResponsableEvaluar){
+          this.ResponsableState = false
+        }
+     
 
         if (usuario != ResponsableEvaluar && usuario != ResponsableVerificar) {
           this.ResponsableState = false
@@ -670,6 +744,10 @@ export default {
 
         if(usuario == this.Informe.QuienTramitaAccion){
          this.VerificarResponsables()
+         console.log(ResponsableEvaluar,ResponsableVerificar)
+         if(ResponsableEvaluar != '' && ResponsableVerificar != ''){
+          this.btnClose = true
+         }
         }
       }
     },
@@ -682,6 +760,7 @@ export default {
       this.EvaluarDisable = true
       this.VerificarDisable = true
       this.EvaluarState = false
+      this.btnClose = false
       // this.Acciones = []
       // this.AcCorrectivas = []
       // this.Correcciones = []
@@ -717,7 +796,7 @@ export default {
         .then((response) => {
         
           this.Informe = response.data
-          
+          this.Evaluacion = this.Informe.EvaluacionEficacia
           this.Permisos()
           this.VerificarResponsables()
           console.log(this.Informe)

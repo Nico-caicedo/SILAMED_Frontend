@@ -606,6 +606,12 @@ export default {
       FieldTextShow: false,
       FieldText: false,
       columnsDocAc: [
+      {
+          name: "operaciones",
+          label: "Operaciones",
+          align: "center",
+          field: "operaciones",
+        },
         {
           name: "Consecutivo",
           label: "No. Ac",
@@ -650,12 +656,7 @@ export default {
           align: "center",
           field: "NCSimiliares",
         },
-        {
-          name: "operaciones",
-          label: "Operaciones",
-          align: "center",
-          field: "operaciones",
-        },
+     
       ],
       DocsAc: [],
       vcAC: ["acciones", "fecha", "evidencias"],
@@ -691,7 +692,7 @@ export default {
     ChangeView(IdAc) {
       this.FirstView = true;
 
-      this.GetIdAc(IdAc)  
+      this.GetIdAc(IdAc)
       this.categoriaList = []
       this.CausasList = []
       this.SubCausasList = []
@@ -730,58 +731,40 @@ export default {
     },
     ValidarCamposDocAc() {
       let errores = 0;
-      if (!this.AccionCorrectiva.TipoEvaluacion) {
-        console.log(this.AccionCorrectiva.TipoEvaluacion)
-        this.Notificaciones('Falta Campo Tipo Evaluación', 'warning', 'bottom')
-        errores++;
-      }
-      if (
-        this.AccionCorrectiva.TipoEvaluacion === "Otro" &&
-        !this.AccionCorrectiva.OtroTipoEvaulacion
-      ) {
-        this.Notificaciones('Falta Campo Otro Tipo Evaluación', 'warning', 'bottom')
-        errores++;
-      }
-      if (!this.AccionCorrectiva.FechaApertura) {
-        errores++;
-        this.Notificaciones('Falta Campo Fecha Apertura', 'warning', 'bottom')
-      }
-      if (!this.AccionCorrectiva.ProcesoLevantaAccion) {
-        this.Notificaciones('Falta Campo Proceso Levanta acción', 'warning', 'bottom')
-        errores++;
-      }
-      if (!this.AccionCorrectiva.QuienLevantaAccion) {
-        this.Notificaciones('Falta Campo Quien Levanta', 'warning', 'bottom')
-        errores++;
-      }
-      if (!this.AccionCorrectiva.CargoQuienLevantaAccion) {
-        this.Notificaciones('Falta Campo Cargo Quién levanta', 'warning', 'bottom')
-        errores++;
-      }
-      if (!this.AccionCorrectiva.IdTramitoAccion) {
-        this.Notificaciones('Falta Campo Quién Tramita', 'warning', 'bottom')
-        errores++;
-      }
-      if (!this.AccionCorrectiva.Hallazgo) {
-        this.Notificaciones('Falta Campo Hallazgo', 'warning', 'bottom')
+
+      // Reglas de validación estándar
+      const campos = [
+        { campo: 'TipoEvaluacion', mensaje: 'Falta Campo Tipo Evaluación' },
+        { campo: 'FechaApertura', mensaje: 'Falta Campo Fecha Apertura' },
+        { campo: 'ProcesoLevantaAccion', mensaje: 'Falta Campo Proceso Levanta acción' },
+        { campo: 'QuienLevantaAccion', mensaje: 'Falta Campo Quién Levanta' },
+        { campo: 'CargoQuienLevantaAccion', mensaje: 'Falta Campo Cargo Quién levanta' },
+        { campo: 'IdTramitoAccion', mensaje: 'Falta Campo Quién Tramita' },
+        { campo: 'Hallazgo', mensaje: 'Falta Campo Hallazgo' },
+        { campo: 'NCSimilares', mensaje: 'Falta Campo NCSimilares' },
+      ];
+
+      // Validar campos estándar
+      campos.forEach(({ campo, mensaje }) => {
+        if (!this.AccionCorrectiva[campo]) {
+          this.Notificaciones(mensaje, 'warning', 'bottom');
+          errores++;
+        }
+      });
+
+      // Validación especial para "Otro tipo"
+      if (this.AccionCorrectiva.TipoEvaluacion === "Otro" && !this.AccionCorrectiva.OtroTipoEvaulacion) {
+        this.Notificaciones('Falta Campo Otro Tipo Evaluación', 'warning', 'bottom');
         errores++;
       }
 
-      if (
-        !this.AccionCorrectiva.NCSimilares) {
-        this.Notificaciones('Falta Campo NCSimilares', 'warning', 'bottom')
-        errores++
-      }
-
-      // Si hay errores, los mostramos y retornamos falso
+      // Evaluar resultado
       if (errores > 0) {
-        this.Notificaciones('Faltan Campos por completar', 'warning', 'bottom')
-        errores = 0
+        this.Notificaciones('Faltan Campos por completar', 'warning', 'bottom');
         return false;
       }
 
-      // Si no hay errores, la validación pasa
-      this.CreateDocAc()
+      this.CreateDocAc();
     },
     GetPaqIdentificacionId() {
       api

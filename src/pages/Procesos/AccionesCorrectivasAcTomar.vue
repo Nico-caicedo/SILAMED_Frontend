@@ -483,6 +483,12 @@ export default {
       ],
 
       columnsDocAc: [
+         {
+          name: "operaciones",
+          label: "Operaciones",
+          align: "center",
+          field: "operaciones",
+        },
         {
           name: "Consecutivo",
           label: "No. Ac",
@@ -527,12 +533,7 @@ export default {
           align: "center",
           field: "NCSimiliares",
         },
-        {
-          name: "operaciones",
-          label: "Operaciones",
-          align: "center",
-          field: "operaciones",
-        },
+       
       ],
       DocsAc: [],
       Accion: { AccionTxt: "", Fecha: "", Evidencia: "" },
