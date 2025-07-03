@@ -2053,12 +2053,21 @@ export default {
       fila.FechaToma = utils.fechaHora();
     },
     CalcularError(fila) {
+      /* Fórmula del error (%) en calibración:
+      Error (%)=(Vf−Vi)×100
+                   Vi
+      📌 Donde:
+
+          VfVf​: Volumen final medido por el medidor (valor registrado).
+
+          ViVi​: Volumen real o de referencia (medido con equipo patrón o estándar).
+
+          El resultado puede ser positivo (el medidor marca más de lo real) o negativo (marca menos de lo real). */
       const self = this;
       fila.Error_repcp =
-        (((fila.VolumenFinalNuevo - fila.VolumenInicialNuevo) * 1000 -
-          this.VolumenRecipiente * 1000) /
-          (this.VolumenRecipiente * 1000)) *
-        100;
+        // (fila.VolumenFinalNuevo - fila.VolumenInicialNuevo) * 100;
+        (((fila.VolumenFinalNuevo - fila.VolumenInicialNuevo) - this.VolumenRecipiente) // (fila.VolumenInicialNuevo * 1000)) /
+          / this.VolumenRecipiente) * 100;
       if (
         fila.Error_repcp > self.caudal.Emp_caudal ||
         fila.Error_repcp < self.caudal.Emp_caudal * -1
@@ -2238,6 +2247,16 @@ export default {
       }
 
       self.LisRepeticionCPMedidores = [];
+        /* Fórmula del error (%) en calibración:
+      Error (%)=(Vf−Vi)×100
+                   Vi
+      📌 Donde:
+
+          VfVf​: Volumen final medido por el medidor (valor registrado).
+
+          ViVi​: Volumen real o de referencia (medido con equipo patrón o estándar).
+
+          El resultado puede ser positivo (el medidor marca más de lo real) o negativo (marca menos de lo real). */
       for (const Rm of Rep.LisRepeticionCPMedidor) {
         let repeticionMedidor = { ...self.RepeticionCPMedidor };
         repeticionMedidor.IdRepeticionCPMedidor = Rm.IdRepeticionCPMedidor;
@@ -2249,10 +2268,8 @@ export default {
         repeticionMedidor.VolumenInicialAnterior = Rm.VolumenInicial;
         repeticionMedidor.VolumenFinalAnterior = Rm.VolumenFinal;
         repeticionMedidor.Error_repcp =
-          (((Rm.VolumenFinal - Rm.VolumenInicial) * 1000 -
-            this.VolumenRecipiente * 1000) /
-            (this.VolumenRecipiente * 1000)) *
-          100;
+        (((Rm.VolumenFinal - Rm.VolumenInicial) - this.VolumenRecipiente)
+          / this.VolumenRecipiente) * 100;
         if (
           repeticionMedidor.Error_repcp > self.caudal.Emp_caudal ||
           repeticionMedidor.Error_repcp < self.caudal.Emp_caudal * -1
