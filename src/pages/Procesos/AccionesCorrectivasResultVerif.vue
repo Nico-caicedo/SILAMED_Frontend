@@ -349,10 +349,10 @@ export default {
           field: "operaciones",
         },
         {
-          name: "Consecutivo",
+          name: "NAC",
           label: "No. Ac",
           align: "center",
-          field: "Consecutivo",
+          field: "NAC",
         },
         {
           name: "TipoEvaluacion",
