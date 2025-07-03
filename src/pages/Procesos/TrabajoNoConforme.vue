@@ -1674,6 +1674,14 @@ export default {
       NotificacionFiles: null,
       ListTNC: [],
       columnsTNC: [
+      {
+          name: "Operaciones",
+          label: "Operaciones",
+          field: "Operaciones",
+          required: true,
+          sortable: true,
+          align: "center",
+        },
         {
           name: "NTNC",
           label: "No. TNC",
@@ -1723,14 +1731,7 @@ export default {
           sortable: true,
           align: "center",
         },
-        {
-          name: "Operaciones",
-          label: "Operaciones",
-          field: "Operaciones",
-          required: true,
-          sortable: true,
-          align: "center",
-        },
+        
       ],
       vcTNC: ["Detectado", "Descripcion", "Operaciones"],
       Descripcion: null,
@@ -3075,6 +3076,7 @@ PermisosConDatos(Op){
               (this.BtnBoxText2 = false),
               (this.BtnSeguimientoAccion = true);
             this.BtnBoxTextRead = false;
+            this.BtnDesAccionCorrectiva = false;
           } else {
             this.editores.editor4 = editar;
             this.editores.leer4 = leer;

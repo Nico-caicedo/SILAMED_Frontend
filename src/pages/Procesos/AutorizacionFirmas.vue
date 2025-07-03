@@ -113,8 +113,8 @@
                 </q-table>
 
                 <q-table v-if="Documento == 'Acciones Correctivas'" class="col-xs-12 col-sm-12 col-md-12" title="" no-data-label="No hay registros" show-bottom
-                  flat bordered :data="ListaCertificados" :columns="columnsAC" row-key="IdCertificado"
-                  selection="multiple" :selected.sync="SelectedCertificados" :visible-columns="vcAC">
+                  flat bordered :data="ListaAC" :columns="columnsAC" row-key="IdAC"
+                  selection="multiple" :selected.sync="SelectedAC" :visible-columns="vcAC">
                   <template v-slot:header-selection="scope">
                     <q-toggle v-model="scope.selected" />
                   </template>
@@ -123,12 +123,12 @@
                   </template>
                   <template v-slot:top="props">
                     <q-btn color="primary" icon-right="archive" label="" no-caps
-                      @click="exportTable(ListaCertificados, columnsAC)" />
+                      @click="exportTable(ListaAC, columnsAC)" />
                     <q-space />
                     <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
                       @click="props.toggleFullscreen" class="q-ml-md" />
                     <q-space />
-                    <q-select v-model="vcCertificado" multiple outlined dense options-dense
+                    <q-select v-model="vcAC" multiple outlined dense options-dense
                       :display-value="$q.lang.table.columns" emit-value map-options :options="columnsAC"
                       option-value="name" options-cover style="min-width: 150px" />
                   </template>
@@ -142,10 +142,10 @@
                 </q-btn>
               </div>
               <q-stepper-navigation>
-                <q-btn color="primary" v-if="Documento == 'Certificados'" @click="EnviarCertificados()" label="Autorizars" />
+                <q-btn color="primary" v-if="Documento == 'Certificados'" @click="EnviarCertificados()" label="Autorizar" />
                 <q-btn color="primary" v-if="Documento == 'Informes'" @click="EnviarInformes()" label="Autorizar" />
                 <q-btn color="primary" v-if="Documento == 'Trabajo No Conforme'" @click="EnviarTNC()" label="Autorizar" />
-                <q-btn color="primary" v-if="Documento == 'Acciones Correctivas'" @click="EnviarInformes()" label="Autorizar" />
+                <q-btn color="primary" v-if="Documento == 'Acciones Correctivas'" @click="EnviarAC()" label="Autorizar" />
               </q-stepper-navigation>
             </q-step>
 
@@ -448,17 +448,17 @@ export default {
        ]
       ,
       columnsAC:[  
-        { name: 'IdInforme', align: 'left', label: 'Id', field: 'IdInforme', required: true },
+        { name: 'IdAC', align: 'left', label: 'Id', field: 'IdAC', required: true },
         // { name: 'IdOrdenEntradad', align: 'left', label: 'Id_OrdenEntradad', field: 'IdOrdenEntradad' },
-        { name: 'No. AC', align: 'left', label: 'NAC', field: 'NAC' },
-        {name: 'Responsable', align: 'left', label: 'Responsable', field: 'Responsable'},
-        { name: 'FechaEmision', align: 'left', label: 'FechaEmisión', field: 'FechaEmision' },
+        { name: 'NAC', align: 'left', label: 'NAC', field: 'NAC' },
+        {name: 'QuienTramitaAccion', align: 'left', label: 'Responsable', field: 'QuienTramitaAccion'},
+        { name: 'FechaApertura', align: 'left', label: 'Fecha Emisión', field: 'FechaApertura' },
        ]
       ,
       vcCertificado: ['IdCertificado', 'NCertificado', 'Serialmedidor_ordenentradad'],
       viInforme: ['IdInforme', 'NInforme', 'SerialMedidor'],
       vcTNC:['NTNC','Responsable','FechaEmision' ],
-      vcAC:['NAC','Responsable','FechaEmisión']
+      vcAC:['NAC','QuienTramita','FechaApertura']
      
     }
   },
@@ -620,6 +620,19 @@ export default {
           this.$q.loading.hide()
         })
     },
+    AutorizarAC(Ac) {
+      const Login = this.usuario.LoginUsuario
+      this.$q.loading.show()
+      api.post(`/AcCorrectivas/InsertAcAutorizar/${Login}`, Ac)
+        .then(response => {
+          this.$q.loading.hide()
+          this.consultarFiltroEntregar(this.consultaGeneral, this.todasFechas, this.fechaIni, this.fechaFin)
+
+        }).catch(error => {
+          console.log(error)
+          this.$q.loading.hide()
+        })
+    },
     EnviarInformes() {
       const self = this
 
@@ -685,24 +698,24 @@ export default {
     EnviarAC() {
       const self = this
 
-      let informes = []
-      for (const em of self.SelectedInformes) {
-        informes.push(em.IdInforme)
+      let AC = []
+      for (const em of self.SelectedAC) {
+        AC.push(em.IdAC)
       }
-      console.log(informes)
+      console.log(AC)
 
-      if (self.SelectedInformes.length > 0) {
+      if (self.SelectedAC.length > 0) {
         this.$q.dialog({
           title: 'SILAMED',
           dark: true,
-          message: 'Está seguro autorizar ' + self.SelectedInformes.length + ' informe?',
+          message: 'Está seguro autorizar ' + self.SelectedAC.length + ' Acción(nes) correctivas?',
           cancel: true,
           persistent: true,
           html: true
         }).onOk(() => {
 
-          if (informes.length > 0) {
-            self.AutorizarInformes(informes)
+          if (AC.length > 0) {
+            self.AutorizarAC(AC)
           }
 
         }).onCancel(() => {
@@ -900,6 +913,17 @@ export default {
   });
             console.log(self.ListaTNC)
           }
+
+
+
+          if(this.Documento == 'Acciones Correctivas'){
+         
+            self.ListaAC = response.data
+            console.log(self.ListaAC)
+          }
+
+
+
           
           self.$q.loading.hide()
         })
