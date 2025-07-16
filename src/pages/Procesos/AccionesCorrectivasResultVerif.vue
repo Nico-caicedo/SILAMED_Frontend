@@ -46,8 +46,8 @@
           <q-td key="operaciones" :props="props" auto-width>
             <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
             <q-btn icon="arrow_forward_ios" @click="ChangeView(props.row.IdAC)" flat color="positive" />
-            <q-btn icon="edit" to="/Procesos/AccionesCorrectivas" flat color="primary" />
-            <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
+            <q-btn icon="edit" v-if="BtnCalidad" to="/Procesos/AccionesCorrectivas" flat color="primary" />
+            <q-btn icon="delete" v-if="BtnCalidad" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
             <q-btn icon="picture_as_pdf" @click="PrintAC(props.row.IdAC)" flat color="negative" />
             <!-- v-if="props.row.Autorizado > 0" -->
           </q-td>
@@ -318,6 +318,7 @@ export default {
       FileSave: null,
       FileTem: null,
       FirtsView: true,
+      BtnCalidad:false,
       // Aquí van las propiedades reactivas del componente
       TipoEvaluacion: [
         { IdTipoEvaluacion: "I", Nombre: "Interna" },
@@ -459,6 +460,31 @@ export default {
         })
     },
 
+
+    DeleteAccion(IdAccion){
+      api
+          .post("/AcCorrectivas/DeleteAccion", IdAccion)
+          .then((response) => {
+        
+            this.SearchDocAC(this.GlobalIdAc)
+         
+            this.Notificaciones(
+          "Responsables Asignados con éxito",
+          "positive",
+          "bottom"
+        );
+        this.btnClose = true
+          })
+          .catch((error) => {
+            console.error("Tipo Identificacion - Fallo la conexion " + error);
+          });
+    },
+
+    OperacionesCalidad() {
+      if (this.usuario.IdRol == "CALI") {
+        this.BtnCalidad = true;
+      }
+    },
 
     GuardarResponsables() {
       console.log(this.AccionCorrectiva)
@@ -841,9 +867,11 @@ export default {
     // Aquí van las propiedades computadas del componente
   },
   mounted() {
+    this.usuario = this.$q.localStorage.getItem("usuarioSILAMED");
     // Aquí van las acciones a realizar cuando el componente se monte
     this.GetDocsAC();
-    this.usuario = this.$q.localStorage.getItem("usuarioSILAMED");
+    this.OperacionesCalidad();
+    
   },
 };
 </script>
