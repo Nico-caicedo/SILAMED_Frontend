@@ -50,8 +50,8 @@
           <q-td key="operaciones" :props="props" auto-width>
             <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
             <q-btn icon="arrow_forward_ios" @click="ChangeView(props.row.IdAC)" flat color="positive" />
-            <q-btn icon="edit" to="/Procesos/AccionesCorrectivas" flat color="primary" />
-            <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
+            <q-btn icon="edit" v-if="BtnCalidad" to="/Procesos/AccionesCorrectivas" flat color="primary" />
+            <q-btn icon="delete" v-if="BtnCalidad" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
           </q-td>
         </template>
       </q-table>
@@ -454,6 +454,7 @@ export default {
       FileSave: null,
       FileTem: null,
       FirtsView: true,
+      BtnCalidad:false,
       TipoAccion: "Correcciones",
       columnsAc: [
         {
@@ -643,6 +644,11 @@ export default {
       this.DescripcionVisible = true;
       this.Descripcion = Description;
       this.titleDescripcion = title
+    },
+    OperacionesCalidad() {
+      if (this.usuario.IdRol == "CALI") {
+        this.BtnCalidad = true;
+      }
     },
     GuardarEvidencias() {
       if (this.FileSave.length == 0) {
@@ -1020,6 +1026,7 @@ export default {
     this.GetDocsAC();
     this.usuario = this.$q.localStorage.getItem("usuarioSILAMED");
     this.date = utils.fechaActual()
+    this.OperacionesCalidad()
   },
 };
 </script>
