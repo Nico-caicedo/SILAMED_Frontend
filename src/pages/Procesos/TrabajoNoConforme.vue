@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh lpr lFf" container style="height: 92vh" class="shadow-2 rounded-borders">
+  <q-layout view="lHh lpr lFf" container style="height:  calc(100vh - 55px)" class="shadow-2 rounded-borders">
     <q-header v-if="mostrarse == true" bordered class="bg-white text-primary col-xs-12 col-sm-12 col-md-12 q-pt-sm">
       <div class="row justify-center q-gutter-md">
         <div class="row justify-center" :style="{
@@ -121,12 +121,12 @@
         <q-btn label="Crear TNC" color="positive" icon="add_circle" @click="CreateTNC" />
       </div>
 
-      <q-table class="col-xs-12 col-sm-12 col-md-12" title="" style="margin: 15px" separator="cell"
+      <q-table class="col-xs-12 col-sm-12 col-md-12 my-sticky-header-table" title="" style="margin: 15px" separator="cell"
         no-data-label="No hay registros" show-bottom flat bordered :data="ListTNC" :columns="columnsTNC"
         :rows-per-page-options="[10]">
         <!-- :visible-columns="vcCertificado" -->
         <template v-slot:top="props">
-          <q-btn color="primary" icon-right="archive" label="" no-caps @click="exportTable(ListTNC, columnsTNC)" />
+          <!-- <q-btn color="primary" icon-right="archive"  label="" no-caps @click="exportTable(ListTNC, columnsTNC)" /> -->
           <q-space />
           <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
             @click="props.toggleFullscreen" class="q-ml-md" />
@@ -248,11 +248,10 @@
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="" style="width: 50%">Afecta los Resultados Previos</p>
-                <q-option-group v-model="Trabajo.AfectaResultadosPrevios" :disable="OptionsDisabled"
-                  :options="options" color="primary" inline dense @input="AfectaVisible()" />
-
-                <div v-if="BtnShowAfecta" style="height: 15px;"><q-btn icon="edit_note" color="positive"
-                    @click="ShowAfecta = true" /></div>
+                <q-option-group v-model="Trabajo.AfectaResultadosPrevios" :disable="OptionsDisabled" :options="options"
+                  color="primary" inline dense />
+                <!-- @input="AfectaVisible()" -->
+                <div style="height: 15px;"><q-btn icon="edit_note" color="positive" @click="ShowAfecta = true" /></div>
               </div>
 
               <div class="row q-gutter-md" style="margin-top: 0">
@@ -304,7 +303,7 @@
 
               <div class="row q-gutter-md" style="margin-top: 0">
                 <p class="text-left" style="width: 50%">
-                  Anular Certificado de Calibración, Informe de medidor o Informes de resultados 
+                  Anular Certificado de Calibración, Informe de medidor o Informes de resultados
                 </p>
                 <q-option-group v-model="Trabajo.AnularDocumento" :options="options" color="primary" inline dense
                   @input="AnularDocumento(Trabajo.AnularDocumento)" :disable="OptionsDisabled" />
@@ -343,7 +342,8 @@
               <div class="row justify-center q-gutter-md" style="margin-top: 0">
                 <p class="h5 text-center">¿REQUIERE ACCIÓN CORRECTIVA?</p>
                 <q-option-group v-model="Trabajo.RequiereAccionCorrectiva" :options="options" color="primary" inline
-                  dense :disable="RAcciondiasableOption" @input="ValidarOpt" />
+                  dense :disable="RAcciondiasableOption" />
+                <!-- @input="ValidarOpt" -->
               </div>
             </q-card-section>
           </q-card>
@@ -530,15 +530,11 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input
-    v-if="AfectaTxtCreate || BtnEditAfecta"
-    type="textarea"
-    v-model="AfectaTxt"
-  />
+          <q-input v-if="AfectaTxtCreate || BtnEditAfecta" type="textarea" v-model="AfectaTxt" />
 
-  <p v-if="AfectaTxtRead">
-    {{ Trabajo.AfectaResultadosPreviosTxt }}
-  </p>
+          <p v-if="AfectaTxtRead">
+            {{ Trabajo.AfectaResultadosPreviosTxt }}
+          </p>
         </q-card-section>
 
         <q-card-actions v-if="AfectaTxtCreate" align="center">
@@ -1047,7 +1043,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="DescripcionVisible" >
+    <q-dialog v-model="DescripcionVisible">
       <q-card style="width: 600px">
         <q-card-section>
           <div class="text-h5 text-center">Descripción Del Problema</div>
@@ -1476,8 +1472,8 @@ export default {
       BtnShowAfecta: false,
       ShowAfecta: false,
       AfectaTxtRead: false,
-      AfectaTxtCreate:false,
-      BtnEditAfecta:false,
+      AfectaTxtCreate: false,
+      BtnEditAfecta: false,
       AfectaTxt: '',
       //
       GeneralView: true,
@@ -1674,7 +1670,7 @@ export default {
       NotificacionFiles: null,
       ListTNC: [],
       columnsTNC: [
-      {
+        {
           name: "Operaciones",
           label: "Operaciones",
           field: "Operaciones",
@@ -1731,7 +1727,7 @@ export default {
           sortable: true,
           align: "center",
         },
-        
+
       ],
       vcTNC: ["Detectado", "Descripcion", "Operaciones"],
       Descripcion: null,
@@ -1793,7 +1789,7 @@ export default {
   methods: {
     // permisos de dir calidad
     CreatorChanges() {
-      
+
       var Changes = {
         Detectado: this.Trabajo.Detectado,
         ResponsableAccion: this.Trabajo.ResponsableAccion,
@@ -1842,18 +1838,18 @@ export default {
     },
 
     PermisosCalidad(OpRol, IdTNC, Permiso) {
-      
+
       this.Permiso = Permiso;
       this.ModalCalidad = false;
       // this.ShowEmailInd = true;
       // Login == this.Trabajo.ResponsableAccion
-      this.GetIdTNC(IdTNC, 2,OpRol)
-      
-      
-  
+      this.GetIdTNC(IdTNC, 2, OpRol)
+
+
+
     },
-PermisosConDatos(Op){
-  this.ModalCalidad = false;
+    PermisosConDatos(Op) {
+      this.ModalCalidad = false;
       // this.ShowEmailInd = true;
       if (this.Trabajo.DetieneActividad > 0) {
         this.ShowEmailInd = true;
@@ -1879,10 +1875,10 @@ PermisosConDatos(Op){
         this.ShowAnular = false;
       }
 
-      if(this.Trabajo.AfectaResultadosPrevios > 0){
-          this.BtnShowAfecta = true
-     
-        }
+      if (this.Trabajo.AfectaResultadosPrevios > 0) {
+        this.BtnShowAfecta = true
+
+      }
 
       if (Op == 2) {
         this.leer = true;
@@ -1903,7 +1899,7 @@ PermisosConDatos(Op){
         this.ShowEvidence = false;
         this.BtnSaveGeneral = false;
         this.AfectaTxtRead = true
-   
+
       }
       // Login == this.Trabajo.ResponsableSeguimiento
       if (Op == 3) {
@@ -1927,7 +1923,7 @@ PermisosConDatos(Op){
         this.DetectadoView = true;
         this.BtnSaveGeneral = false;
         this.AfectaTxtRead = true
-       
+
       }
       // Login == this.Trabajo.LoginCierra
       if (Op == 1) {
@@ -1955,7 +1951,7 @@ PermisosConDatos(Op){
         }
 
 
-        if(this.Trabajo.AfectaResultadosPrevios > 0){
+        if (this.Trabajo.AfectaResultadosPrevios > 0) {
           this.BtnShowAfecta = true
           this.BtnEditAfecta = true
           this.AfectaTxt = this.Trabajo.AfectaResultadosPreviosTxt
@@ -1966,7 +1962,7 @@ PermisosConDatos(Op){
         //   this.ResumeActivity = true
         // }
       }
-},
+    },
     // ----------------------//
     CambioCheckbox(id, NDocumento) {
       if (this.IdsAprobar.includes(id)) {
@@ -2098,47 +2094,47 @@ PermisosConDatos(Op){
         });
     },
     CerrarTNC() {
-  // Actualiza el estado de las evidencias
-  this.EstadoEvidenciaId(this.Trabajo.IdTNC);
+      // Actualiza el estado de las evidencias
+      this.EstadoEvidenciaId(this.Trabajo.IdTNC);
 
-  // Validar si requiere acción correctiva y no hay evidencias aprobadas
-  if (this.Trabajo.RequiereAccionCorrectiva == 1 && !this.EstadoEvidencias) {
-    this.Notificaciones(
-      "No se pueden cerrar trabajos que requieren acción correctiva sin evidencias aprobadas.",
-      "warning",
-      "bottom"
-    );
-    return;
-  }
-
-  // Validar si NO requiere acción correctiva y tampoco hay evidencias aprobadas
-  if (this.Trabajo.RequiereAccionCorrectiva == 0 && !this.EstadoEvidencias) {
-    this.Notificaciones(
-      "Sin acciones o evidencias aprobadas para cerrar este trabajo.",
-      "warning",
-      "bottom"
-    );
-    return;
-  }
-
-  // Ejecutar cierre de TNC
-  api
-    .post(`/medidor/CloseTNC/${this.Trabajo.IdTNC}/${this.Trabajo.ReanudarActividad}`)
-    .then((response) => {
-      if (response.data) {
-        this.sendEmail(this.EmailsReanudar, this.Trabajo.IdTNC);
-        this.ReturnView();
+      // Validar si requiere acción correctiva y no hay evidencias aprobadas
+      if (this.Trabajo.RequiereAccionCorrectiva == 1 && !this.EstadoEvidencias) {
         this.Notificaciones(
-          "El trabajo no conforme ha sido cerrado.",
-          "positive",
+          "No se pueden cerrar trabajos que requieren acción correctiva sin evidencias aprobadas.",
+          "warning",
           "bottom"
         );
+        return;
       }
-    })
-    .catch((error) => {
-      console.error("CerrarTNC - Error en la conexión:", error);
-    });
-},
+
+      // Validar si NO requiere acción correctiva y tampoco hay evidencias aprobadas
+      if (this.Trabajo.RequiereAccionCorrectiva == 0 && !this.EstadoEvidencias) {
+        this.Notificaciones(
+          "Sin acciones o evidencias aprobadas para cerrar este trabajo.",
+          "warning",
+          "bottom"
+        );
+        return;
+      }
+
+      // Ejecutar cierre de TNC
+      api
+        .post(`/medidor/CloseTNC/${this.Trabajo.IdTNC}/${this.Trabajo.ReanudarActividad}`)
+        .then((response) => {
+          if (response.data) {
+            this.sendEmail(this.EmailsReanudar, this.Trabajo.IdTNC);
+            this.ReturnView();
+            this.Notificaciones(
+              "El trabajo no conforme ha sido cerrado.",
+              "positive",
+              "bottom"
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("CerrarTNC - Error en la conexión:", error);
+        });
+    },
 
     ReanudaActividad(Op) {
       if (Op == 1) {
@@ -2168,22 +2164,22 @@ PermisosConDatos(Op){
           console.error("Tipo Identificacion - Fallo la conexion " + error);
         });
     },
-    ValidarOpt() {
-      if (this.Trabajo.RequiereAccionCorrectiva > 0) {
-        this.RAcciondiasable = false
-        this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
-      } else {
-        this.RAcciondiasable = true
-        if (this.Acciones.length > 0) {
-          this.ModalSaveOpt = true
+    // ValidarOpt() {
+    //   if (this.Trabajo.RequiereAccionCorrectiva > 0) {
+    //     this.RAcciondiasable = false
+    //     this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
+    //   } else {
+    //     this.RAcciondiasable = true
+    //     if (this.Acciones.length > 0) {
+    //       this.ModalSaveOpt = true
 
-        } else {
-          // this.RAcciondiasable = true
-          this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
-        }
-      }
+    //     } else {
+    //       // this.RAcciondiasable = true
+    //       this.SaveOpt(this.Trabajo.RequiereAccionCorrectiva)
+    //     }
+    //   }
 
-    },
+    // },
     ReturnValOpt() {
       this.Trabajo.RequiereAccionCorrectiva = 1
       this.ModalSaveOpt = false
@@ -2604,15 +2600,15 @@ PermisosConDatos(Op){
       }
     },
 
-    AfectaVisible() {
-      if (this.Trabajo.AfectaResultadosPrevios > 0) {
-        this.BtnShowAfecta = true
-      } else {
-        this.BtnShowAfecta = false
-        this.AfectaTxt = ''
-        this.Trabajo.AfectaResultadosPreviosTxt = ''
-      }
-    },
+    // AfectaVisible() {
+    //   if (this.Trabajo.AfectaResultadosPrevios > 0) {
+    //     this.BtnShowAfecta = true
+    //   } else {
+    //     this.BtnShowAfecta = false
+    //     this.AfectaTxt = ''
+    //     this.Trabajo.AfectaResultadosPreviosTxt = ''
+    //   }
+    // },
     NotificarVisibles(notificar) {
       if (notificar == 1) {
         this.NotificarVisible = true;
@@ -3655,7 +3651,7 @@ PermisosConDatos(Op){
 
     },
 
-    GetIdTNC(IdTNC, Op,OpRol) {
+    GetIdTNC(IdTNC, Op, OpRol) {
       api
         .post(`/medidor/TNCModify/${IdTNC}`)
         .then((response) => {
@@ -3675,7 +3671,7 @@ PermisosConDatos(Op){
 
 
           console.log(this.Trabajo)
-      
+
           if (Op == 1) {
             this.ValidarPermisos();
           }
@@ -3711,15 +3707,15 @@ PermisosConDatos(Op){
             } else if (this.Trabajo.DetieneActividad == 1) {
               this.ResumeActivity = false;
             }
-          
-            if(this.Trabajo.AfectaResultadosPrevios > 0){
+
+            if (this.Trabajo.AfectaResultadosPrevios > 0) {
               this.BtnShowAfecta = true
-              this.AfectaTxtRead = true 
+              this.AfectaTxtRead = true
             }
-            
-         
+
+
           }
-          if(Op == 2 ){
+          if (Op == 2) {
             this.PermisosConDatos(OpRol)
           }
         })
@@ -3842,24 +3838,24 @@ PermisosConDatos(Op){
           this.$q.loading.hide();
         });
     },
-    SaveChangesAfecta(){
-      if(this.AfectaTxt == ''){
+    SaveChangesAfecta() {
+      if (this.AfectaTxt == '') {
         this.Notificaciones("Debe digitar texto para guardar", "warning", "bottom");
         return
       }
-    
+
       this.Trabajo.AfectaResultadosPreviosTxt = this.AfectaTxt
-     
+
       this.Notificaciones("Cambios guardados", "positive", "bottom");
       this.ShowAfecta = false
 
-      
+
     },
 
 
 
-    CancelAfectaTxt(){
-      this.AfectaTxt =   this.Trabajo.AfectaResultadosTxt 
+    CancelAfectaTxt() {
+      this.AfectaTxt = this.Trabajo.AfectaResultadosTxt
       this.ShowAfecta = false
 
     },
@@ -3987,8 +3983,7 @@ PermisosConDatos(Op){
         this.ShowAnular = false;
       }
 
-      if(this.Trabajo.AfectaResultadosPrevios > 0)
-      {
+      if (this.Trabajo.AfectaResultadosPrevios > 0) {
         this.BtnShowAfecta = true
         this.AfectaTxtRead = true
       }
@@ -4188,7 +4183,7 @@ PermisosConDatos(Op){
       this.AfectaTxtCreate = false
       this.AfectaTxtRead = false
       this.BtnEditAfecta = false
-      
+
       this.BtnShowAfecta = false
       this.EditEmailReanudar = false;
       this.EditNotificacion = false;
@@ -4328,4 +4323,32 @@ PermisosConDatos(Op){
   border: 1px solid #787878ff !important;
   box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.3);
 }
+
+.my-sticky-header-table {
+  /* height or max-height is important */
+  height: 310px;
+}
+
+
+.my-sticky-header-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.my-sticky-header-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.my-sticky-header-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.my-sticky-header-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
+}
+
 </style>

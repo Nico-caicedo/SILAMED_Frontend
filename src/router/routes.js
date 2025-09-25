@@ -11,6 +11,7 @@ const routes = [
       { path: '/Administracion/Tercero', component: () => import('pages/Administracion/Tercero.vue') },
       { path: '/Administracion/ParametroInstrumentos', component: () => import('pages/Administracion/ParametroInstrumentos.vue') },
       { path: '/Administracion/ParametroMedidores', component: () => import('pages/Administracion/ParametroMedidores.vue') },
+      { path: '/Administracion/ListadoInstrumentos', component: () => import('pages/Administracion/ListadoInstrumentos.vue') },
       { path: '/Procesos/OrdenEntrada', component: () => import('pages//Procesos/OrdenEntrada.vue') },
       { path: '/Procesos/ProgramacionOrdenes', component: () => import('pages//Procesos/ProgramacionOrdenes.vue') },
       { path: '/Procesos/CalibracionMedidores', component: () => import('pages//Procesos/CalibracionMedidores.vue') },

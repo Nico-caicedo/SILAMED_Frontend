@@ -208,6 +208,17 @@
             no-data-label="No hay registros" show-bottom flat bordered :data="Correcciones" :columns="columnsAc"
             :rows-per-page-options="[10]">
             <!-- :visible-columns="vcCertificado" -->
+            <template v-slot:body-cell-operaciones="props">
+              <q-td v-if="Visible" key="operaciones" :props="props" auto-width>
+                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
+                <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
+                <q-btn icon="edit" @click="EditAccion(props.row.key)" flat color="primary" />
+              </q-td>
+              <q-td v-if="!Visible" key="operaciones" :props="props" auto-width>
+                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
+                <p> No Disponibles</p>
+              </q-td>
+            </template>
             <template v-slot:top="props">
               <q-space />
               <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
@@ -224,17 +235,7 @@
                 <p class="">{{ props.row.evidencia }}</p>
               </q-td>
             </template>
-            <template v-slot:body-cell-operaciones="props">
-              <q-td v-if="Visible" key="operaciones" :props="props" auto-width>
-                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-                <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
-                <q-btn icon="edit" @click="EditAccion(props.row.key)" flat color="primary" />
-              </q-td>
-              <q-td v-if="!Visible" key="operaciones" :props="props" auto-width>
-                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-                <p> No Disponibles</p>
-              </q-td>
-            </template>
+        
           </q-table>
         </div>
 
@@ -244,6 +245,17 @@
             no-data-label="No hay registros" show-bottom flat bordered :data="AcCorrectivas" :columns="columnsAc"
             :rows-per-page-options="[10]">
             <!-- :visible-columns="vcCertificado" -->
+            <template v-slot:body-cell-operaciones="props">
+              <q-td v-if="Visible" key="operaciones" :props="props" auto-width>
+                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
+                <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
+                <q-btn icon="edit" @click="EditAccion(props.row.key)" flat color="primary" />
+              </q-td>
+              <q-td v-if="!Visible" key="operaciones" :props="props" auto-width>
+                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
+                <p>No Disponibles</p>
+              </q-td>
+            </template>
             <template v-slot:top="props">
               <q-space />
               <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
@@ -259,17 +271,7 @@
                 <p class="">{{ props.row.evidencia }}</p>
               </q-td>
             </template>
-            <template v-slot:body-cell-operaciones="props">
-              <q-td v-if="Visible" key="operaciones" :props="props" auto-width>
-                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-                <q-btn icon="delete" color="negative" align="center" flat @click="DeleteAccion(props.rowIndex)" />
-                <q-btn icon="edit" @click="EditAccion(props.row.key)" flat color="primary" />
-              </q-td>
-              <q-td v-if="!Visible" key="operaciones" :props="props" auto-width>
-                <!-- <q-btn icon="visibility" color="black" align="center" flat @click="GetIdTNC(props.row.IdTNC, 1)" /> -->
-                <p>No Disponibles</p>
-              </q-td>
-            </template>
+          
           </q-table>
 
 
@@ -457,6 +459,18 @@ export default {
       BtnCalidad:false,
       TipoAccion: "Correcciones",
       columnsAc: [
+      {
+          name: "operaciones",
+          label: "Operaciones",
+          align: "center",
+          field: "operaciones",
+        },
+        {
+          name: "evidencias",
+          label: "Evidencias",
+          align: "center",
+          field: "evidencias",
+        },
         {
           name: "AccionTxt",
           label: "Acciones",
@@ -469,18 +483,8 @@ export default {
           align: "center",
           field: (row) => row.Fecha,
         },
-        {
-          name: "evidencias",
-          label: "Evidencias",
-          align: "center",
-          field: "evidencias",
-        },
-        {
-          name: "operaciones",
-          label: "Operaciones",
-          align: "center",
-          field: "operaciones",
-        },
+      
+       
       ],
 
       columnsDocAc: [

@@ -211,5 +211,12 @@ export default {
         mensaje('Fallo la conexion ' + error)
         self.$q.loading.hide()
       })
-  }
+  },
+   Notificaciones: async (text, color, position, self) => {
+      self.$q.notify({
+        type: color,
+        message: `${text}`,
+        position: position,
+      });
+    },
 }

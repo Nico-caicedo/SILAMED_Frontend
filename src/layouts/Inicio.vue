@@ -8,7 +8,7 @@
         <q-toolbar-title>SILAMED</q-toolbar-title>
       </q-toolbar>
     </q-header>
-    <q-page-container>
+    <!-- <q-page-container>
       <div>
         <q-form class="q-pa-md">
           <div class="row justify-center q-pt-sm">
@@ -30,6 +30,38 @@
           </div>
         </q-form>
       </div>
+    </q-page-container> -->
+    <q-page-container class="row" style="height: 100vh">
+      <q-card class="login-card col bg-grey-1 col-xs-10 col-sm-8 vertical-middle rounded-borders">
+        <q-card-section align="center" class="q-gutter-sm justify-center q-pa-md">
+          <q-separator color="primary" size="1px" />
+          <div class="row col justify-center">
+            <img class="col-xs-10 col-sm-5 col-md-5" src="~assets/logo.png" />
+          </div>
+          <q-separator color="primary" size="1px" />
+          <div class="row col justify-center">
+            <q-input v-model="usuario.LoginUsuario" class="col-xs-12 col-sm col-md" label="Usuario" outlined lazy-rules :rules="[
+              (val) => (val && val.length > 0) || 'Falta llenar campo',
+            ]" />
+          </div>
+          <div class="row col justify-center">
+            <q-input label="Password" class="col-xs-12 col-sm col-md" v-model="usuario.PasswordUsuario"
+              @keydown.enter.prevent="login()" outlined :type="isPwd ? 'password' : 'text'" :rules="[
+              (val) => (val !== null && val !== '') || 'Falta llenar campo',
+            ]">
+              <template v-slot:append>
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                  @click="isPwd = !isPwd" />
+              </template>
+            </q-input>
+          </div>
+          <div class="row col justify-center q-pt-sm">
+            <q-btn label="Login" text-color="white" class="col-xs-12 col-sm col-md bg-primary"
+              style="border: 1px dashed white" icon="vpn_key" outline color="primary" align="center" unelevated
+              @click="login()" />
+          </div>
+        </q-card-section>
+      </q-card>
     </q-page-container>
   </q-layout>
 </template>
@@ -131,3 +163,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.login-card {
+  max-width: 400px;
+  margin: auto;
+}
+</style>
